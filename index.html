@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mini IPTV + Radio</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<style>
+  :root{--bg:#0f1115;--card:#171a21;--txt:#e6e6e6;--muted:#9aa0a6;--acc:#3b82f6}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.45 system-ui,Segoe UI,Roboto}
+  header{padding:12px 16px;border-bottom:1px solid #222;display:flex;gap:12px;align-items:center}
+  header input, header select{padding:10px 12px;background:#0c0f14;border:1px solid #222;border-radius:10px;color:var(--txt)}
+  header input{flex:1}
+  header .btn{background:var(--acc);color:white;border:0;border-radius:10px;padding:10px 14px;cursor:pointer}
+  .wrap{display:grid;grid-template-columns:320px 1fr;min-height:calc(100dvh - 58px)}
+  aside{border-right:1px solid #222;overflow:auto}
+  .chan{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;border-bottom:1px solid #1e222b}
+  .chan:hover{background:#121722}
+  .chan.active{background:#0f1a2e}
+  .logo{width:28px;height:28px;border-radius:6px;background:#2a2f3a;object-fit:cover}
+  .tag{font-size:12px;color:var(--muted)}
+  main{display:grid;grid-template-rows:auto 1fr auto;min-width:0}
+  .meta{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;background:var(--card);border-bottom:1px solid #222}
+  .epg{color:var(--muted);font-size:13px}
+  .player{display:grid;place-items:center;background:black}
+  video,audio{width:100%;height:100%;max-height:78vh;background:black}
+  .title { font-weight:600; }
+  #video, #audio { display:none; }
+  footer{padding:8px 12px;color:var(--muted);border-top:1px solid #222}
+  @media (max-width:900px){ .wrap{grid-template-columns:1fr} aside{order:2;height:42vh} main{order:1} }
+</style>
+</head>
+<body>
+<header>
+  <strong>Mini IPTV + Radio</strong>
+  <input id="search" placeholder="Kërko… (kanal, grup, lloj)" />
+  <select id="filterType" title="Filtro sipas llojit">
+    <option value="">TV + Radio</option>
+    <option value="tv">Vetëm TV</option>
+    <option value="radio">Vetëm Radio</option>
+  </select>
+  <button class="btn" id="loadM3U">Ngarko M3U (TV)</button>
+  <input id="m3uInput" type="file" accept=".m3u,.m3u8" hidden>
+  <input id="m3uUrlInput" placeholder="M3U URL" style="width:180px" />
+  <button class="btn" id="importM3UUrl">Importo nga URL</button>
+</header>
+
+<div class="wrap">
+  <aside id="list"></aside>
+  <main>
+    <div id="title" class="title">—</div>
+    <div class="epg" id="epg">—</div>
+    <div class="player">
+  <video id="video" controls playsinline><!-- playsinline nuk mbështetet nga Firefox --></video>
+      <audio id="audio" controls></audio>
+    </div>
+    <div class="epg" id="status">Gati</div>
+    <footer>Shkurtore: ↑/↓ kanal • Space pauzë/luaj • Ruhet kanali i fundit automatikisht.</footer>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
+<script>
+/* --------- 1) Të dhënat: TV (shembuj test) + Radio (lista jote) --------- */
+let items = [
+  // —— RADIO (VETËM HTTPS) ——
+  { id:"topalbania_https", name:"Top Albania Radio (HTTPS)", url:"https://stream.topalbaniaradio.com/topalbaniaradio.mp3", type:"radio", group:"Kombëtare", logo:"https://topalbaniaradio.com/wp-content/uploads/2020/05/topalbania.png", site:"https://topalbaniaradio.com/" },
+  { id:"radiomariaal", name:"Radio Maria Albania", url:"https://stream.radiomaria.al:8443/rma", type:"radio", group:"Kombëtare", logo:"https://radiomaria.al/wp-content/uploads/2020/09/cropped-logo-1-192x192.png", site:"https://radiomaria.al/" },
+  { id:"radiotravel", name:"Radio Travel", url:"https://live.radiotravel.al:8000/radiotravel", type:"radio", group:"Kombëtare", logo:"https://radiotravel.al/wp-content/uploads/2021/03/cropped-Logo-RT-2021-192x192.png", site:"https://radiotravel.al/" },
+  { id:"radioplus", name:"Radio Plus", url:"https://stream.radioplus.al:8000/stream", type:"radio", group:"Kombëtare", logo:"https://radioplus.al/wp-content/uploads/2020/09/cropped-favicon-192x192.png", site:"https://radioplus.al/" },
+  { id:"radiokorca", name:"Radio Korça", url:"https://stream.radiokorca.com:8000/radiokorca", type:"radio", group:"Shqipëri - Lokale", logo:"https://radiokorca.com/wp-content/uploads/2021/01/cropped-favicon-192x192.png", site:"https://radiokorca.com/" },
+  { id:"bbcworldservice", name:"BBC World Service", url:"https://stream.live.vc.bbcmedia.co.uk/bbc_world_service", type:"radio", group:"Ndërkombëtare", logo:"https://upload.wikimedia.org/wikipedia/commons/5/5e/BBC_World_Service_Logo_2022.svg", site:"https://www.bbc.co.uk/worldserviceradio" },
+  { id:"npr", name:"NPR News", url:"https://npr-ice.streamguys1.com/live.mp3", type:"radio", group:"Ndërkombëtare", logo:"https://media.npr.org/images/about-npr/NPR-logo_icon.png", site:"https://www.npr.org/" },
+  { id:"franceinter", name:"France Inter", url:"https://icecast.radiofrance.fr/franceinter-midfi.mp3", type:"radio", group:"Ndërkombëtare", logo:"https://upload.wikimedia.org/wikipedia/commons/6/6b/France_Inter_logo_2021.svg", site:"https://www.franceinter.fr/" },
+  { id:"classicfm", name:"Classic FM (UK)", url:"https://media-ice.musicradio.com/ClassicFMMP3", type:"radio", group:"Ndërkombëtare", logo:"https://upload.wikimedia.org/wikipedia/commons/2/2e/Classic_FM_logo_2019.svg", site:"https://www.classicfm.com/" },
+  { id:"bbcworldservice", name:"BBC World Service", url:"https://stream.live.vc.bbcmedia.co.uk/bbc_world_service", type:"radio", group:"Ndërkombëtare", logo:"https://upload.wikimedia.org/wikipedia/commons/5/5e/BBC_World_Service_Logo_2022.svg", site:"https://www.bbc.co.uk/worldserviceradio" },
+  { id:"npr", name:"NPR News", url:"https://npr-ice.streamguys1.com/live.mp3", type:"radio", group:"Ndërkombëtare", logo:"https://media.npr.org/images/about-npr/NPR-logo_icon.png", site:"https://www.npr.org/" },
+  { id:"franceinter", name:"France Inter", url:"https://icecast.radiofrance.fr/franceinter-midfi.mp3", type:"radio", group:"Ndërkombëtare", logo:"https://upload.wikimedia.org/wikipedia/commons/6/6b/France_Inter_logo_2021.svg", site:"https://www.franceinter.fr/" },
+  { id:"classicfm", name:"Classic FM (UK)", url:"https://media-ice.musicradio.com/ClassicFMMP3", type:"radio", group:"Ndërkombëtare", logo:"https://upload.wikimedia.org/wikipedia/commons/2/2e/Classic_FM_logo_2019.svg", site:"https://www.classicfm.com/" },
+  { id:"radiodukagjini", name:"Radio Dukagjini", url:"https://radiodukagjini.com:8000/stream", type:"radio", group:"Kosovë", logo:"https://radiodukagjini.com/wp-content/uploads/2020/10/cropped-favicon-192x192.png", site:"https://radiodukagjini.com/" },
+  { id:"radiokosova", name:"Radio Kosova", url:"https://stream.rtklive.com/radiokosova", type:"radio", group:"Kosovë - Publike", logo:"https://rtklive.com/favicon.ico", site:"https://rtklive.com/" },
+  { id:"radioplus", name:"Radio Plus", url:"https://stream.radioplus.al:8000/stream", type:"radio", group:"Kombëtare", logo:"https://radioplus.al/wp-content/uploads/2020/09/cropped-favicon-192x192.png", site:"https://radioplus.al/" },
+  { id:"radiokorca", name:"Radio Korça", url:"https://stream.radiokorca.com:8000/radiokorca", type:"radio", group:"Shqipëri - Lokale", logo:"https://radiokorca.com/wp-content/uploads/2021/01/cropped-favicon-192x192.png", site:"https://radiokorca.com/" },
+  { id:"topalbania_https", name:"Top Albania Radio (HTTPS)", url:"https://stream.topalbaniaradio.com/topalbaniaradio.mp3", type:"radio", group:"Kombëtare", logo:"https://topalbaniaradio.com/wp-content/uploads/2020/05/topalbania.png", site:"https://topalbaniaradio.com/" },
+  { id:"radiomariaal", name:"Radio Maria Albania", url:"https://stream.radiomaria.al:8443/rma", type:"radio", group:"Kombëtare", logo:"https://radiomaria.al/wp-content/uploads/2020/09/cropped-logo-1-192x192.png", site:"https://radiomaria.al/" },
+  { id:"radiotravel", name:"Radio Travel", url:"https://live.radiotravel.al:8000/radiotravel", type:"radio", group:"Kombëtare", logo:"https://radiotravel.al/wp-content/uploads/2021/03/cropped-Logo-RT-2021-192x192.png", site:"https://radiotravel.al/" },
+  { id:"kosovalire", name:"Radio Kosova e Lirë 94.2 FM", url:"http://94.23.67.20:9986/;", type:"radio", group:"Kosovë - Publike", logo:"", site:"https://www.radiokosovaelire.com/" },
+  { id:"twitch_mellooow", name:"Mellooow_ (Twitch)", url:"https://www.twitch.tv/mellooow_", type:"tv", group:"Twitch", logo:"https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png" },
+  // —— SHQIPËRI - SHTESË ——
+  { id:"kanali7", name:"Kanali 7 Ⓢ", url:"https://fe.tring.al/delta/105/out/u/1200_1.m3u8", type:"tv", group:"Shqipëri - DVB-S", logo:"https://i.imgur.com/rL2v9pM.png", epg:"Kanali7.al" },
+  { id:"a2cnn", name:"A2 CNN Albania", url:"https://tv.a2news.com/live/smil:a2cnnweb.stream.smil/playlist.m3u8", type:"tv", group:"Shqipëri - Web", logo:"https://i.imgur.com/TgO3Lzi.png", epg:"A2CNN.al" },
+  { id:"abcnewsalbania", name:"ABC News Albania Ⓣ", url:"https://www.twitch.tv/abcnewsal", type:"tv", group:"Shqipëri - Web", logo:"https://i.imgur.com/aObcudw.png", epg:"ABCNewsAlbania.al" },
+  { id:"albkanalemusic", name:"AlbKanale Music TV Ⓢ", url:"https://albportal.net/albkanalemusic.m3u8", type:"tv", group:"Shqipëri - Web", logo:"https://i.imgur.com/JdKxscs.png", epg:"AlbKanaleMusicTV.al" },
+  { id:"alpotv", name:"Alpo TV", url:"https://5d00db0e0fcd5.streamlock.net/7236/7236/playlist.m3u8", type:"tv", group:"Shqipëri - Web", logo:"https://i.imgur.com/Pr4ixiA.png", epg:"AlpoTV.al" },
+  { id:"cna", name:"CNA", url:"https://live1.mediadesk.al/cnatvlive.m3u8", type:"tv", group:"Shqipëri - Web", logo:"https://i.imgur.com/X3ukD5t.png", epg:"CNA.al" },
+  { id:"euronewsalbania", name:"Euronews Albania Ⓨ", url:"https://www.youtube.com/@EuronewsAlbania/live", type:"tv", group:"Shqipëri - Web", logo:"https://i.imgur.com/Skf6vdi.png", epg:"EuronewsAlbania.al" },
+  { id:"news24", name:"News 24 Ⓢ", url:"https://tv.balkanweb.com/news24/livestream/playlist.m3u8", type:"tv", group:"Shqipëri - Web", logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/News_24_%28Albania%29.svg/1024px-News_24_%28Albania%29.svg.png", epg:"News24.al" },
+  { id:"oranews_extra", name:"Ora News", url:"https://live1.mediadesk.al/oranews.m3u8", type:"tv", group:"Shqipëri - Web", logo:"https://i.imgur.com/ILZY5bJ.png", epg:"OraNews.al" },
+  { id:"panoramatv", name:"Panorama TV Ⓢ", url:"http://198.244.188.94/panorama/livestream/playlist.m3u8", type:"tv", group:"Shqipëri - Web", logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Panorama_logo.svg/512px-Panorama_logo.svg.png", epg:"PanoramaTV.al" },
+  { id:"reporttv", name:"Report TV", url:"https://deb10stream.duckdns.org/hls/stream.m3u8", type:"tv", group:"Shqipëri - Web", logo:"https://i.imgur.com/yuRDJYY.png", epg:"ReportTV.al" },
+  { id:"syri", name:"Syri", url:"https://stream.syritv.al/SyriTV/index.m3u8", type:"tv", group:"Shqipëri - Web", logo:"https://i.imgur.com/4zVyj1M.png", epg:"Syri.al" },
+  { id:"topnews", name:"Top News Ⓣ", url:"https://www.twitch.tv/topnewsal", type:"tv", group:"Shqipëri - Web", logo:"https://i.imgur.com/tBAXkOW.png", epg:"TopNews.al" },
+  { id:"tropoja", name:"Tropoja", url:"https://live.prostream.al/al/smil:tropojatv.smil/playlist.m3u8", type:"tv", group:"Shqipëri - Web", logo:"https://i.imgur.com/D3hNOVS.png", epg:"TropojaTelevizion.al" },
+  { id:"tv7albania", name:"TV 7 Albania", url:"https://5d00db0e0fcd5.streamlock.net/7064/7064/playlist.m3u8", type:"tv", group:"Shqipëri - Web", logo:"https://i.imgur.com/k9WqPLZ.png", epg:"TV7Albania.al" },
+  { id:"tvapollon", name:"TV Apollon Ⓢ", url:"https://live.apollon.tv/Apollon-WEB/video.m3u8?token=tnt3u76re30d2", type:"tv", group:"Shqipëri - Web", logo:"https://i.imgur.com/gUz2AjM.png", epg:"TVApollon.al" },
+  { id:"vizionplus", name:"Vizion Plus", url:"https://fe.tring.al/delta/105/out/u/rdghfhsfhfshs.m3u8", type:"tv", group:"Shqipëri - Web", logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Vizion_Plus.svg/512px-Vizion_Plus.svg.png", epg:"VizionPlus.al" },
+  // —— FETARE SHTESË —— 
+  { id:"trtdiyanet", name:"TRT Diyanet TV", url:"https://tv-trtdiyanet.medya.trt.com.tr/master.m3u8", type:"tv", group:"Islame - Turqi", logo:"" },
+  { id:"iqra", name:"Iqraa TV", url:"http://iqraacast.abradio.org/iqraa/playlist.m3u8", type:"tv", group:"Islame - Arabë", logo:"" },
+  { id:"makkah", name:"Makkah Live", url:"https://live5.makkahlive.net/maq1/playlist.m3u8", type:"tv", group:"Islame - Arabë", logo:"" },
+  { id:"madani", name:"Madani Channel", url:"http://madani.tv:1935/live/madanitv/playlist.m3u8", type:"tv", group:"Islame - Arabë", logo:"" },
+  { id:"trinitas", name:"Trinitas TV", url:"http://trinitas.tv:1935/trinitas/livestream/playlist.m3u8", type:"tv", group:"E Krishterë - Ballkan", logo:"" },
+  { id:"sat7arabic", name:"SAT-7 Arabic", url:"http://iptv.sat7arabic.org/hls/sat7arabic.m3u8", type:"tv", group:"E Krishterë - Arabë", logo:"" },
+  { id:"hopeeurope", name:"Hope Channel Europe", url:"https://live-hls-web-aje.getaj.net/hope/chunklist.m3u8", type:"tv", group:"E Krishterë - Ndërkombëtare", logo:"" },
+
+  // —— TV PROVA (HLS) ——
+  { id:"mux", name:"Mux Test TV", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"tv", group:"Test", logo:"" },
+  { id:"sintel", name:"Sintel HLS", url:"https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8", type:"tv", group:"Film", logo:"" },
+
+  // —— RADIO SHQIP —— 
+  { id:"tirana1", name:"Radio Tirana 1", url:"http://91.187.121.202:8000/RadioTirana1", type:"radio", group:"Publike", logo:"https://upload.wikimedia.org/wikipedia/commons/b/b2/Radio_Tirana_logo.svg", site:"https://rtsh.al/radio-tirana" },
+  { id:"tirana2", name:"Radio Tirana 2", url:"http://91.187.121.202:8000/RadioTirana2", type:"radio", group:"Publike", logo:"https://upload.wikimedia.org/wikipedia/commons/b/b2/Radio_Tirana_logo.svg", site:"https://rtsh.al/radio-tirana" },
+  { id:"tirana3", name:"Radio Tirana 3", url:"http://91.187.121.202:8000/RadioTirana3", type:"radio", group:"Publike", logo:"https://upload.wikimedia.org/wikipedia/commons/b/b2/Radio_Tirana_logo.svg", site:"https://rtsh.al/radio-tirana" },
+  { id:"topalbania", name:"Top Albania Radio", url:"https://stream.topalbaniaradio.com/topalbaniaradio.mp3", type:"radio", group:"Kombëtare", logo:"https://topalbaniaradio.com/wp-content/uploads/2020/05/topalbania.png", site:"https://topalbaniaradio.com/" },
+  { id:"clubfm", name:"Club FM", url:"http://5.39.71.159:8100/", type:"radio", group:"Muzikë", logo:"https://clubfm.al/wp-content/uploads/2019/06/logo.png", site:"https://clubfm.al/" },
+  { id:"radioselam", name:"Radio Selam", url:"http://94.23.67.20:9994/", type:"radio", group:"Islame", logo:"", site:"https://radioselam.com/" },
+  { id:"radiopendimi", name:"Radio Pendimi", url:"http://91.187.121.202:8000/pendimi", type:"radio", group:"Islame", logo:"", site:"https://pendimi.com/radio/" },
+  { id:"radiokristi", name:"Radio Kristi", url:"http://94.23.67.20:9988/", type:"radio", group:"E Krishterë", logo:"", site:"https://radiokristi.com/" },
+  { id:"radiovellazeria", name:"Radio Vëllazëria", url:"http://94.23.67.20:9992/", type:"radio", group:"E Krishterë", logo:"", site:"https://vellazeria.com/" },
+  { id:"topchannel", name:"Top Channel", url:"https://iptv-org.github.io/iptv/countries/al.m3u", type:"tv", group:"Shqipëri - Kombëtare", logo:"https://upload.wikimedia.org/wikipedia/en/f/f7/Top_Channel-Logo.png" },
+  { id:"klan", name:"TV Klan", url:"https://iptv-org.github.io/iptv/countries/al.m3u", type:"tv", group:"Shqipëri - Kombëtare", logo:"https://upload.wikimedia.org/wikipedia/en/2/29/TV_Klan_logo.png" },
+  { id:"oranews", name:"Ora News", url:"https://iptv-org.github.io/iptv/countries/al.m3u", type:"tv", group:"Shqipëri - Lajme", logo:"https://upload.wikimedia.org/wikipedia/en/d/d6/Ora_News_logo.png" },
+
+  // —— KOSOVË —— 
+  { id:"rtk1", name:"RTK 1", url:"https://ub1doy938d.gjirafa.net/live/Gfsqdsr7FewrYClU3ACEGZvCHktt2wse/zykxzq.m3u8", type:"tv", group:"Kosovë - Publike", logo:"https://i.imgur.com/KTcWcO6.png" },
+  { id:"rtk2", name:"RTK 2", url:"https://ub1doy938d.gjirafa.net/live/Gfsqdsr7FewrYClU3ACEGZvCHktt2wse/zykxz0.m3u8", type:"tv", group:"Kosovë - Publike", logo:"https://i.imgur.com/g6k6xyO.png" },
+  { id:"rtk3", name:"RTK 3", url:"https://ub1doy938d.gjirafa.net/live/Gfsqdsr7FewrYClU3ACEGZvCHktt2wse/zykxzk.m3u8", type:"tv", group:"Kosovë - Publike", logo:"https://i.imgur.com/Ut9VcT3.png" },
+  { id:"rtk4", name:"RTK 4", url:"https://ub1doy938d.gjirafa.net/live/Gfsqdsr7FewrYClU3ACEGZvCHktt2wse/zykxgt.m3u8", type:"tv", group:"Kosovë - Publike", logo:"https://i.imgur.com/Urm4XDR.png" },
+  { id:"rtv21", name:"RTV 21", url:"https://iptv-org.github.io/iptv/countries/xk.m3u", type:"tv", group:"Kosovë - Kombëtare", logo:"https://upload.wikimedia.org/wikipedia/en/0/0d/RTV21_logo.png" },
+  { id:"klanKosova", name:"Klan Kosova", url:"https://iptv-org.github.io/iptv/countries/xk.m3u", type:"tv", group:"Kosovë - Kombëtare", logo:"https://upload.wikimedia.org/wikipedia/en/2/23/Klan_Kosova_logo.png" },
+  { id:"dukagjini", name:"RTV Dukagjini", url:"https://iptv-org.github.io/iptv/countries/xk.m3u", type:"tv", group:"Kosovë - Kombëtare", logo:"https://upload.wikimedia.org/wikipedia/commons/6/65/RTV_Dukagjini.png" },
+  { id:"bashktv_rtv21", name:"RTV21 (Bashk.TV)", url:"https://bashk.tv/sq/k/RTV21", type:"tv", group:"Kosovë - Web", logo:"https://upload.wikimedia.org/wikipedia/en/0/0d/RTV21_logo.png", epg:"RTV21.al" },
+
+  // —— FETARE —— 
+  { id:"radioselam", name:"Radio Selam", url:"http://94.23.67.20:9994/;", type:"radio", group:"Islame", logo:"" },
+  { id:"radiopendimi", name:"Radio Pendimi", url:"http://91.187.121.202:8000/pendimi", type:"radio", group:"Islame", logo:"" },
+  { id:"peacetvalbania", name:"Peace TV Albania", url:"https://peacetv.stream/albania.m3u8", type:"tv", group:"Islame", logo:"https://upload.wikimedia.org/wikipedia/commons/7/75/Peace_TV_logo.png" },
+  { id:"radiokristi", name:"Radio Kristi", url:"http://94.23.67.20:9988/;", type:"radio", group:"E Krishterë", logo:"" },
+  { id:"radiovellazeria", name:"Radio Vëllazëria", url:"http://94.23.67.20:9992/;", type:"radio", group:"E Krishterë", logo:"" },
+  { id:"tvshpresa", name:"TV Shpresa", url:"http://stream.tvshpresa.org/live/playlist.m3u8", type:"tv", group:"E Krishterë", logo:"" },
+
+  // —— GJERMANI —— 
+  { id:"ardone", name:"ARD One", url:"https://mcdn.daserste.de/daserste/de/master.m3u8", type:"tv", group:"Gjermani - Filma", logo:"https://upload.wikimedia.org/wikipedia/commons/e/e2/One_Logo_2016.svg" },
+  { id:"zdfneo", name:"ZDF Neo", url:"https://zdf-hls-15.akamaized.net/hls/live/2016498/de/high/master.m3u8", type:"tv", group:"Gjermani - Filma", logo:"https://upload.wikimedia.org/wikipedia/commons/0/0f/ZDFneo_2017_logo.svg" },
+  { id:"arte", name:"Arte DE", url:"https://arte-cdn.akamaized.net/am/arte_de/master.m3u8", type:"tv", group:"Gjermani - Filma", logo:"https://upload.wikimedia.org/wikipedia/commons/5/5d/Arte-logo.svg" },
+  { id:"kika", name:"KIKA", url:"https://kikade-lh.akamaihd.net/i/kikade_1@816548/master.m3u8", type:"tv", group:"Gjermani - Fëmijë", logo:"https://upload.wikimedia.org/wikipedia/commons/e/e1/KiKA_Logo_2012.svg" },
+  { id:"ric", name:"RiC TV", url:"http://ric-live.de/live/smil:ric.smil/playlist.m3u8", type:"tv", group:"Gjermani - Fëmijë", logo:"https://upload.wikimedia.org/wikipedia/commons/f/fd/RiC_logo.svg" },
+  { id:"toggo_plus", name:"Super RTL - Toggo Plus", url:"http://84.22.46.188/play/a013", type:"tv", group:"Gjermani - Fëmijë", logo:"https://static.epg.best/de/TOGGOplus.de.png" },
+
+  // —— NDËRKOMBËTARE (Lajme) —— 
+  { id:"aljazeera", name:"Al Jazeera English", url:"https://live-hls-web-aje.getaj.net/AJE/index.m3u8", type:"tv", group:"Lajme", logo:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Aljazeera_eng.svg" },
+  { id:"france24", name:"France 24 English", url:"https://static.france24.com/live/F24_EN_HI_HLS/live_tv.m3u8", type:"tv", group:"Lajme", logo:"https://upload.wikimedia.org/wikipedia/commons/7/78/France24.png" },
+  { id:"dw", name:"DW English", url:"https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8", type:"tv", group:"Lajme", logo:"https://upload.wikimedia.org/wikipedia/commons/d/d0/Deutsche_Welle_logo_2012.svg" },
+  { id:"nhkworld", name:"NHK World Japan", url:"https://nhkworld.webcdn.stream.ne.jp/www11/nhkworld-tv/playlist.m3u8", type:"tv", group:"Lajme", logo:"https://upload.wikimedia.org/wikipedia/commons/8/89/NHK_World.svg" },
+
+  // —— NDËRKOMBËTARE (Sport FTA) —— 
+  { id:"redbulltv", name:"Red Bull TV", url:"https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master_3360.m3u8", type:"tv", group:"Sport", logo:"https://upload.wikimedia.org/wikipedia/commons/5/5c/Red_Bull_TV_logo.png" },
+
+  // —— ARABE (Sport/Lajme FTA) —— 
+  { id:"dubaisports", name:"Dubai Sports", url:"https://dmiedge1.akamaized.net/dubaisports/smil:dubaisports.smil/playlist.m3u8", type:"tv", group:"Arabe - Sport", logo:"https://upload.wikimedia.org/wikipedia/en/5/55/Dubai_Sports_logo.png" },
+  { id:"alkass", name:"Al Kass Sports", url:"https://alkasslivehttp.secureswiftcontent.com/alkass/alkass1/chunklist.m3u8", type:"tv", group:"Arabe - Sport", logo:"https://upload.wikimedia.org/wikipedia/en/f/f8/Alkass_Sports_Channel_Logo.png" },
+  { id:"abudhabisports", name:"Abu Dhabi Sports 1", url:"https://adtv.ercdn.net/adsport1/adsport1.m3u8", type:"tv", group:"Arabe - Sport", logo:"https://upload.wikimedia.org/wikipedia/en/7/71/Abu_Dhabi_Sports_Channel.png" },
+  { id:"almubasher", name:"Al Jazeera Mubasher", url:"https://live-hls-web-ajm.getaj.net/AJM/index.m3u8", type:"tv", group:"Arabe - Lajme", logo:"https://upload.wikimedia.org/wikipedia/en/f/f1/Al_Jazeera_Mubasher.png" },
+
+  // —— PALESTINË —— 
+  { id:"palestinetv", name:"Palestine TV", url:"https://pbc.gov.ps/LiveStream/PalestineTV.sdp/playlist.m3u8", type:"tv", group:"Palestinë - Lajme", logo:"https://upload.wikimedia.org/wikipedia/commons/5/59/Palestine_TV_logo.png" },
+  { id:"alaqsa", name:"Al Aqsa TV", url:"http://live.al-aqsa.ps:1935/live/al-aqsa/chunklist.m3u8", type:"tv", group:"Palestinë - Lajme", logo:"https://upload.wikimedia.org/wikipedia/commons/8/89/Al-Aqsa_TV_logo.png" },
+
+  // —— IZRAEL —— 
+  { id:"kan11", name:"KAN 11", url:"https://kan11.media.kan.org.il/hls/live/2024514/2024514/master.m3u8", type:"tv", group:"Izrael - Publike", logo:"https://upload.wikimedia.org/wikipedia/commons/f/f3/Kan_11_logo.svg" },
+
+  // —— FËMIJË (Shqipëri & Kosovë) —— 
+  { id:"rtshfemije", name:"RTSH Fëmijë", url:"https://iptv-org.github.io/iptv/countries/al.m3u", type:"tv", group:"Shqipëri - Fëmijë", logo:"https://upload.wikimedia.org/wikipedia/commons/e/e7/RTSH_logo_2017.png" },
+  { id:"rtkfemije", name:"RTK Fëmijë", url:"https://iptv-org.github.io/iptv/countries/xk.m3u", type:"tv", group:"Kosovë - Fëmijë", logo:"https://upload.wikimedia.org/wikipedia/commons/7/70/RTK1_logo.png" },
+
+  // —— BALLKANI PERËNDIMOR —— 
+  { id:"bh", name:"Bosnia & Herzegovina Channels", url:"https://iptv-org.github.io/iptv/countries/ba.m3u", type:"tv", group:"Bosnjë - FTA", logo:"" },
+  { id:"mk", name:"Macedonia North Channels", url:"https://iptv-org.github.io/iptv/countries/mk.m3u", type:"tv", group:"Maqedoni - FTA", logo:"" },
+  { id:"me", name:"Montenegro Channels", url:"https://iptv-org.github.io/iptv/countries/me.m3u", type:"tv", group:"Mali i Zi - FTA", logo:"" },
+  { id:"hr", name:"Croatia Channels", url:"https://iptv-org.github.io/iptv/countries/hr.m3u", type:"tv", group:"Kroaci - FTA", logo:"" },
+
+  // —— TURQI —— 
+  { id:"tr", name:"Turkish Channels (FTA)", url:"https://iptv-org.github.io/iptv/countries/tr.m3u", type:"tv", group:"Turqi - FTA", logo:"" }
+];
+
+const listEl   = document.querySelector('#list');
+const searchEl = document.querySelector('#search');
+const typeSel  = document.querySelector('#filterType');
+const videoEl  = document.querySelector('#video');
+const audioEl  = document.querySelector('#audio');
+const titleEl  = document.querySelector('#title');
+const epgEl    = document.querySelector('#epg');
+const statusEl = document.querySelector('#status');
+
+let filtered = [...items];
+let currentIndex = -1;
+let hls;
+
+/* --------- 2) Listimi + kërkimi/filtër --------- */
+function renderList(){
+  listEl.innerHTML = '';
+  filtered.forEach((c,i)=>{
+    const row = document.createElement('div');
+    row.className = 'chan' + (i===currentIndex ? ' active' : '');
+    row.dataset.index = i;
+    row.innerHTML = `
+      <img class="logo" src="${c.logo && c.logo.trim() ? c.logo : 'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'}"
+        onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'">
+      <div style="min-width:0">
+        <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.name}</div>
+        <div class="tag">${(c.group || '—')} • ${(c.type||'tv').toUpperCase()}</div>
+      </div>
+    `;
+    row.onclick = () => selectIndex(i);
+    listEl.appendChild(row);
+  });
+}
+
+function applyFilters(){
+  const q = searchEl.value.trim().toLowerCase();
+  const t = typeSel.value; // "", "tv", "radio"
+  filtered = items.filter(it=>{
+    const matchQ = !q || [it.name,it.group,it.type].filter(Boolean).join(' ').toLowerCase().includes(q);
+    const matchT = !t || (it.type||'tv')===t;
+    return matchQ && matchT;
+  });
+  if (filtered.length && !filtered.includes(items[currentIndex])) currentIndex = 0;
+  renderList();
+}
+
+searchEl.addEventListener('input', applyFilters);
+typeSel.addEventListener('change', applyFilters);
+
+/* --------- 3) Luajtësi i unifikuar --------- */
+function playMedia(entry){
+  statusEl.textContent = 'Duke ngarkuar…';
+  const kind = (entry.type || 'tv').toLowerCase();
+
+  // Fshih të gjithë player-at
+  videoEl.style.display = 'none';
+  audioEl.style.display = 'none';
+  // Hiq iframe ekzistues nëse ka
+  let twitchFrame = document.getElementById('twitchFrame');
+  if (twitchFrame) twitchFrame.remove();
+
+  // ç’aktivizo HLS nëse ishte në përdorim
+  if (hls){ try{ hls.destroy(); }catch(e){} hls = null; }
+
+  if (kind === 'radio'){
+    if(entry.id === 'radiostargjilan'){
+      audioEl.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    } else {
+      audioEl.removeAttribute('referrerpolicy');
+    }
+    audioEl.src = entry.url;
+    audioEl.style.display = '';
+    audioEl.play().catch(()=>{});
+    statusEl.textContent = 'Radio duke luajtur';
+  } else if (entry.url.startsWith('https://www.twitch.tv/')) {
+    // Twitch: shfaq iframe
+    const playerDiv = document.querySelector('.player');
+  const channel = entry.url.split('/').pop();
+  const iframe = document.createElement('iframe');
+  iframe.id = 'twitchFrame';
+  iframe.src = `https://player.twitch.tv/?channel=${channel}&parent=localhost`;
+  iframe.width = '100%';
+  iframe.height = '500';
+  iframe.allowFullscreen = true;
+  iframe.frameBorder = '0';
+  playerDiv.appendChild(iframe);
+  statusEl.textContent = 'Twitch duke luajtur';
+  } else {
+    // TV (HLS)
+    videoEl.style.display = '';
+    const url = entry.url;
+    if (videoEl.canPlayType('application/vnd.apple.mpegurl')) {
+      videoEl.src = url;
+      videoEl.play().catch(()=>{});
+    } else if (Hls.isSupported()){
+      hls = new Hls({lowLatencyMode:true, backBufferLength:90});
+      hls.loadSource(url);
+      hls.attachMedia(videoEl);
+      hls.on(Hls.Events.MANIFEST_PARSED, ()=>videoEl.play().catch(()=>{}));
+      hls.on(Hls.Events.ERROR, (_,data)=>{ statusEl.textContent = 'Gabim stream: '+(data?.details||data?.type||'i panjohur'); });
+    } else {
+      statusEl.textContent = 'Shfletuesi nuk mbështet HLS.';
+    }
+    videoEl.onplaying=()=>statusEl.textContent='Duke luajtur';
+    videoEl.onpause=()=>statusEl.textContent='Pauzë';
+  }
+}
+
+function selectIndex(i){
+  if (i<0 || i>=filtered.length) return;
+  currentIndex = i;
+  const ch = filtered[i];
+  titleEl.textContent = ch.name;
+  epgEl.textContent = ch.group ? `Grupi: ${ch.group}` : '—';
+  localStorage.setItem('miniiptv_last_id', ch.id);
+  renderList();
+  playMedia(ch);
+}
+
+
+// Ngarko nga file
+document.getElementById('loadM3U').onclick = ()=>document.getElementById('m3uInput').click();
+document.getElementById('m3uInput').addEventListener('change', async e=>{
+  const file = e.target.files[0]; if(!file) return;
+  const text = await file.text();
+  importM3U(text);
+});
+
+// Ngarko nga URL
+document.getElementById('importM3UUrl').onclick = async ()=>{
+  const url = document.getElementById('m3uUrlInput').value.trim();
+  if(!url) return alert('Vendos URL-në e M3U!');
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Gabim në shkarkim');
+    const text = await res.text();
+    importM3U(text);
+  } catch (e) {
+    alert('Gabim në shkarkim ose format: '+e.message);
+  }
+};
+
+function importM3U(text){
+  // Lexo EPG nga x-tvg-url në rreshtin e parë
+  const firstLine = text.split(/\r?\n/)[0];
+  let epgUrls = [];
+  const epgMatch = firstLine.match(/x-tvg-url="([^"]+)"/);
+  if(epgMatch) epgUrls = epgMatch[1].split(',').map(x=>x.trim());
+  window.m3uEpgUrls = epgUrls;
+  // Importo kanalet
+  const tvs = parseM3U(text);
+  if (tvs.length){
+    items = [...tvs, ...items.filter(x=>x.type==='radio')];
+    applyFilters();
+    selectIndex(0);
+    if(epgUrls.length) statusEl.textContent = 'EPG gjetur: '+epgUrls.length+' burime';
+  } else alert('S’u gjetën kanale TV në M3U.');
+}
+
+function parseM3U(txt){
+  const lines = txt.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  const out = []; let meta=null;
+  for (let i=0;i<lines.length;i++){
+    const l = lines[i];
+    if (l.startsWith('#EXTINF')){
+      const nameMatch = l.match(/,(.*)$/);
+      const tvgName   = (l.match(/tvg-name="([^"]+)"/) || [])[1];
+      const group     = (l.match(/group-title="([^"]+)"/) || [])[1];
+      const logo      = (l.match(/tvg-logo="([^"]+)"/) || [])[1];
+      meta = { name:(tvgName || (nameMatch?nameMatch[1]:'TV')), group:group||'', logo:logo||'' };
+    } else if (!l.startsWith('#') && meta){
+      out.push({ id:`tv-${out.length}-${Date.now()}`, name:meta.name.trim(), url:l, type:'tv', group:meta.group, logo:meta.logo });
+      meta=null;
+    }
+  }
+  return out;
+}
+
+/* --------- 5) Shkurtore dhe init --------- */
+document.addEventListener('keydown', e=>{
+  if (['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
+  if (e.key===' '){ e.preventDefault();
+    const kind = filtered[currentIndex]?.type || 'tv';
+    if (kind==='radio'){ if (audioEl.paused) audioEl.play(); else audioEl.pause(); }
+    else { if (videoEl.paused) videoEl.play(); else videoEl.pause(); }
+  }
+  if (e.key==='ArrowDown'){ e.preventDefault(); selectIndex(Math.min(currentIndex+1, filtered.length-1)); }
+  if (e.key==='ArrowUp'){ e.preventDefault(); selectIndex(Math.max(currentIndex-1, 0)); }
+});
+
+
+// URL M3U për import automatik
+const AUTO_M3U_URL = "http://192.168.1.2:5501/al.m3u"; // ndryshoje sipas nevojës
+
+async function autoImportM3U(){
+  try {
+    const res = await fetch(AUTO_M3U_URL);
+    if (!res.ok) throw new Error('Gabim në shkarkim');
+    const text = await res.text();
+    // Lexo EPG nga x-tvg-url në rreshtin e parë
+    const firstLine = text.split(/\r?\n/)[0];
+    let epgUrls = [];
+    const epgMatch = firstLine.match(/x-tvg-url="([^"]+)"/);
+    if(epgMatch) epgUrls = epgMatch[1].split(',').map(x=>x.trim());
+    window.m3uEpgUrls = epgUrls;
+    importM3U(text);
+    if(epgUrls.length) statusEl.textContent = 'EPG gjetur: '+epgUrls.length+' burime';
+  } catch (e) {
+    statusEl.textContent = 'Gabim në import automatik: '+e.message;
+    applyFilters();
+    const lastId = localStorage.getItem('miniiptv_last_id');
+    if (lastId){
+      const j = items.findIndex(x=>x.id===lastId);
+      if (j>=0){ filtered=[...items]; renderList(); selectIndex(j); return; }
+    }
+    if (filtered.length) selectIndex(0);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', autoImportM3U);
+</script>
+<button class="btn" id="unlockAdult">Zhblloko 18+</button>
+
+</body>
+</html>
+
