@@ -9,30 +9,34 @@
 </head>
 <body>
 <header>
-  <strong>Mini IPTV + Radio</strong>
-  <input id="search" placeholder="Kërko… (kanal, grup, lloj)" />
-  <select id="filterType" title="Filtro sipas llojit">
+  <img src="https://img.icons8.com/color/48/000000/tv.png" alt="Logo" class="app-logo" />
+  <strong class="app-title">Mini IPTV <span class="accent-blue">+</span> <span class="accent-orange">Radio</span></strong>
+  <input id="search" placeholder="🔍 Kërko… (kanal, grup, lloj)" aria-label="Kërko kanale ose radio" />
+  <select id="filterType" title="Filtro sipas llojit" aria-label="Filtro sipas llojit">
     <option value="">TV + Radio</option>
     <option value="tv">Vetëm TV</option>
     <option value="radio">Vetëm Radio</option>
   </select>
-  <button class="btn" id="loadM3U" type="button">Ngarko M3U (TV)</button>
+  <button class="btn" id="loadM3U" type="button" title="Ngarko M3U nga kompjuteri">📂 Ngarko M3U (TV)</button>
   <input id="m3uInput" type="file" accept=".m3u,.m3u8" hidden>
-  <input id="m3uUrlInput" placeholder="M3U URL" />
-  <button class="btn" id="importM3UUrl" type="button">Importo nga URL</button>
+  <input id="m3uUrlInput" placeholder="🌐 M3U URL" aria-label="M3U URL" />
+  <button class="btn" id="importM3UUrl" type="button" title="Importo M3U nga interneti">🌍 Importo nga URL</button>
 </header>
 
 <div class="wrap">
-  <aside id="list"></aside>
+  <aside id="list" aria-label="Lista e kanaleve"></aside>
   <main>
-    <div id="title" class="title">—</div>
+    <div class="main-separator"></div>
+    <div id="title" class="title title-margin">—</div>
     <div class="epg" id="epg">—</div>
     <div class="player">
-  <video id="video" controls><!-- playsinline nuk mbështetet nga Firefox --></video>
-  <audio id="audio" controls></audio>
+      <video id="video" controls><!-- playsinline nuk mbështetet nga Firefox --></video>
+      <audio id="audio" controls></audio>
     </div>
     <div class="epg" id="status">Gati</div>
-    <footer>Shkurtore: ↑/↓ kanal • Space pauzë/luaj • Ruhet kanali i fundit automatikisht.</footer>
+    <footer>
+      <span class="accent-blue bold">Shkurtore:</span> ↑/↓ kanal &nbsp;•&nbsp; <span class="accent-orange">Space</span> pauzë/luaj &nbsp;•&nbsp; <span class="muted">Ruhet kanali i fundit automatikisht.</span>
+    </footer>
   </main>
 </div>
 
