@@ -5,30 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Mini IPTV + Radio</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<style>
-  :root{--bg:#0f1115;--card:#171a21;--txt:#e6e6e6;--muted:#9aa0a6;--acc:#3b82f6}
-  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.45 system-ui,Segoe UI,Roboto}
-  header{padding:12px 16px;border-bottom:1px solid #222;display:flex;gap:12px;align-items:center}
-  header input, header select{padding:10px 12px;background:#0c0f14;border:1px solid #222;border-radius:10px;color:var(--txt)}
-  header input{flex:1}
-  header .btn{background:var(--acc);color:white;border:0;border-radius:10px;padding:10px 14px;cursor:pointer}
-  .wrap{display:grid;grid-template-columns:320px 1fr;min-height:calc(100dvh - 58px)}
-  aside{border-right:1px solid #222;overflow:auto}
-  .chan{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;border-bottom:1px solid #1e222b}
-  .chan:hover{background:#121722}
-  .chan.active{background:#0f1a2e}
-  .logo{width:28px;height:28px;border-radius:6px;background:#2a2f3a;object-fit:cover}
-  .tag{font-size:12px;color:var(--muted)}
-  main{display:grid;grid-template-rows:auto 1fr auto;min-width:0}
-  .meta{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;background:var(--card);border-bottom:1px solid #222}
-  .epg{color:var(--muted);font-size:13px}
-  .player{display:grid;place-items:center;background:black}
-  video,audio{width:100%;height:100%;max-height:78vh;background:black}
-  .title { font-weight:600; }
-  #video, #audio { display:none; }
-  footer{padding:8px 12px;color:var(--muted);border-top:1px solid #222}
-  @media (max-width:900px){ .wrap{grid-template-columns:1fr} aside{order:2;height:42vh} main{order:1} }
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header>
@@ -39,10 +16,10 @@
     <option value="tv">Vetëm TV</option>
     <option value="radio">Vetëm Radio</option>
   </select>
-  <button class="btn" id="loadM3U">Ngarko M3U (TV)</button>
+  <button class="btn" id="loadM3U" type="button">Ngarko M3U (TV)</button>
   <input id="m3uInput" type="file" accept=".m3u,.m3u8" hidden>
-  <input id="m3uUrlInput" placeholder="M3U URL" style="width:180px" />
-  <button class="btn" id="importM3UUrl">Importo nga URL</button>
+  <input id="m3uUrlInput" placeholder="M3U URL" />
+  <button class="btn" id="importM3UUrl" type="button">Importo nga URL</button>
 </header>
 
 <div class="wrap">
@@ -51,8 +28,8 @@
     <div id="title" class="title">—</div>
     <div class="epg" id="epg">—</div>
     <div class="player">
-  <video id="video" controls playsinline><!-- playsinline nuk mbështetet nga Firefox --></video>
-      <audio id="audio" controls></audio>
+  <video id="video" controls><!-- playsinline nuk mbështetet nga Firefox --></video>
+  <audio id="audio" controls></audio>
     </div>
     <div class="epg" id="status">Gati</div>
     <footer>Shkurtore: ↑/↓ kanal • Space pauzë/luaj • Ruhet kanali i fundit automatikisht.</footer>
@@ -498,8 +475,5 @@ async function autoImportM3U(){
 
 window.addEventListener('DOMContentLoaded', autoImportM3U);
 </script>
-<button class="btn" id="unlockAdult">Zhblloko 18+</button>
-
 </body>
 </html>
-
