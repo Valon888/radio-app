@@ -1,0 +1,102 @@
+[
+  {
+    "id": "tirana1",
+    "name": "Radio Tirana 1",
+    "url": "http://91.187.121.202:8000/RadioTirana1",
+    "type": "radio",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b2/Radio_Tirana_logo.svg",
+    "group": "Publike"
+  },
+  {
+    "id": "tirana2",
+    "name": "Radio Tirana 2",
+    "url": "http://91.187.121.202:8000/RadioTirana2",
+    "type": "radio",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b2/Radio_Tirana_logo.svg",
+    "group": "Publike"
+  },
+  {
+    "id": "tirana3",
+    "name": "Radio Tirana 3",
+    "url": "http://91.187.121.202:8000/RadioTirana3",
+    "type": "radio",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b2/Radio_Tirana_logo.svg",
+    "group": "Publike"
+  },
+
+  {
+    "id": "topalbania",
+    "name": "Top Albania Radio",
+    "url": "https://stream.topalbaniaradio.com/topalbaniaradio.mp3",
+    "type": "radio",
+    "logo": "https://topalbaniaradio.com/wp-content/uploads/2020/05/topalbania.png",
+    "group": "Kombëtare"
+  },
+  {
+    "id": "radioklan",
+    "name": "Radio Klan",
+    "url": "http://live.radioklan.com:8000/",
+    "type": "radio",
+    "logo": "https://klankosova.tv/wp-content/uploads/2021/06/radioklan.png",
+    "group": "Kombëtare"
+  },
+
+  {
+    "id": "alporadio",
+    "name": "Alpo Radio",
+    "url": "http://94.23.66.155:9304/",
+    "type": "radio",
+    "logo": "https://alporadio.al/wp-content/uploads/2021/01/logo.png",
+    "group": "Rajonale"
+  },
+
+  {
+    "id": "clubfm",
+    "name": "Club FM",
+    "url": "http://5.39.71.159:8100/",
+    "type": "radio",
+    "logo": "https://clubfm.al/wp-content/uploads/2019/06/logo.png",
+    "group": "Muzikë"
+  },
+  {
+    "id": "radioora",
+    "name": "Radio Ora",
+    "url": "http://s1.voscast.com:10484/",
+    "type": "radio",
+    "logo": "https://radioora.al/wp-content/uploads/2018/01/cropped-favicon-32x32.png",
+    "group": "Muzikë"
+  },
+  {
+    "id": "radiotravel",
+    "name": "Radio Travel",
+    "url": "http://stream.radiosolutions.it:8000/radiotravel",
+    "type": "radio",
+    "logo": "https://radiotravel.al/wp-content/uploads/2020/03/RadioTravelLogo.png",
+    "group": "Muzikë"
+  },
+  {
+    "id": "boomboom",
+    "name": "Boom Boom Radio",
+    "url": "http://94.23.66.155:9306/",
+    "type": "radio",
+    "logo": "https://boomboomradio.al/wp-content/uploads/2020/07/logo.png",
+    "group": "Muzikë"
+  },
+  {
+    "id": "starfm",
+    "name": "Radio Star FM",
+    "url": "http://94.23.66.155:9302/",
+    "type": "radio",
+    "logo": "https://starfm.al/wp-content/uploads/2018/12/logo.png",
+    "group": "Muzikë"
+  },
+
+  {
+    "id": "radioemigranti",
+    "name": "Radio Emigranti",
+    "url": "http://94.23.67.20:9996/",
+    "type": "radio",
+    "logo": "https://radioemigranti.com/wp-content/uploads/2021/04/Logo.png",
+    "group": "Diaspora"
+  }
+]
