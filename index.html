@@ -73,6 +73,16 @@ let items = [
   { id:"npr", name:"NPR News", url:"https://npr-ice.streamguys1.com/live.mp3", type:"radio", group:"Ndërkombëtare", logo:"https://media.npr.org/images/about-npr/NPR-logo_icon.png", site:"https://www.npr.org/" },
   { id:"franceinter", name:"France Inter", url:"https://icecast.radiofrance.fr/franceinter-midfi.mp3", type:"radio", group:"Ndërkombëtare", logo:"https://upload.wikimedia.org/wikipedia/commons/6/6b/France_Inter_logo_2021.svg", site:"https://www.franceinter.fr/" },
   { id:"classicfm", name:"Classic FM (UK)", url:"https://media-ice.musicradio.com/ClassicFMMP3", type:"radio", group:"Ndërkombëtare", logo:"https://upload.wikimedia.org/wikipedia/commons/2/2e/Classic_FM_logo_2019.svg", site:"https://www.classicfm.com/" },
+  // —— USA RADIO ——
+  { id:"kexp", name:"KEXP 90.3 FM Seattle", url:"https://kexp-mp3-128.streamguys1.com/kexp128.mp3", type:"radio", group:"USA", logo:"https://www.kexp.org/static/images/favicons/apple-touch-icon.png", site:"https://www.kexp.org/" },
+  { id:"wnyc", name:"WNYC 93.9 FM New York", url:"https://fm939.wnyc.org/wnycfm.aac", type:"radio", group:"USA", logo:"https://media.wnyc.org/i/800/800/l/80/2020/10/19/WNYC_Logo_2020.png", site:"https://www.wnyc.org/" },
+  { id:"kroq", name:"KROQ 106.7 FM Los Angeles", url:"https://playerservices.streamtheworld.com/api/livestream-redirect/KROQFM.mp3", type:"radio", group:"USA", logo:"https://upload.wikimedia.org/wikipedia/en/2/2d/KROQ_Logo.png", site:"https://www.audacy.com/kroq" },
+  { id:"wfuv", name:"WFUV 90.7 FM New York", url:"https://wfuv-stream.wfuv.org/wfuv/mp3:WFUVLive/playlist.m3u8", type:"radio", group:"USA", logo:"https://www.wfuv.org/sites/default/files/wfuv-favicon-2022.png", site:"https://www.wfuv.org/" },
+  // —— GERMANY RADIO ——
+  { id:"deutschlandfunk", name:"Deutschlandfunk", url:"https://st01.sslstream.dlf.de/dlf/01/128/mp3/stream.mp3", type:"radio", group:"Gjermani", logo:"https://upload.wikimedia.org/wikipedia/commons/2/2e/Deutschlandfunk_Logo_2017.svg", site:"https://www.deutschlandfunk.de/" },
+  { id:"bayern1", name:"Bayern 1", url:"https://dispatcher.rndfnk.com/br/br1/obb/mp3/mid", type:"radio", group:"Gjermani", logo:"https://upload.wikimedia.org/wikipedia/commons/2/2a/Bayern_1_Logo_2017.svg", site:"https://www.br.de/radio/bayern1/" },
+  { id:"wdr2", name:"WDR 2", url:"https://wdr-wdr2-rheinruhr.icecastssl.wdr.de/wdr/wdr2/rheinruhr/mp3/128/stream.mp3", type:"radio", group:"Gjermani", logo:"https://upload.wikimedia.org/wikipedia/commons/2/2e/WDR_2_Logo_2012.svg", site:"https://www1.wdr.de/radio/wdr2/" },
+  { id:"radioeins", name:"radioeins rbb", url:"https://rbb-radioeins-live.cast.addradio.de/rbb/radioeins/live/mp3/128/stream.mp3", type:"radio", group:"Gjermani", logo:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Radioeins_Logo.svg", site:"https://www.radioeins.de/" },
   { id:"bbcworldservice", name:"BBC World Service", url:"https://stream.live.vc.bbcmedia.co.uk/bbc_world_service", type:"radio", group:"Ndërkombëtare", logo:"https://upload.wikimedia.org/wikipedia/commons/5/5e/BBC_World_Service_Logo_2022.svg", site:"https://www.bbc.co.uk/worldserviceradio" },
   { id:"npr", name:"NPR News", url:"https://npr-ice.streamguys1.com/live.mp3", type:"radio", group:"Ndërkombëtare", logo:"https://media.npr.org/images/about-npr/NPR-logo_icon.png", site:"https://www.npr.org/" },
   { id:"franceinter", name:"France Inter", url:"https://icecast.radiofrance.fr/franceinter-midfi.mp3", type:"radio", group:"Ndërkombëtare", logo:"https://upload.wikimedia.org/wikipedia/commons/6/6b/France_Inter_logo_2021.svg", site:"https://www.franceinter.fr/" },
@@ -116,6 +126,16 @@ let items = [
   // —— TV PROVA (HLS) ——
   { id:"mux", name:"Mux Test TV", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"tv", group:"Test", logo:"" },
   { id:"sintel", name:"Sintel HLS", url:"https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8", type:"tv", group:"Film", logo:"" },
+  // —— USA TV (SAMPLE, FTA/NEWS/TEST) ——
+  { id:"bloombergusa", name:"Bloomberg USA", url:"https://bloomberg-bloomberg-1-us.rakuten.wurl.tv/playlist.m3u8", type:"tv", group:"USA - Lajme", logo:"https://upload.wikimedia.org/wikipedia/commons/0/0c/Bloomberg_logo.svg", epg:"Bloomberg.com" },
+  { id:"abcnewsus", name:"ABC News (US)", url:"https://abcnews-live.akamaized.net/hls/live/2023675/abcnews/abcnews.m3u8", type:"tv", group:"USA - Lajme", logo:"https://upload.wikimedia.org/wikipedia/commons/5/5e/ABC_News_solid_black_logo.svg", epg:"abcnews.go.com" },
+  { id:"cbsnews", name:"CBS News (US)", url:"https://cbsn-us-cedexis.cbsnstream.cbsnews.com/out/v1/7b6e2e2b7e2e4e2e8e2e2e2e2e2e2e2e/playlist.m3u8", type:"tv", group:"USA - Lajme", logo:"https://upload.wikimedia.org/wikipedia/commons/1/1b/CBS_News_logo.svg", epg:"cbsnews.com" },
+  { id:"nbcnewsnow", name:"NBC News Now", url:"https://nbcnewsnow-lh.akamaihd.net/i/nbcnewsnow_1@199302/index_720_av-p.m3u8", type:"tv", group:"USA - Lajme", logo:"https://upload.wikimedia.org/wikipedia/commons/6/69/NBC_News_2022.svg", epg:"nbcnews.com" },
+  // —— GERMANY TV (FTA/NEWS/TEST) ——
+  { id:"tagesschau24", name:"Tagesschau24", url:"https://tagesschau-lh.akamaihd.net/i/tagesschau24_1@119231/index_3776_av-p.m3u8", type:"tv", group:"Gjermani - Lajme", logo:"https://upload.wikimedia.org/wikipedia/commons/2/2e/Tagesschau_Logo_2014.svg", epg:"tagesschau.de" },
+  { id:"phoenix", name:"Phoenix (DE)", url:"https://zdf-hls-16.akamaized.net/hls/live/2016499/de/high/master.m3u8", type:"tv", group:"Gjermani - Lajme", logo:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Phoenix_Logo_2018.svg", epg:"phoenix.de" },
+  { id:"ndr", name:"NDR Fernsehen", url:"https://ndrfs-lh.akamaihd.net/i/ndrfs_ndrfs@430233/index_3776_av-p.m3u8", type:"tv", group:"Gjermani - Publike", logo:"https://upload.wikimedia.org/wikipedia/commons/2/2d/NDR_Fernsehen_Logo_2017.svg", epg:"ndr.de" },
+  { id:"zdfinfo", name:"ZDFinfo", url:"https://zdf-hls-14.akamaized.net/hls/live/2016497/de/high/master.m3u8", type:"tv", group:"Gjermani - Lajme", logo:"https://upload.wikimedia.org/wikipedia/commons/1/1a/ZDFinfo_Logo_2011.svg", epg:"zdf.de" },
 
   // —— RADIO SHQIP —— 
   { id:"tirana1", name:"Radio Tirana 1", url:"http://91.187.121.202:8000/RadioTirana1", type:"radio", group:"Publike", logo:"https://upload.wikimedia.org/wikipedia/commons/b/b2/Radio_Tirana_logo.svg", site:"https://rtsh.al/radio-tirana" },
@@ -417,5 +437,3 @@ window.addEventListener('DOMContentLoaded', autoImportM3U);
 
 </body>
 </html>
-
-
