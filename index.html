@@ -9,7 +9,6 @@
 </head>
 <body>
 <header>
-  <img src="https://img.icons8.com/color/48/000000/tv.png" alt="Logo" class="app-logo" />
   <strong class="app-title">Mini IPTV <span class="accent-blue">+</span> <span class="accent-orange">Radio</span></strong>
   <input id="search" placeholder="🔍 Kërko… (kanal, grup, lloj)" aria-label="Kërko kanale ose radio" />
   <select id="filterType" title="Filtro sipas llojit" aria-label="Filtro sipas llojit">
@@ -280,8 +279,6 @@ function renderList(){
     row.className = 'chan' + (i===currentIndex ? ' active' : '');
     row.dataset.index = i;
     row.innerHTML = `
-      <img class="logo" src="${c.logo && c.logo.trim() ? c.logo : 'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'}"
-        onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'">
       <div style="min-width:0">
         <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.name}</div>
         <div class="tag">${(c.group || '—')} • ${(c.type||'tv').toUpperCase()}</div>
