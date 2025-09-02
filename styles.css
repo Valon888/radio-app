@@ -1,75 +1,177 @@
-/* Radio section styles */
-.radio-section {
-  margin: 24px 0 0 0;
-  padding: 16px;
-  background: var(--card);
-  border-radius: 10px;
-  box-shadow: 0 2px 8px #0002;
-}
-.radio-section h2 {
-  margin-top: 0;
-  color: var(--acc);
-}
-#radio {
-  width: 100%;
-  margin-bottom: 10px;
-}
-#radios {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+/* Video resolution selector styles */
+.resolution-row {
+  margin-bottom: 8px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  align-items: center;
 }
-.radio-item {
-  background: var(--bg);
-  color: var(--txt);
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s;
-  border: 1px solid var(--acc);
-}
-.radio-item:hover {
-  background: var(--acc);
+.resolution-label {
   color: #fff;
+  font-size: 14px;
 }
-:root { --bg:#0f1115; --card:#171a21; --txt:#e6e6e6; --muted:#9aa0a6; --acc:#3b82f6; }
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.4 system-ui,Segoe UI,Roboto}
-header{padding:12px 16px;border-bottom:1px solid #222;display:flex;gap:12px;align-items:center}
-header input{flex:1; padding:10px 12px; background:#0c0f14; border:1px solid #222; border-radius:10px; color:var(--txt)}
-header button{background:var(--acc);color:white;border:0;border-radius:10px;padding:10px 14px;cursor:pointer}
-.wrap{display:grid;grid-template-columns:300px 1fr;min-height:calc(100dvh - 58px)}
-aside{border-right:1px solid #222;overflow:auto}
-.chan{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;border-bottom:1px solid #1e222b}
-.chan:hover{background:#121722}
-.chan.active{background:#0f1a2e}
-.tag{font-size:12px;color:var(--muted)}
-main{display:grid;grid-template-rows:auto 1fr;min-width:0}
-.player{display:grid;place-items:center;background:black}
-video{width:100%;height:100%;max-height:78vh;background:black}
-.meta{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;background:var(--card);border-bottom:1px solid #222}
-.epg{color:var(--muted);font-size:13px}
-footer{padding:8px 12px;color:var(--muted);border-top:1px solid #222}
-@media (max-width:900px){ .wrap{grid-template-columns:1fr} aside{order:2;height:40vh} main{order:1} }
-/* Moved from inline styles */
-.chan-dot {
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#3b82f6;
+.resolution-select {
+  margin-left: 8px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #2a3b4d;
+  background: #1a2332;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
-.chan-info {
-  min-width:0;
+/* Logo e kanalit në player */
+.chan-logo {
+  max-width: 120px;
+  max-height: 80px;
+  display: none;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px #0002;
+}
+/* --- MODERN GLASSMORPHISM & SOFT UI --- */
+body {
+  background: linear-gradient(135deg, #0f1115 0%, #171a21 100%);
+  color: #e6e6e6;
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+}
+header, .meta, .player, aside, footer {
+  background: rgba(23,26,33,0.85);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2);
+  backdrop-filter: blur(8px) saturate(1.2);
+  border-radius: 18px;
+  box-shadow: 0 6px 32px #22d3ee22, 0 1.5px 8px #0002;
+}
+header {
+  margin: 18px 18px 0 18px;
+  padding: 18px 24px;
+  border: none;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+footer {
+  margin: 0 18px 18px 18px;
+  padding: 12px 18px;
+  border: none;
+  font-size: 1rem;
+  background: rgba(23,26,33,0.92);
+}
+.wrap {
+  margin: 18px;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px #22d3ee22;
+  overflow: hidden;
+}
+aside {
+  background: rgba(23,26,33,0.92);
+  border: none;
+  box-shadow: 0 2px 12px #22d3ee22;
+}
+.chan {
+  border-radius: 12px;
+  margin: 6px 8px;
+  padding: 12px 18px;
+  background: rgba(36,41,54,0.85);
+  box-shadow: 0 2px 8px #22d3ee22;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.chan:hover {
+  background: linear-gradient(90deg, #2563eb 0%, #22d3ee 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px #22d3ee44;
+}
+.chan.active {
+  border-left: 5px solid #3b82f6;
+  background: linear-gradient(90deg, #0f1a2e 60%, #3b82f6 100%);
+  color: #fff;
+  box-shadow: 0 6px 24px #3b82f644;
+}
+.chan.islamic {
+  border-left: 5px solid #22d3ee;
+  background: linear-gradient(90deg, #1e293b 0%, #3b82f6 100%);
+  color: #fff;
+  box-shadow: 0 6px 24px #22d3ee44;
 }
 .chan-title {
-  font-weight:600;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  font-size: 1.08rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #e6e6e6;
 }
-.title {
-  font-weight:600;
+.chan.islamic .chan-title {
+  color: #fff;
+}
+.player {
+  background: linear-gradient(135deg, #171a21 60%, #3b82f6 100%);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px #3b82f644;
+  margin: 18px 0;
+  padding: 18px;
+}
+video, audio {
+  border-radius: 12px;
+  box-shadow: 0 2px 12px #22d3ee22;
+  background: #000;
+}
+.meta {
+  background: linear-gradient(90deg, #171a21 60%, #22d3ee 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #22d3ee22;
+  font-size: 1.08rem;
+  padding: 12px 18px;
+}
+header input, header select {
+  border: 1.5px solid #22d3ee;
+  background: rgba(36,41,54,0.85);
+  color: #e6e6e6;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px #22d3ee22;
+}
+header input:focus, header select:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 4px 16px #3b82f644;
+}
+header select {
+  background: rgba(23,26,33,0.92);
+}
+::-webkit-scrollbar {
+  width: 10px;
+  background: #171a21;
+}
+::-webkit-scrollbar-thumb {
+  background: #22d3ee;
+  border-radius: 8px;
+}
+.app-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px #22d3ee22;
+  margin-right: 12px;
+}
+.app-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #3b82f6;
+  text-shadow: 0 2px 12px #22d3ee22;
+  letter-spacing: 1.5px;
+}
+footer a {
+  color: #22d3ee;
+  text-decoration: underline;
+  font-weight: 600;
+}
+.muted {
+  color: #9aa0a6;
+  font-size: 1rem;
+}
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr; margin:8px;}
+  aside{order:2;height:40vh; margin:0;}
+  main{order:1;}
+  header, footer {margin: 8px;}
 }
