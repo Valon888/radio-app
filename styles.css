@@ -1,177 +1,218 @@
-/* Video resolution selector styles */
-.resolution-row {
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-}
-.resolution-label {
-  color: #fff;
-  font-size: 14px;
-}
-.resolution-select {
-  margin-left: 8px;
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: 1px solid #2a3b4d;
-  background: #1a2332;
-  color: #fff;
-  font-size: 14px;
-  outline: none;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-}
-/* Logo e kanalit në player */
-.chan-logo {
-  max-width: 120px;
-  max-height: 80px;
-  display: none;
-  margin-bottom: 10px;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px #0002;
-}
-/* --- MODERN GLASSMORPHISM & SOFT UI --- */
+
+/* --- PROFESSIONAL MODERN IPTV & RADIO UI --- */
 body {
   background: linear-gradient(135deg, #0f1115 0%, #171a21 100%);
   color: #e6e6e6;
-  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  font-family: 'Segoe UI', 'Roboto', 'Montserrat', Arial, sans-serif;
+  min-height: 100vh;
+  margin: 0;
 }
+
 header, .meta, .player, aside, footer {
   background: rgba(23,26,33,0.85);
-  -webkit-backdrop-filter: blur(8px) saturate(1.2);
-  backdrop-filter: blur(8px) saturate(1.2);
-  border-radius: 18px;
-  box-shadow: 0 6px 32px #22d3ee22, 0 1.5px 8px #0002;
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  backdrop-filter: blur(12px) saturate(1.3);
+  border-radius: 22px;
+  box-shadow: 0 8px 36px #22d3ee22, 0 2px 12px #0002;
 }
+
 header {
-  margin: 18px 18px 0 18px;
-  padding: 18px 24px;
+  margin: 24px 24px 0 24px;
+  padding: 24px 32px;
   border: none;
   display: flex;
-  gap: 16px;
+  gap: 20px;
   align-items: center;
+  justify-content: space-between;
 }
-footer {
-  margin: 0 18px 18px 18px;
-  padding: 12px 18px;
-  border: none;
-  font-size: 1rem;
-  background: rgba(23,26,33,0.92);
+
+.app-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px #22d3ee22;
+  margin-right: 18px;
 }
-.wrap {
-  margin: 18px;
-  border-radius: 18px;
-  box-shadow: 0 8px 32px #22d3ee22;
-  overflow: hidden;
+
+.app-title {
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: #22d3ee;
+  text-shadow: 0 4px 16px #22d3ee44;
+  letter-spacing: 2px;
 }
-aside {
-  background: rgba(23,26,33,0.92);
-  border: none;
+
+header input, header select {
+  border: 2px solid #22d3ee;
+  background: rgba(36,41,54,0.92);
+  color: #e6e6e6;
+  border-radius: 16px;
+  padding: 14px 20px;
+  font-size: 1.08rem;
+  transition: border 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 12px #22d3ee22;
 }
+header input:focus, header select:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 6px 24px #3b82f644;
+}
+header select {
+  background: rgba(23,26,33,0.96);
+}
+
+.wrap {
+  margin: 24px;
+  border-radius: 22px;
+  box-shadow: 0 12px 48px #22d3ee22;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+}
+
+aside {
+  background: rgba(23,26,33,0.96);
+  border: none;
+  box-shadow: 0 4px 16px #22d3ee22;
+  padding: 18px 0;
+  min-width: 260px;
+  max-width: 340px;
+  height: 70vh;
+  overflow-y: auto;
+}
+
 .chan {
-  border-radius: 12px;
-  margin: 6px 8px;
-  padding: 12px 18px;
-  background: rgba(36,41,54,0.85);
-  box-shadow: 0 2px 8px #22d3ee22;
-  transition: background 0.2s, box-shadow 0.2s;
+  border-radius: 16px;
+  margin: 8px 12px;
+  padding: 16px 24px;
+  background: rgba(36,41,54,0.92);
+  box-shadow: 0 2px 12px #22d3ee22;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 .chan:hover {
   background: linear-gradient(90deg, #2563eb 0%, #22d3ee 100%);
   color: #fff;
-  box-shadow: 0 4px 16px #22d3ee44;
+  box-shadow: 0 8px 32px #22d3ee44;
+  transform: scale(1.03);
 }
 .chan.active {
-  border-left: 5px solid #3b82f6;
+  border-left: 6px solid #3b82f6;
   background: linear-gradient(90deg, #0f1a2e 60%, #3b82f6 100%);
   color: #fff;
-  box-shadow: 0 6px 24px #3b82f644;
+  box-shadow: 0 12px 48px #3b82f644;
 }
 .chan.islamic {
-  border-left: 5px solid #22d3ee;
+  border-left: 6px solid #22d3ee;
   background: linear-gradient(90deg, #1e293b 0%, #3b82f6 100%);
   color: #fff;
-  box-shadow: 0 6px 24px #22d3ee44;
+  box-shadow: 0 12px 48px #22d3ee44;
 }
 .chan-title {
-  font-size: 1.08rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-size: 1.18rem;
+  font-weight: 800;
+  letter-spacing: 0.7px;
   color: #e6e6e6;
 }
 .chan.islamic .chan-title {
   color: #fff;
 }
+
 .player {
-  background: linear-gradient(135deg, #171a21 60%, #3b82f6 100%);
-  border-radius: 18px;
-  box-shadow: 0 8px 32px #3b82f644;
-  margin: 18px 0;
-  padding: 18px;
+  background: linear-gradient(135deg, #171a21 60%, #22d3ee 100%);
+  border-radius: 22px;
+  box-shadow: 0 12px 48px #22d3ee44;
+  margin: 24px 0;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
+.chan-logo {
+  max-width: 140px;
+  max-height: 90px;
+  display: none;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px #0002;
+}
+
 video, audio {
-  border-radius: 12px;
-  box-shadow: 0 2px 12px #22d3ee22;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px #22d3ee22;
   background: #000;
+  width: 100%;
+  max-width: 700px;
+  margin-bottom: 12px;
 }
+
 .meta {
   background: linear-gradient(90deg, #171a21 60%, #22d3ee 100%);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px #22d3ee22;
-  font-size: 1.08rem;
-  padding: 12px 18px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px #22d3ee22;
+  font-size: 1.18rem;
+  padding: 16px 24px;
+  margin-bottom: 12px;
 }
-header input, header select {
-  border: 1.5px solid #22d3ee;
-  background: rgba(36,41,54,0.85);
-  color: #e6e6e6;
-  border-radius: 12px;
-  padding: 12px 16px;
-  font-size: 1rem;
-  transition: border 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px #22d3ee22;
+
+.resolution-row {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
 }
-header input:focus, header select:focus {
-  border-color: #3b82f6;
+.resolution-label {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}
+.resolution-select {
+  margin-left: 12px;
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: 2px solid #22d3ee;
+  background: #1a2332;
+  color: #fff;
+  font-size: 16px;
   outline: none;
-  box-shadow: 0 4px 16px #3b82f644;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
-header select {
-  background: rgba(23,26,33,0.92);
-}
-::-webkit-scrollbar {
-  width: 10px;
-  background: #171a21;
-}
-::-webkit-scrollbar-thumb {
-  background: #22d3ee;
-  border-radius: 8px;
-}
-.app-logo {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px #22d3ee22;
-  margin-right: 12px;
-}
-.app-title {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #3b82f6;
-  text-shadow: 0 2px 12px #22d3ee22;
-  letter-spacing: 1.5px;
+
+footer {
+  margin: 0 24px 24px 24px;
+  padding: 16px 24px;
+  border: none;
+  font-size: 1.08rem;
+  background: rgba(23,26,33,0.96);
+  border-radius: 22px;
+  box-shadow: 0 4px 16px #22d3ee22;
 }
 footer a {
   color: #22d3ee;
   text-decoration: underline;
-  font-weight: 600;
+  font-weight: 700;
 }
+
 .muted {
   color: #9aa0a6;
-  font-size: 1rem;
+  font-size: 1.08rem;
 }
-@media (max-width:900px){
-  .wrap{grid-template-columns:1fr; margin:8px;}
+
+::-webkit-scrollbar {
+  width: 12px;
+  background: #171a21;
+}
+::-webkit-scrollbar-thumb {
+  background: #22d3ee;
+  border-radius: 10px;
+}
+
+@media (max-width:1100px){
+  .wrap{grid-template-columns:1fr; margin:12px;}
   aside{order:2;height:40vh; margin:0;}
   main{order:1;}
-  header, footer {margin: 8px;}
+  header, footer {margin: 12px;}
 }

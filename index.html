@@ -6,10 +6,7 @@
 <title>Mini IPTV + Radio</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="styles.css">
-<script>
-// Load items.js synchronously to ensure window.items is available before DOMContentLoaded
-document.write('<script src="items.js"><\/script>');
-</script>
+<script src="items.js"></script>
 </head>
 <body>
 <header>
@@ -163,7 +160,12 @@ function playMedia(entry){
     playerDiv.appendChild(iframe);
     statusEl.textContent = 'Radio Pendimi (iframe)';
   } else if (kind === 'radio'){
-    statusEl.textContent = 'Ky kanal është radio. Player-i audio është hequr.';
+    var audioEl = document.getElementById('audio');
+    audioEl.style.display = '';
+    audioEl.src = entry.url;
+    audioEl.play().catch(()=>{});
+    videoEl.style.display = 'none';
+    statusEl.textContent = 'Duke luajtur radio.';
   } else if (entry.url.startsWith('https://www.twitch.tv/')) {
     // Twitch: shfaq iframe
     const playerDiv = document.querySelector('.player');
