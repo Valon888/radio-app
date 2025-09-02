@@ -49,6 +49,50 @@ const channels = [
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/RiC_logo.svg/200px-RiC_logo.svg.png"
   }
 ];
+// Rakuten TV Germany channels
+const rakutenGermanyChannels = [
+  { id: "rakuten_amasia", name: "Amasia (720p)", url: "https://splendid-film-amasia-1-eu.rakuten.wurl.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_topgear", name: "BBC Top Gear Germany (1080p)", url: "https://amg00793-amg00793c44-rakuten-de-5538.playouts.now.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_comedyshows", name: "Comedy & Shows Germany (1080p)", url: "https://comedy-and-shows-rakuten.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_defatv", name: "DEFA TV (720p)", url: "https://wdrmediagroup-defatv-1-eu.rakuten.wurl.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_fifa", name: "FIFA+ Germany (720p)", url: "https://4397879b.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWRlX0ZJRkFQbHVzR2VybWFuX0hMUw/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_filmgold", name: "FilmGold Germany (1080p)", url: "https://mainstreamfilmgold-rakuten.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_flussmonster", name: "Fluss Monster (1080p)", url: "https://rivermonstergermany-rakuten.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_freitagnachtnews", name: "Freitag Nacht News (1080p)", url: "https://freitag-nacht-news-0765b77e-9244-47e4-8dcb-e8bc069b871d-de.fast.rakuten.tv/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6434/master.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_grahamnorton", name: "Graham Norton Germany (1080p)", url: "https://amg00654-itv-amg00654c37-rakuten-de-7600.playouts.now.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_hellskitchen", name: "Hell's Kitchen Germany (1080p)", url: "https://hellskitchengermany-rakuten.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_krimi", name: "Krimi (720p)", url: "https://4dad3dcf.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X0FSRFBsdXNLcmltaV9ITFM/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_lindenstrasse", name: "Lindenstrasse (720p)", url: "https://ad2ef2da.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X0FSRFBsdXNMaW5kZW5zdHJhZV9ITFM/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_loolookids", name: "LooLoo Kids TV (1080p)", url: "https://amg02757-amg02757c3-rakuten-de-6135.playouts.now.amagi.tv/playlist/amg02757-loolookids-llkdefast-rakutende/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_mytimemovie", name: "MyTime Movie Network Germany (1080p)", url: "https://appletree-mytimemoviegerman-rakuten.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_naruto", name: "Naruto Germany (1080p)", url: "https://palatinmedia-naruto-rakuten.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_actionmovies", name: "Rakuten TV Action Movies Germany (1080p)", url: "https://284824cf70404fdfb6ddf9349009c710.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6066/master.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_comedymovies", name: "Rakuten TV Comedy Movies Germany (1080p)", url: "https://ecac08c9e2214375b907d6825aaf9a01.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6182/master.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_crimeseries", name: "Rakuten TV Crime Series Germany (1080p)", url: "https://b6244e915ee04a5aa758e863a55a6a3d.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6217/master.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_dramamovies", name: "Rakuten TV Drama Movies Germany (1080p)", url: "https://968754c2483045c1a9a7f677caec35b6.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6096/master.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_familymovies", name: "Rakuten TV Family Movies Germany (1080p)", url: "https://af230031eeac45f3b78d4f8a13265105.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6209/master.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_germancinema", name: "Rakuten TV German Cinema (1080p)", url: "https://a5dc66582aa040269fd99d7d7a6ac23b.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6200/master.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_romancemovies", name: "Rakuten TV Romance Movies Germany (1080p)", url: "https://romance-rakuten-tv-de.fast.rakuten.tv/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6475/master.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_thrillers", name: "Rakuten TV Thrillers Germany (1080p)", url: "https://thriller-rakuten-tv-de.fast.rakuten.tv/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6481/master.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_topmovies", name: "Rakuten TV Top Movies Germany (1080p)", url: "https://cbb622b29f5d43b598991f3fa19de291.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5985/master.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_trailers", name: "Rakuten TV Trailers Germany (1080p)", url: "https://7ebdf1136a8b4992acc6d9d06f8567b3.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-4547/master.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_redbulltv", name: "Red Bull TV Germany (1080p)", url: "https://769a97d9.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X1JlZEJ1bGxUVl9ITFM/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_royalworld", name: "Royalworld Germany (720p)", url: "https://amogonetworx-royalworld-2-de.rakuten.wurl.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_spannungemotionen", name: "Spannung & Emotionen (1080p)", url: "https://spannung-and-emotionen-rakuten.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_starkefrauen", name: "Starke Frauen (1080p)", url: "https://mainstreamstarkefrauen-rakuten.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_starsingeahr", name: "Stars in Gefahr (1080p)", url: "https://stars-in-gefahr-rakuten.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_strongman", name: "Strongman Champions League (720p)", url: "https://rightsboosterltd-scl-2-eu.rakuten.wurl.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_tastemade", name: "Tastemade (1080p)", url: "https://rakutenaa-tm-germany-rakuten-ger-8jboz.amagi.tv/playlist/rakutenAA-tm-germany-rakuten-ger/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_tennischannel", name: "Tennis Channel Germany (720p)", url: "https://tennischanneldeu-rakuten.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_topsci-fi", name: "Top Sci-Fi (1080p)", url: "https://amg00609-amg00609c5-rakuten-uk-3764.playouts.now.amagi.tv/master.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_topserien", name: "Top Serien (1080p)", url: "https://amg00609-palatinmediafil-cractiontv-rakuten-dhjcp.amagi.tv/hls/amagi_hls_data_rakutenAA-cractiontv-rakuten/CDN/master.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_travelxp", name: "Travelxp Germany (720p)", url: "https://travelxp-travelxp-2-de.rakuten.wurl.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_vevopop", name: "Vevo Pop Germany (1080p)", url: "https://amg00056-amg00056c7-rakuten-de-3245.playouts.now.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_vevoschlager", name: "Vevo Schlager Pop (1080p)", url: "https://amg00056-amg00056c15-rakuten-it-3241.playouts.now.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_wickedtuna", name: "Wicked Tuna Germany (1080p)", url: "https://amg00353-amg00353c28-rakuten-us-4895.playouts.now.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_worldoffreesports", name: "World of Freesports (1080p)", url: "https://mainstreammedia-worldoffreesportsintl-rakuten.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" },
+  { id: "rakuten_xite", name: "XITE (720p)", url: "https://xite-rakuten.amagi.tv/playlist.m3u8", type: "tv", group: "Gjermani - Rakuten TV", logo: "" }
+];
 
 // Turkish channels (sample, HTTPS only, prefer 720p/1080p)
 const turkishChannels = [
@@ -611,48 +655,30 @@ const turkishChannelsFixed = turkishChannels.map((ch, idx) => ({
   logo: ""
 }));
 
-// Pluto TV Germany channels (from de_pluto.m3u)
+// Pluto TV Germany channels.
+// PROBLEM I MËPARSHËM:
+// 1. URL-të ishin "http" (bllokohen në GitHub Pages për shkak të Mixed Content) -> tani "https".
+// 2. Shumë kanale kishin të njëjtin channelId (placeholder) -> DUHET zëvendësuar me ID reale të Pluto TV.
+// 3. Këtu mbajmë vetëm disa shembuj minimalë derisa të sigurojmë listën zyrtare.
+// SI TË GJENDET NJË URL E SAKTË Pluto:
+// Hap web player Pluto TV (me VPN në Gjermani nëse duhet), inspekto network -> kërko "master.m3u8" ku përmban /channel/{CHANNEL_ID}/.
+// Kopjo gjithë URL-në https dhe vendose këtu.
 const plutoGermanyChannels = [
-  { id: "plutode_0", name: "48 Hours", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/651432fa98020f000878b407/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_1", name: "90210", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/65a67dd13af63d0008257f17/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_2", name: "Action Sports", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5be1be871843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_3", name: "AKIBA PASS TV Anime: Sport", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/659e598ab9adc4000843c574/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_4", name: "Alle hassen Chris", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/622f6e1e2792150007e0b2ff/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_5", name: "American Dad!", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_6", name: "Ancient Aliens", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_7", name: "Bar Rescue", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_8", name: "Beverly Hills 90210", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_9", name: "Blue Bloods", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_10", name: "Bob Ross", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_11", name: "Buffy the Vampire Slayer", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_12", name: "CSI: Miami", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_13", name: "Family Guy", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_14", name: "Fringe", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_15", name: "Ghost Hunters", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_16", name: "Hell's Kitchen", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_17", name: "Hawaii Five-0", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_18", name: "Ink Master", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_19", name: "Jersey Shore", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_20", name: "Killer Inside: The Mind of Aaron Hernandez", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_21", name: "Law & Order", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_22", name: "MasterChef", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_23", name: "NCIS", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_24", name: "Nashville", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_25", name: "Paw Patrol", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_26", name: "Peppa Pig", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_27", name: "Perry Mason", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_28", name: "Rugrats", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_29", name: "SpongeBob SquarePants", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_30", name: "The Amazing Race", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_31", name: "The Office", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_32", name: "The Real World", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_33", name: "The Simpsons", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_34", name: "The X-Files", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_35", name: "Top Gear", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_36", name: "Two and a Half Men", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_37", name: "Unsolved Mysteries", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_38", name: "Wild 'N Out", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
-  { id: "plutode_39", name: "Wipeout", url: "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4e4a7d1843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" }
+  {
+    id: "plutode_die_nanny",
+    name: "Die Nanny",
+    url: "https://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/66c6fc06489bab0008b6f9da/master.m3u8",
+    type: "tv",
+    group: "Gjermani - Pluto TV",
+    logo: "https://images.pluto.tv/channels/66c6fc06489bab0008b6f9da/featuredImage.jpg"
+  },
+  // Shembuj të tjerë ekzistues:
+  { id: "plutode_48hours", name: "48 Hours", url: "https://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/651432fa98020f000878b407/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
+  { id: "plutode_90210", name: "90210", url: "https://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/65a67dd13af63d0008257f17/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
+  { id: "plutode_actionsports", name: "Action Sports", url: "https://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5be1be871843b56328bc3ef1/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
+  { id: "plutode_anime_sport", name: "AKIBA PASS Anime Sport", url: "https://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/659e598ab9adc4000843c574/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" },
+  { id: "plutode_allehassenchris", name: "Alle hassen Chris", url: "https://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/622f6e1e2792150007e0b2ff/master.m3u8", type: "tv", group: "Gjermani - Pluto TV", logo: "" }
+  // Shto këtu kanale të tjera me ID unike & URL HTTPS
 ];
 
 // —— SHËNIM ——
@@ -740,5 +766,6 @@ window.items = [].concat(
   radioChannels,
   channels,
   turkishChannelsFixed,
-  plutoGermanyChannels
+  plutoGermanyChannels,
+  rakutenGermanyChannels
 );
