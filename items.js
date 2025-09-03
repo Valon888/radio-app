@@ -2,7 +2,7 @@ const channels = [
   {
     id: "toggo_plus",
     name: "Super RTL - Toggo Plus",
-    url: "http://84.22.46.188/play/a013",
+  url: "https://84.22.46.188/play/a013",
     type: "tv",
     group: "Gjermani - Fëmijë",
     logo: "https://static.epg.best/de/TOGGOplus.de.png"
@@ -11,7 +11,7 @@ const channels = [
   {
     id: "ardone",
     name: "ARD One",
-    url: "https://mcdn.daserste.de/daserste/de/master.m3u8",
+  url: "https://mcdn.daserste.de/daserste/de/master.m3u8",
     type: "tv",
     group: "Gjermani - Filma",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/One_Logo_2016.svg/200px-One_Logo_2016.svg.png"
@@ -19,7 +19,7 @@ const channels = [
   {
     id: "zdfneo",
     name: "ZDF Neo",
-    url: "https://zdf-hls-15.akamaized.net/hls/live/2016498/de/high/master.m3u8",
+  url: "https://zdf-hls-15.akamaized.net/hls/live/2016498/de/high/master.m3u8",
     type: "tv",
     group: "Gjermani - Filma",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/ZDFneo_2017_logo.svg/200px-ZDFneo_2017_logo.svg.png"
@@ -27,7 +27,7 @@ const channels = [
   {
     id: "arte",
     name: "Arte DE",
-    url: "https://arte-cdn.akamaized.net/am/arte_de/master.m3u8",
+  url: "https://arte-cdn.akamaized.net/am/arte_de/master.m3u8",
     type: "tv",
     group: "Gjermani - Filma",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Arte-logo.svg/200px-Arte-logo.svg.png"
@@ -35,7 +35,7 @@ const channels = [
   {
     id: "kika",
     name: "KIKA",
-    url: "https://kikade-lh.akamaihd.net/i/kikade_1@816548/master.m3u8",
+  url: "https://kikade-lh.akamaihd.net/i/kikade_1@816548/master.m3u8",
     type: "tv",
     group: "Gjermani - Fëmijë",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/KiKA_Logo_2012.svg/200px-KiKA_Logo_2012.svg.png"
@@ -43,7 +43,7 @@ const channels = [
   {
     id: "ric",
     name: "RiC TV",
-    url: "http://ric-live.de/live/smil:ric.smil/playlist.m3u8",
+  url: "https://ric-live.de/live/smil:ric.smil/playlist.m3u8",
     type: "tv",
     group: "Gjermani - Fëmijë",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/RiC_logo.svg/200px-RiC_logo.svg.png"
@@ -482,26 +482,26 @@ const turkishChannels = [
   },
   {
     title: "Tabii Spor 6",
-    url: "https://vbtob9hyq58eiophct5qctxr2.medya.trt.com.tr/master.m3u8",
+  url: "https://vbtob9hyq58eiophct5qctxr2.medya.trt.com.tr/master.m3u8",
     quality: "720p",
     country: "TR"
   },
   {
     title: "Tarim TV",
-    url: "https://content.tvkur.com/l/c7e1da7mm25p552d9u9g/master.m3u8",
+  url: "https://content.tvkur.com/l/c7e1da7mm25p552d9u9g/master.m3u8",
     quality: "1080p",
     country: "TR"
   },
   // (Removed invalid object containing variable declaration inside array)
   {
     title: "TRT 3",
-    url: "https://tv-trt3.live.trt.com.tr/master.m3u8",
+  url: "https://tv-trt3.live.trt.com.tr/master.m3u8",
     quality: "720p",
     country: "TR"
   },
   {
     title: "TRT Arabi",
-    url: "https://tv-trtarabi.medya.trt.com.tr/master.m3u8",
+  url: "https://tv-trtarabi.medya.trt.com.tr/master.m3u8",
     quality: "1080p",
     country: "TR"
   },
