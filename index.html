@@ -20,7 +20,6 @@
   </select>
 </header>
 <div class="wrap">
-  <aside id="list" aria-label="Lista e kanaleve"></aside>
   <main>
     <div class="meta">
       <span id="title" class="title"></span>
@@ -36,7 +35,26 @@
         </select>
       </div>
       <video id="video" controls></video>
-      <audio id="audio" controls style="display:none"></audio>
+      <audio id="audio" controls></audio>
+    </div>
+    <div id="status" class="muted"></div>
+  </main>
+  <aside id="list" aria-label="Lista e kanaleve"></aside>
+    <div class="meta">
+      <span id="title" class="title"></span>
+      <span id="epg" class="epg"></span>
+    </div>
+    <div class="player">
+      <img id="chanLogo" class="chan-logo" alt="Logo" />
+      <div class="resolution-row">
+        <label for="resolutionSel" class="resolution-label">Rezolucioni:</label>
+        <select id="resolutionSel" class="resolution-select">
+          <option value="1080p">1080p</option>
+          <option value="720p">720p</option>
+        </select>
+      </div>
+      <video id="video" controls></video>
+      <audio id="audio" controls></audio>
     </div>
     <div id="status" class="muted"></div>
   </main>
@@ -327,3 +345,4 @@ window.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
