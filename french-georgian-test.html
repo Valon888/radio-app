@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>French and Georgian Channels Test</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .test-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .channel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .channel-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+  }
+  
+  .channel-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  
+  .channel-logo {
+    width: 100%;
+    height: 80px;
+    object-fit: contain;
+    background-color: #f8f8f8;
+    margin-bottom: 10px;
+    border-radius: 3px;
+  }
+  
+  .channel-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .channel-group {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+  }
+  
+  .channel-url {
+    color: #0078d7;
+    font-size: 0.8em;
+    word-break: break-all;
+  }
+  
+  .tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-bottom: none;
+    margin-right: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  
+  .tab.active {
+    background-color: white;
+    border-color: #ddd;
+    margin-bottom: -1px;
+  }
+  
+  .tab-content {
+    display: none;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  .loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+    margin: 20px auto;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .stats {
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+  
+  .stats h3 {
+    margin-top: 0;
+  }
+  
+  .reload-btn {
+    background-color: #0078d7;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-bottom: 20px;
+  }
+  
+  .reload-btn:hover {
+    background-color: #005fa3;
+  }
+</style>
+</head>
+<body>
+<div class="test-container">
+  <h1>French and Georgian Channels Test</h1>
+  <p>This page tests the loading of French and Georgian channels from the playlist files.</p>
+  
+  <button id="reloadBtn" class="reload-btn">Reload All Channels</button>
+  
+  <div class="stats" id="statsContainer">
+    <h3>Channel Statistics</h3>
+    <div id="statsContent">
+      <p>Click "Reload All Channels" to fetch the latest data.</p>
+    </div>
+  </div>
+  
+  <div class="tabs">
+    <div class="tab active" data-tab="french">French Channels</div>
+    <div class="tab" data-tab="georgian">Georgian Channels</div>
+    <div class="tab" data-tab="all">All Channels</div>
+  </div>
+  
+  <div class="tab-content active" id="french-tab">
+    <div id="french-channels" class="channel-grid">
+      <div class="loader"></div>
+    </div>
+  </div>
+  
+  <div class="tab-content" id="georgian-tab">
+    <div id="georgian-channels" class="channel-grid">
+      <div class="loader"></div>
+    </div>
+  </div>
+  
+  <div class="tab-content" id="all-tab">
+    <div id="all-channels" class="channel-grid">
+      <div class="loader"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Load necessary scripts -->
+<script src="playlist-loader.js"></script>
+<script src="test-french-georgian-channels.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  // Setup tab switching
+  const tabs = document.querySelectorAll('.tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Remove active class from all tabs
+      tabs.forEach(t => t.classList.remove('active'));
+      // Add active class to clicked tab
+      tab.classList.add('active');
+      
+      // Hide all tab content
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Show content for clicked tab
+      const tabId = tab.getAttribute('data-tab');
+      document.getElementById(`${tabId}-tab`).classList.add('active');
+    });
+  });
+  
+  // Load channels on page load
+  await loadAndDisplayChannels();
+  
+  // Set up reload button
+  document.getElementById('reloadBtn').addEventListener('click', async () => {
+    if (window.riktheTeGjitheKanalet) {
+      await window.riktheTeGjitheKanalet();
+      await loadAndDisplayChannels();
+    } else if (window.playlistLoader) {
+      window.playlistLoader.clearCache = true;
+      await window.playlistLoader.loadAllPlaylists();
+      await loadAndDisplayChannels();
+    } else {
+      alert('Playlist loader not found!');
+    }
+  });
+});
+
+// Function to load and display all channels
+async function loadAndDisplayChannels() {
+  try {
+    // Show loading indicators
+    document.querySelectorAll('.channel-grid').forEach(grid => {
+      grid.innerHTML = '<div class="loader"></div>';
+    });
+    
+    // Load all channels if not already loaded
+    let allChannels = [];
+    if (window.playlistLoader) {
+      allChannels = await window.playlistLoader.loadAllPlaylists();
+    } else {
+      document.getElementById('statsContent').innerHTML = '<p class="error">Error: Playlist loader not found!</p>';
+      return;
+    }
+    
+    // Filter channels by country
+    const frenchChannels = allChannels.filter(c => 
+      (c.group && (c.group === 'France' || c.group === 'Francë')) || 
+      (c.source && c.source === 'fr.m3u')
+    );
+    
+    const georgianChannels = allChannels.filter(c => 
+      (c.group && (c.group === 'Georgia' || c.group === 'Gjeorgji')) || 
+      (c.source && c.source === 'ge.m3u')
+    );
+    
+    // Display statistics
+    document.getElementById('statsContent').innerHTML = `
+      <ul>
+        <li><strong>Total Channels:</strong> ${allChannels.length}</li>
+        <li><strong>French Channels:</strong> ${frenchChannels.length}</li>
+        <li><strong>Georgian Channels:</strong> ${georgianChannels.length}</li>
+        <li><strong>Last Updated:</strong> ${new Date().toLocaleTimeString()}</li>
+      </ul>
+    `;
+    
+    // Display French channels
+    displayChannelsInGrid('french-channels', frenchChannels);
+    
+    // Display Georgian channels
+    displayChannelsInGrid('georgian-channels', georgianChannels);
+    
+    // Display all channels (limited to 100 for performance)
+    displayChannelsInGrid('all-channels', allChannels.slice(0, 100), true);
+    
+  } catch (error) {
+    console.error('Error loading channels:', error);
+    document.getElementById('statsContent').innerHTML = `<p class="error">Error: ${error.message}</p>`;
+  }
+}
+
+// Function to display channels in a grid
+function displayChannelsInGrid(containerId, channels, showLimit = false) {
+  const container = document.getElementById(containerId);
+  
+  if (!channels || channels.length === 0) {
+    container.innerHTML = '<p>No channels found.</p>';
+    return;
+  }
+  
+  let html = '';
+  
+  channels.forEach(channel => {
+    html += `
+      <div class="channel-card">
+        <img src="${channel.logo || 'file_0000000061906246a7cec4605005f737.png'}" 
+             alt="${channel.name}" 
+             class="channel-logo" 
+             onerror="this.src='file_0000000061906246a7cec4605005f737.png'">
+        <div class="channel-name">${channel.name}</div>
+        <div class="channel-group">${channel.group || 'No Group'}</div>
+        <div class="channel-url">${channel.url}</div>
+      </div>
+    `;
+  });
+  
+  if (showLimit && channels.length >= 100) {
+    html += '<p>Showing only the first 100 channels...</p>';
+  }
+  
+  container.innerHTML = html;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kosovo Channels Test</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+    background-color: #f5f5f5;
+  }
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  h1 {
+    color: #0078d7;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+  }
+  h2 {
+    color: #0078d7;
+    margin-top: 25px;
+  }
+  .status-box {
+    background: #f5f5f5;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  .status-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+    border-left: 5px solid #3c763d;
+  }
+  .status-warning {
+    background-color: #fcf8e3;
+    color: #8a6d3b;
+    border-left: 5px solid #8a6d3b;
+  }
+  .status-error {
+    background-color: #f2dede;
+    color: #a94442;
+    border-left: 5px solid #a94442;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #f5f5f5;
+    position: sticky;
+    top: 0;
+  }
+  .channel-table {
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  button {
+    background-color: #0078d7;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  button:hover {
+    background-color: #005fa3;
+  }
+  .player-container {
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+  video {
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 7px;
+    border-radius: 3px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .badge-success {
+    background-color: #5cb85c;
+  }
+  .badge-warning {
+    background-color: #f0ad4e;
+  }
+  .badge-error {
+    background-color: #d9534f;
+  }
+  .nav {
+    display: flex;
+    background-color: #f5f5f5;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    flex-wrap: wrap;
+  }
+  .nav a {
+    padding: 8px 15px;
+    text-decoration: none;
+    color: #333;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+  }
+  .nav a:hover {
+    background-color: #ddd;
+  }
+  .nav a.active {
+    background-color: #0078d7;
+    color: white;
+  }
+  .loader {
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid #3498db;
+    width: 30px;
+    height: 30px;
+    animation: spin 2s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .channel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+  }
+  .channel-card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .channel-card img {
+    max-width: 100px;
+    max-height: 60px;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .channel-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+  }
+  .log-container {
+    background-color: #002b36;
+    color: #839496;
+    padding: 15px;
+    border-radius: 4px;
+    font-family: monospace;
+    margin: 20px 0;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Kosovo Channels Test</h1>
+  
+  <div class="nav">
+    <a href="/" class="active">Home</a>
+    <a href="/kosovo-info">Kosovo Info</a>
+    <a href="/diagnostics">Diagnostics</a>
+    <a href="/fixed_index.html">Main App</a>
+  </div>
+
+  <div class="status-box" id="connection-status">
+    <h2>Connection Status</h2>
+    <button id="test-connection">Test Server Connection</button>
+    <div id="connection-result"></div>
+  </div>
+
+  <div class="status-box" id="file-status">
+    <h2>Kosovo File Access Test</h2>
+    <button id="test-file-access">Test File Access</button>
+    <div id="file-result"></div>
+  </div>
+  
+  <div class="status-box" id="api-status">
+    <h2>Kosovo API Test</h2>
+    <button id="test-api">Test Kosovo API</button>
+    <div id="api-result"></div>
+  </div>
+
+  <div class="status-box" id="channel-status">
+    <h2>Kosovo Channels</h2>
+    <button id="load-channels">Load Kosovo Channels</button>
+    <div id="channel-count"></div>
+    <div class="channel-table">
+      <table id="channel-table">
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>Group</th>
+            <th>URL</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="player-container" id="player-container" style="display: none;">
+    <h2>Channel Preview</h2>
+    <div id="player-info"></div>
+    <div id="video-container"></div>
+  </div>
+
+  <div class="log-container" id="log">
+    <div>--- Log output will appear here ---</div>
+  </div>
+</div>
+
+<script>
+// Logging function
+function log(message, type = 'info') {
+  const logElement = document.getElementById('log');
+  const entry = document.createElement('div');
+  
+  const timestamp = new Date().toLocaleTimeString();
+  let prefix = '';
+  
+  switch (type) {
+    case 'success':
+      prefix = '✅ ';
+      entry.style.color = '#859900'; // green
+      break;
+    case 'error':
+      prefix = '❌ ';
+      entry.style.color = '#dc322f'; // red
+      break;
+    case 'warning':
+      prefix = '⚠️ ';
+      entry.style.color = '#b58900'; // yellow
+      break;
+    default:
+      prefix = 'ℹ️ ';
+      entry.style.color = '#268bd2'; // blue
+  }
+  
+  entry.textContent = `[${timestamp}] ${prefix}${message}`;
+  logElement.appendChild(entry);
+  
+  // Auto-scroll to bottom
+  logElement.scrollTop = logElement.scrollHeight;
+}
+
+// Test server connection
+document.getElementById('test-connection').addEventListener('click', function() {
+  const resultElement = document.getElementById('connection-result');
+  resultElement.innerHTML = '<div class="loader"></div> Testing connection to server...';
+  
+  fetch('/')
+    .then(response => {
+      if (response.ok) {
+        resultElement.innerHTML = '<span class="badge badge-success">Connected</span> Server is online and responding.';
+        log('Server connection test successful', 'success');
+      } else {
+        resultElement.innerHTML = `<span class="badge badge-error">Error ${response.status}</span> Server responded with error.`;
+        log(`Server connection test failed with status ${response.status}`, 'error');
+      }
+    })
+    .catch(error => {
+      resultElement.innerHTML = `<span class="badge badge-error">Failed</span> ${error.message}`;
+      log(`Server connection test failed: ${error.message}`, 'error');
+    });
+});
+
+// Test file access
+document.getElementById('test-file-access').addEventListener('click', function() {
+  const resultElement = document.getElementById('file-result');
+  resultElement.innerHTML = '<div class="loader"></div> Testing access to Kosovo channels file...';
+  
+  fetch('/xk.m3u')
+    .then(response => {
+      if (response.ok) {
+        return response.text().then(content => {
+          const channelCount = (content.match(/#EXTINF/g) || []).length;
+          resultElement.innerHTML = `
+            <span class="badge badge-success">File Accessible</span> 
+            Kosovo channels file (xk.m3u) is accessible.<br>
+            File size: ${content.length} bytes<br>
+            Channel count: ${channelCount}
+          `;
+          log(`Kosovo file test successful - ${channelCount} channels found`, 'success');
+        });
+      } else {
+        resultElement.innerHTML = `<span class="badge badge-error">Error ${response.status}</span> Could not access Kosovo channels file.`;
+        log(`Kosovo file access failed with status ${response.status}`, 'error');
+      }
+    })
+    .catch(error => {
+      resultElement.innerHTML = `<span class="badge badge-error">Failed</span> ${error.message}`;
+      log(`Kosovo file access failed: ${error.message}`, 'error');
+    });
+});
+
+// Test Kosovo API
+document.getElementById('test-api').addEventListener('click', function() {
+  const resultElement = document.getElementById('api-result');
+  resultElement.innerHTML = '<div class="loader"></div> Testing Kosovo API endpoint...';
+  
+  // Set Accept header to request JSON
+  fetch('/kosovo-info', {
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+    .then(response => {
+      if (response.ok) {
+        return response.json().then(data => {
+          resultElement.innerHTML = `
+            <span class="badge badge-success">API Working</span> 
+            Kosovo API is responding correctly.<br>
+            Status: ${data.status}<br>
+            Channels: ${data.channelCount || (data.channels ? data.channels.length : 0)}
+          `;
+          
+          // Add a details section with sample data
+          if (data.channels && data.channels.length > 0) {
+            const sampleChannel = data.channels[0];
+            const detailsElement = document.createElement('div');
+            detailsElement.style.marginTop = '10px';
+            detailsElement.innerHTML = `
+              <h4>Sample Channel Data:</h4>
+              <pre style="max-height: 150px; overflow-y: auto;">${JSON.stringify(sampleChannel, null, 2)}</pre>
+            `;
+            resultElement.appendChild(detailsElement);
+          }
+          
+          log(`Kosovo API test successful - received ${data.channels ? data.channels.length : 0} channels`, 'success');
+        });
+      } else {
+        resultElement.innerHTML = `<span class="badge badge-error">Error ${response.status}</span> Kosovo API returned an error.`;
+        log(`Kosovo API test failed with status ${response.status}`, 'error');
+      }
+    })
+    .catch(error => {
+      resultElement.innerHTML = `<span class="badge badge-error">Failed</span> ${error.message}`;
+      log(`Kosovo API test failed: ${error.message}`, 'error');
+    });
+});
+
+// Load Kosovo channels
+document.getElementById('load-channels').addEventListener('click', function() {
+  const tableBody = document.getElementById('channel-table').querySelector('tbody');
+  const countElement = document.getElementById('channel-count');
+  
+  tableBody.innerHTML = '<tr><td colspan="4"><div class="loader"></div> Loading channels...</td></tr>';
+  countElement.innerHTML = '';
+  
+  fetch('/kosovo-info', {
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      const channels = data.channels || [];
+      tableBody.innerHTML = '';
+      
+      if (channels.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="4">No channels found</td></tr>';
+        countElement.innerHTML = '<span class="badge badge-warning">0 channels found</span>';
+        log('No Kosovo channels found in the API response', 'warning');
+        return;
+      }
+      
+      countElement.innerHTML = `<span class="badge badge-success">${channels.length} channels found</span>`;
+      log(`Loaded ${channels.length} Kosovo channels successfully`, 'success');
+      
+      // Sort channels by name
+      channels.sort((a, b) => a.name.localeCompare(b.name));
+      
+      channels.forEach(channel => {
+        const row = document.createElement('tr');
+        
+        // Channel column
+        const nameCell = document.createElement('td');
+        nameCell.textContent = channel.name || 'Unnamed Channel';
+        row.appendChild(nameCell);
+        
+        // Group column
+        const groupCell = document.createElement('td');
+        groupCell.textContent = channel.group || 'No Group';
+        row.appendChild(groupCell);
+        
+        // URL column
+        const urlCell = document.createElement('td');
+        const urlText = channel.url || 'No URL';
+        urlCell.title = urlText;
+        urlCell.textContent = urlText.length > 50 ? urlText.substring(0, 47) + '...' : urlText;
+        row.appendChild(urlCell);
+        
+        // Actions column
+        const actionsCell = document.createElement('td');
+        if (channel.url) {
+          const testButton = document.createElement('button');
+          testButton.textContent = 'Test';
+          testButton.onclick = function() {
+            playChannel(channel);
+          };
+          actionsCell.appendChild(testButton);
+        } else {
+          actionsCell.textContent = 'No URL to test';
+        }
+        row.appendChild(actionsCell);
+        
+        tableBody.appendChild(row);
+      });
+    })
+    .catch(error => {
+      tableBody.innerHTML = `<tr><td colspan="4">Error loading channels: ${error.message}</td></tr>`;
+      countElement.innerHTML = `<span class="badge badge-error">Error loading channels</span>`;
+      log(`Error loading Kosovo channels: ${error.message}`, 'error');
+    });
+});
+
+// Play a channel
+function playChannel(channel) {
+  const playerContainer = document.getElementById('player-container');
+  const playerInfo = document.getElementById('player-info');
+  const videoContainer = document.getElementById('video-container');
+  
+  playerContainer.style.display = 'block';
+  playerInfo.innerHTML = `
+    <h3>Playing: ${channel.name}</h3>
+    <p>Group: ${channel.group || 'No Group'}</p>
+    <p>URL: <code>${channel.url}</code></p>
+  `;
+  
+  // Check URL extension
+  const url = channel.url.toLowerCase();
+  let player;
+  
+  if (url.endsWith('.m3u8') || url.includes('.m3u8?') || url.includes('application/x-mpegurl')) {
+    // Use hls.js for HLS streams
+    log(`Playing HLS stream: ${channel.name}`, 'info');
+    videoContainer.innerHTML = `
+      <p>Loading HLS stream... This may take a moment.</p>
+      <video controls id="video-player" style="background-color: black; width: 100%; max-width: 640px;"></video>
+      <p><small>Note: HLS streams require hls.js which will be loaded automatically.</small></p>
+    `;
+    
+    // Load hls.js if not already loaded
+    if (typeof Hls === 'undefined') {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/hls.js@latest';
+      script.onload = () => {
+        initHlsPlayer(channel.url);
+      };
+      document.head.appendChild(script);
+    } else {
+      initHlsPlayer(channel.url);
+    }
+  } else if (url.endsWith('.mp4') || url.includes('video/mp4')) {
+    // Standard video player for MP4
+    log(`Playing MP4 video: ${channel.name}`, 'info');
+    videoContainer.innerHTML = `
+      <video controls autoplay style="background-color: black; width: 100%; max-width: 640px;">
+        <source src="${channel.url}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    `;
+  } else {
+    // Default to iframe for other formats
+    log(`Playing stream in iframe: ${channel.name}`, 'info');
+    videoContainer.innerHTML = `
+      <iframe src="${channel.url}" frameborder="0" allowfullscreen 
+        style="width: 100%; max-width: 640px; height: 360px;"></iframe>
+      <p><small>Note: Some streams may not play in iframe due to browser security restrictions.</small></p>
+      <p><a href="${channel.url}" target="_blank">Open stream in new tab</a></p>
+    `;
+  }
+}
+
+// Initialize HLS player
+function initHlsPlayer(streamUrl) {
+  const video = document.getElementById('video-player');
+  
+  if (Hls.isSupported()) {
+    const hls = new Hls();
+    hls.loadSource(streamUrl);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+      video.play();
+    });
+    
+    hls.on(Hls.Events.ERROR, function(event, data) {
+      if (data.fatal) {
+        log(`HLS error: ${data.type} - ${data.details}`, 'error');
+        document.getElementById('video-container').innerHTML += `
+          <p style="color: red;">Error loading stream: ${data.details}</p>
+        `;
+      }
+    });
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    // For Safari
+    video.src = streamUrl;
+    video.addEventListener('loadedmetadata', function() {
+      video.play();
+    });
+  } else {
+    document.getElementById('video-container').innerHTML = `
+      <p>Your browser does not support HLS playback.</p>
+      <p><a href="${streamUrl}" target="_blank">Open stream URL directly</a></p>
+    `;
+  }
+}
+
+// Initialize page
+window.addEventListener('load', function() {
+  log('Kosovo channel test page loaded', 'info');
+  
+  // Automatically test connection
+  document.getElementById('test-connection').click();
+});
+</script>
+</body>
+</html>

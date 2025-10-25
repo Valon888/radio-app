@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini IPTV - Test i kanaleve</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #1e1e1e;
+      color: #eee;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1, h2 {
+      color: #fff;
+    }
+    .stats {
+      background-color: #333;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .stat-item {
+      margin-bottom: 10px;
+    }
+    .channels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 15px;
+    }
+    .channel-card {
+      background-color: #2a2a2a;
+      border-radius: 5px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .channel-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .channel-group {
+      color: #aaa;
+      font-size: 0.9em;
+      margin-bottom: 10px;
+    }
+    .channel-url {
+      font-size: 0.8em;
+      color: #88c;
+      word-break: break-all;
+    }
+    .source-label {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: 0.7em;
+      margin-top: 5px;
+    }
+    .source-imported {
+      background-color: #2c6e49;
+    }
+    .source-fallback {
+      background-color: #8c5e58;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Mini IPTV Channel Test</h1>
+    
+    <div class="stats" id="stats">
+      <h2>Channel Statistics</h2>
+      <div class="stat-item">Loading statistics...</div>
+    </div>
+    
+    <h2>Sample Channels from Each Source</h2>
+    <div class="channels-grid" id="channels-grid">
+      Loading channels...
+    </div>
+  </div>
+
+  <script src="fallback-channels.js"></script>
+  <script src="imported-channels.js"></script>
+  <script>
+    // Wait for DOM to load
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get stats container
+      const statsContainer = document.getElementById('stats');
+      const channelsGrid = document.getElementById('channels-grid');
+      
+      // Get channels
+      let importedCount = 0;
+      let fallbackCount = 0;
+      
+      try {
+        // Check if imported channels are available
+        if (typeof importedChannels !== 'undefined') {
+          importedCount = importedChannels.length;
+        }
+        
+        // Check if fallback channels are available
+        if (typeof hardcodedChannels !== 'undefined') {
+          fallbackCount = hardcodedChannels.length;
+          // Count imported fallback channels
+          const importedFallbackCount = hardcodedChannels.filter(ch => ch.id && ch.id.startsWith('fallback_')).length;
+          
+          // Display stats
+          statsContainer.innerHTML = `
+            <h2>Channel Statistics</h2>
+            <div class="stat-item">Imported Channels: <strong>${importedCount}</strong></div>
+            <div class="stat-item">Fallback Channels: <strong>${fallbackCount}</strong> (${importedFallbackCount} imported)</div>
+            <div class="stat-item">Total Channels: <strong>${importedCount + fallbackCount}</strong></div>
+          `;
+          
+          // Display sample channels
+          let html = '';
+          
+          // Add 5 imported channels
+          if (importedCount > 0) {
+            const groups = {};
+            importedChannels.forEach(ch => {
+              if (!groups[ch.group]) {
+                groups[ch.group] = [];
+              }
+              groups[ch.group].push(ch);
+            });
+            
+            // Get a sample channel from each group
+            let sampleImported = [];
+            Object.keys(groups).forEach(group => {
+              if (sampleImported.length < 6) {
+                sampleImported.push(groups[group][0]);
+              }
+            });
+            
+            sampleImported.forEach(ch => {
+              html += `
+                <div class="channel-card">
+                  <div class="channel-name">${ch.name}</div>
+                  <div class="channel-group">${ch.group}</div>
+                  <div class="channel-url">${ch.url}</div>
+                  <div class="source-label source-imported">Imported</div>
+                </div>
+              `;
+            });
+          }
+          
+          // Add 5 fallback channels
+          if (fallbackCount > 0) {
+            const importedFallback = hardcodedChannels.filter(ch => ch.id && ch.id.startsWith('fallback_')).slice(0, 5);
+            
+            importedFallback.forEach(ch => {
+              html += `
+                <div class="channel-card">
+                  <div class="channel-name">${ch.name}</div>
+                  <div class="channel-group">${ch.group}</div>
+                  <div class="channel-url">${ch.url}</div>
+                  <div class="source-label source-fallback">Fallback (Imported)</div>
+                </div>
+              `;
+            });
+            
+            // Add 3 regular fallback channels
+            const regularFallback = hardcodedChannels.filter(ch => !ch.id || !ch.id.startsWith('fallback_')).slice(0, 3);
+            
+            regularFallback.forEach(ch => {
+              html += `
+                <div class="channel-card">
+                  <div class="channel-name">${ch.name}</div>
+                  <div class="channel-group">${ch.group}</div>
+                  <div class="channel-url">${ch.url}</div>
+                  <div class="source-label source-fallback">Fallback</div>
+                </div>
+              `;
+            });
+          }
+          
+          channelsGrid.innerHTML = html;
+        }
+      } catch (error) {
+        statsContainer.innerHTML = `
+          <h2>Error</h2>
+          <div class="stat-item">${error.message}</div>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>

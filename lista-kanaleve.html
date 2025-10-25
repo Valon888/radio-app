@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini IPTV - Lista e Kanaleve</title>
+  <style>
+    :root {
+      --primary-color: #0078d7;
+      --secondary-color: #2ecc71;
+      --accent-color: #e74c3c;
+      --bg-color: #f5f5f5;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --text-secondary: #666666;
+      --border-radius: 8px;
+      --box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      --hover-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      --transition: all 0.2s ease;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+    
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+    
+    .search-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      min-width: 200px;
+    }
+    
+    .filter-select {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      min-width: 150px;
+    }
+    
+    .stats {
+      margin: 1rem 0;
+      padding: 0.75rem;
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      text-align: center;
+      color: var(--text-secondary);
+    }
+    
+    .channel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    
+    .channel-card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .channel-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--hover-shadow);
+    }
+    
+    .channel-type {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.8rem;
+      color: white;
+    }
+    
+    .type-tv {
+      background-color: var(--primary-color);
+    }
+    
+    .type-radio {
+      background-color: var(--secondary-color);
+    }
+    
+    .channel-logo {
+      width: 100%;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 0.5rem;
+      background-color: #f0f0f0;
+      border-radius: var(--border-radius);
+      padding: 0.5rem;
+    }
+    
+    .channel-logo.default {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      color: var(--text-secondary);
+    }
+    
+    .channel-name {
+      font-weight: 600;
+      margin: 0.5rem 0;
+      color: var(--text-color);
+    }
+    
+    .channel-info {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin: 0.25rem 0;
+    }
+    
+    .channel-group {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      font-style: italic;
+      color: var(--text-secondary);
+    }
+    
+    .empty-results {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-secondary);
+    }
+    
+    footer {
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+    
+    footer a {
+      color: white;
+      text-decoration: none;
+    }
+    
+    footer a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .search-container {
+        flex-direction: column;
+      }
+      
+      .search-input, .filter-select {
+        width: 100%;
+      }
+    }
+
+    /* Visually hidden utility class */
+    .visually-hidden {
+      position: absolute !important;
+      left: -9999px !important;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(1px, 1px, 1px, 1px);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Mini IPTV - Lista e Kanaleve</h1>
+  </header>
+  
+  <div class="container">
+    <div class="search-container">
+      <input type="text" id="searchInput" class="search-input" placeholder="Kërko kanale...">
+      <label for="typeFilter" class="visually-hidden">Filtro sipas llojit</label>
+      <select id="typeFilter" class="filter-select" title="Filtro sipas llojit">
+        <option value="">Të gjitha llojet</option>
+        <option value="tv">TV</option>
+        <option value="radio">Radio</option>
+      </select>
+      <label for="groupFilter" class="visually-hidden">Filtro sipas grupit</label>
+      <select id="groupFilter" class="filter-select" title="Filtro sipas grupit">
+        <option value="">Të gjitha grupet</option>
+      </select>
+    </div>
+    
+    <div id="stats" class="stats">
+      Duke ngarkuar...
+    </div>
+    
+    <div id="channelList" class="channel-grid">
+      <div class="loading">Duke ngarkuar kanalet...</div>
+    </div>
+  </div>
+  
+  <footer>
+    &copy; 2025 Mini IPTV + Radio | 
+    <a href="#" id="debugButton">Shfaq informacion debug</a>
+  </footer>
+  
+  <script>
+    // Kanalet dhe lista e grupeve
+    let allChannels = [];
+    const groups = new Set();
+    
+    // Elementet e DOM
+    const searchInput = document.getElementById('searchInput');
+    const typeFilter = document.getElementById('typeFilter');
+    const groupFilter = document.getElementById('groupFilter');
+    const statsEl = document.getElementById('stats');
+    const channelListEl = document.getElementById('channelList');
+    const debugButton = document.getElementById('debugButton');
+    
+    // Funksioni që merr të dhënat e kanaleve dhe i shfaq
+    async function loadAndRenderChannels() {
+      allChannels = [];
+      
+      // Verifikojmë nëse ekzistojnë skriptat e kanaleve
+      try {
+        // Ngarko skriptat e kanaleve
+        await loadScript('fallback-channels.js');
+        await loadScript('radio-channels.js');
+        await loadScript('turkish-channels.js');
+        await loadScript('german-channels.js');
+        await loadScript('items.js');
+        await loadScript('imported-channels.js');
+        
+        // Merr kanalet nga objektet globalë
+        const sources = [
+          { name: 'Kanalet shqiptare', obj: window.albanianChannels || [] },
+          { name: 'Kanalet e Kosovës', obj: window.kosovoChannels || [] },
+          { name: 'Kanalet gjermane', obj: window.germanChannels || [] },
+          { name: 'Kanalet e importuara', obj: window.importedChannels || [] },
+          { name: 'Kanalet e radios', obj: window.radioChannels || [] },
+          { name: 'Kanalet rezervë', obj: window.hardcodedChannels || [] },
+          { name: 'Kanalet nga items', obj: window.items || [] },
+          { name: 'Kanalet Tring Albania', obj: window.tringAlbaniaChannels || [] },
+          { name: 'Kanalet turke', obj: window.turkishChannels || [] },
+        ];
+        
+        // Kombino të gjitha burimet
+        for (const source of sources) {
+          if (Array.isArray(source.obj) && source.obj.length > 0) {
+            console.log(`Gjetur ${source.obj.length} kanale nga ${source.name}`);
+            allChannels = [...allChannels, ...source.obj];
+          }
+        }
+        
+        // Hiq dublikatat sipas ID-së
+        const uniqueIds = new Set();
+        allChannels = allChannels.filter(channel => {
+          if (!channel.id || uniqueIds.has(channel.id)) return false;
+          uniqueIds.add(channel.id);
+          
+          // Regjistroni grupet për filtrim
+          if (channel.group) groups.add(channel.group);
+          
+          return true;
+        });
+      } catch (error) {
+        console.error('Gabim në ngarkimin e kanaleve:', error);
+      }
+      
+      // Nëse nuk u gjetën kanale, shto disa kanale shembull
+      if (allChannels.length === 0) {
+        allChannels = [
+          { id: "rtsh1", name: "RTSH 1", url: "https://tvlive.rtsh.dev/live/rtsh_1mob_pp2/playlist.m3u8", type: "tv", group: "Shqipëri", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/RTSH_1_HD.svg/640px-RTSH_1_HD.svg.png", quality: "720p" },
+          { id: "tirana1", name: "Radio Tirana 1", url: "http://91.187.121.202:8000/RadioTirana1", type: "radio", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Radio_Tirana_logo.svg", group: "Publike" },
+        ];
+        groups.add('Shqipëri');
+        groups.add('Publike');
+      }
+      
+      // Përditëso filtrin e grupeve
+      updateGroupFilter();
+      
+      // Shfaq kanalet
+      renderChannels();
+    }
+    
+    // Funksion për ngarkimin e skriptave
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+    
+    // Përditëso filtrin e grupeve
+    function updateGroupFilter() {
+      // Ruaj vlerën e zgjedhur aktualisht
+      const currentSelection = groupFilter.value;
+      
+      // Pastro opsionet ekzistuese përveç opsionit të parë
+      while (groupFilter.options.length > 1) {
+        groupFilter.remove(1);
+      }
+      
+      // Shto grupet e reja
+      [...groups].sort().forEach(group => {
+        const option = document.createElement('option');
+        option.value = group;
+        option.textContent = group;
+        groupFilter.appendChild(option);
+      });
+      
+      // Rikthe vlerën e zgjedhur nëse ende ekziston
+      if (currentSelection && [...groups].includes(currentSelection)) {
+        groupFilter.value = currentSelection;
+      }
+    }
+    
+    // Filtro dhe shfaq kanalet
+    function renderChannels() {
+      // Merr vlerat e filtrave
+      const searchTerm = searchInput.value.trim().toLowerCase();
+      const selectedType = typeFilter.value;
+      const selectedGroup = groupFilter.value;
+      
+      // Filtro kanalet
+      const filteredChannels = allChannels.filter(channel => {
+        const matchesSearch = !searchTerm || 
+                             (channel.name && channel.name.toLowerCase().includes(searchTerm)) || 
+                             (channel.group && channel.group.toLowerCase().includes(searchTerm));
+        const matchesType = !selectedType || (channel.type === selectedType);
+        const matchesGroup = !selectedGroup || (channel.group === selectedGroup);
+        
+        return matchesSearch && matchesType && matchesGroup;
+      });
+      
+      // Përditëso statistikat
+      const totalChannels = allChannels.length;
+      const tvChannels = allChannels.filter(c => c.type === 'tv').length;
+      const radioChannels = allChannels.filter(c => c.type === 'radio').length;
+      
+      statsEl.innerHTML = `
+        Totali: ${totalChannels} kanale (${tvChannels} TV, ${radioChannels} Radio) | 
+        U gjetën: ${filteredChannels.length} kanale
+      `;
+      
+      // Pastro listën dhe shfaq kanalet
+      channelListEl.innerHTML = '';
+      
+      if (filteredChannels.length === 0) {
+        channelListEl.innerHTML = '<div class="empty-results">Nuk u gjetën kanale që përputhen me kriteret e kërkimit</div>';
+        return;
+      }
+      
+      // Renditi kanalet sipas emrit
+      filteredChannels.sort((a, b) => {
+        if (a.group !== b.group) return a.group?.localeCompare(b.group || '');
+        return a.name?.localeCompare(b.name || '');
+      });
+      
+      // Shto çdo kanal në listë
+      filteredChannels.forEach(channel => {
+        const card = document.createElement('div');
+        card.className = 'channel-card';
+        
+        // Ikona e llojit të kanalit
+        const typeLabel = document.createElement('div');
+        typeLabel.className = `channel-type type-${channel.type || 'tv'}`;
+        typeLabel.textContent = channel.type === 'radio' ? '📻 Radio' : '📺 TV';
+        card.appendChild(typeLabel);
+        
+        // Logo e kanalit
+        let logoContent;
+        if (channel.logo && channel.logo.trim().length > 5) {
+          logoContent = `<img src="${channel.logo}" alt="${channel.name}" class="channel-logo">`;
+        } else {
+          logoContent = `<div class="channel-logo default">${channel.type === 'radio' ? '📻' : '📺'}</div>`;
+        }
+        
+        // Informacioni i kanalit
+        let infoContent = '';
+        if (channel.quality) {
+          infoContent += `<div class="channel-info">Cilësia: ${channel.quality}</div>`;
+        }
+        
+        // Grupi i kanalit
+        const groupContent = channel.group ? 
+          `<div class="channel-group">${channel.group}</div>` : '';
+        
+        card.innerHTML += `
+          ${logoContent}
+          <h3 class="channel-name">${channel.name || 'Pa emër'}</h3>
+          ${infoContent}
+          ${groupContent}
+        `;
+        
+        // Shtoji klikimin për të hapur playerin për TV ose radio
+        card.addEventListener('click', () => {
+          if (channel.type === 'tv') {
+            openVideoPlayer(channel);
+          } else if (channel.type === 'radio') {
+            openAudioPlayer(channel);
+          } else {
+            alert(`Kanali: ${channel.name}\nLloji: ${channel.type}\nURL: ${channel.url}`);
+          }
+        });
+
+        channelListEl.appendChild(card);
+      });
+    }
+    
+    // Dëgjuesit e ngjarjeve për filtrat
+    searchInput.addEventListener('input', renderChannels);
+    typeFilter.addEventListener('change', renderChannels);
+    groupFilter.addEventListener('change', renderChannels);
+    
+    // Butoni i debug-imit
+    debugButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      console.log('Të gjitha kanalet:', allChannels);
+      console.log('Grupet:', [...groups]);
+      alert(`Informacioni i debug-it u shfaq në konsolën e shfletuesit.\nKanale totale: ${allChannels.length}`);
+    });
+    
+    // Audio player modal for radio streams
+    function createAudioPlayerModal() {
+      let modal = document.getElementById('audioPlayerModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'audioPlayerModal';
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.background = 'rgba(0,0,0,0.9)';
+        modal.style.display = 'none';
+        modal.style.zIndex = '9999';
+        modal.style.justifyContent = 'center';
+        modal.style.alignItems = 'center';
+        modal.innerHTML = `
+          <div id="audioPlayerContent" style="background:linear-gradient(135deg, #2c3e50, #27ae60);padding:2rem;border-radius:12px;max-width:550px;width:95%;box-shadow:0 15px 40px rgba(0,0,0,0.5);position:relative;text-align:center;color:white;">
+            <button id="closeAudioBtn" style="position:absolute;top:10px;right:10px;font-size:1.5rem;background:none;border:none;cursor:pointer;color:white;transition:all 0.2s ease;z-index:10;">&times;</button>
+            
+            <div class="audio-player-container" style="display:flex;flex-direction:column;align-items:center;">
+              <!-- Radio info section -->
+              <div style="display:flex;align-items:center;margin-bottom:1.5rem;width:100%;background:rgba(0,0,0,0.2);padding:15px;border-radius:10px;">
+                <img id="radioLogo" style="width:80px;height:80px;object-fit:contain;margin-right:1rem;border-radius:8px;background:rgba(255,255,255,0.1);padding:5px;" src="" alt="Radio Logo">
+                <div style="text-align:left;flex:1;">
+                  <h2 id="radioTitle" style="margin:0;font-size:1.6rem;font-weight:600;"></h2>
+                  <div id="radioGroup" style="opacity:0.8;font-size:0.9rem;margin-top:5px;"></div>
+                </div>
+              </div>
+              
+              <!-- Audio visualization -->
+              <div id="audioVisualization" style="width:100%;height:80px;margin-bottom:15px;background:rgba(0,0,0,0.3);border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;">
+                <div class="audio-bars" style="display:flex;align-items:flex-end;height:100%;width:100%;justify-content:center;padding:0 20px;">
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:30%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:70%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:40%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:90%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:60%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:20%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:80%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:50%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:40%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:60%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:35%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:55%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:75%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:45%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:25%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:65%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:35%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:70%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:50%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:40%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:30%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:60%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:80%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:45%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:70%;border-radius:3px 3px 0 0;"></div>
+                  <div class="bar" style="width:3px;margin:0 2px;background:#2ecc71;height:55%;border-radius:3px 3px 0 0;"></div>
+                </div>
+                <canvas id="audioCanvas" width="500" height="80" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;opacity:0;pointer-events:none;"></canvas>
+                <style>
+                  @keyframes sound {
+                    0% { height: 10%; }
+                    50% { height: 30%; }
+                    80% { height: 60%; }
+                    100% { height: 90%; }
+                  }
+                  .audio-playing .bar {
+                    transition: height 150ms ease;
+                  }
+                  .audio-bars .bar {
+                    box-shadow: 0 0 5px rgba(46, 204, 113, 0.5);
+                  }
+                  .audio-playing .bar:nth-child(odd) {
+                    background: linear-gradient(to top, #2ecc71, #1abc9c);
+                  }
+                  .audio-playing .bar:nth-child(even) {
+                    background: linear-gradient(to top, #27ae60, #2ecc71);
+                  }
+                </style>
+              </div>
+              
+              <!-- Audio player with custom styling -->
+              <div style="width:100%;background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;margin-bottom:15px;">
+                <audio id="mainAudioPlayer" controls style="width:100%;margin:0;border-radius:30px;height:40px;">
+                </audio>
+              </div>
+              
+              <!-- Player status and info -->
+              <div style="display:flex;justify-content:space-between;width:100%;margin-top:10px;">
+                <div id="audioPlayerStatus" style="color:#2ecc71;font-weight:500;"></div>
+                <div id="streamInfo" style="font-size:0.9rem;opacity:0.7;"></div>
+              </div>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Close button with hover effect
+        const closeBtn = modal.querySelector('#closeAudioBtn');
+        closeBtn.onclick = () => {
+          modal.style.display = 'none';
+          const audio = modal.querySelector('#mainAudioPlayer');
+          if (audio) { 
+            // Cleanup
+            audio.pause(); 
+            audio.src = ''; 
+            if (window._audioHlsInstance) {
+              try { window._audioHlsInstance.destroy(); } catch(e) {}
+              window._audioHlsInstance = null;
+            }
+          }
+        };
+        
+        // Add hover effect to close button
+        closeBtn.addEventListener('mouseover', () => {
+          closeBtn.style.transform = 'scale(1.2)';
+          closeBtn.style.color = '#e74c3c';
+        });
+        
+        closeBtn.addEventListener('mouseout', () => {
+          closeBtn.style.transform = 'scale(1)';
+          closeBtn.style.color = 'white';
+        });
+        
+        // Custom audio player styling with CSS
+        const style = document.createElement('style');
+        style.textContent = `
+          /* Custom audio player controls */
+          #mainAudioPlayer::-webkit-media-controls-panel {
+            background: linear-gradient(to right, #2c3e50, #2980b9);
+          }
+          
+          #mainAudioPlayer::-webkit-media-controls-play-button {
+            background-color: #2ecc71;
+            border-radius: 50%;
+          }
+          
+          #mainAudioPlayer::-webkit-media-controls-timeline {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 2px;
+          }
+          
+          #mainAudioPlayer::-webkit-media-controls-current-time-display,
+          #mainAudioPlayer::-webkit-media-controls-time-remaining-display {
+            color: white;
+          }
+          
+          #mainAudioPlayer::-webkit-media-controls-volume-slider {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 2px;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+      return modal;
+    }
+    
+    // Video player modal
+    function createPlayerModal() {
+      let modal = document.getElementById('videoPlayerModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'videoPlayerModal';
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.background = 'rgba(0,0,0,0.9)';
+        modal.style.display = 'none';
+        modal.style.zIndex = '9999';
+        modal.style.justifyContent = 'center';
+        modal.style.alignItems = 'center';
+        modal.innerHTML = `
+          <div id="playerContent" style="background:linear-gradient(135deg, #2c3e50, #1a2530);padding:2rem;border-radius:12px;max-width:85%;width:800px;box-shadow:0 10px 40px rgba(0,0,0,0.5);position:relative;color:white;">
+            <button id="closePlayerBtn" style="position:absolute;top:10px;right:10px;font-size:1.5rem;background:none;border:none;cursor:pointer;color:white;z-index:2;">&times;</button>
+            
+            <div style="display:flex;align-items:center;margin-bottom:1rem;position:relative;">
+              <img id="channelLogo" src="" alt="" style="width:60px;height:60px;object-fit:contain;margin-right:15px;background:rgba(255,255,255,0.1);border-radius:8px;padding:5px;">
+              <div>
+                <h2 id="playerTitle" style="margin:0;font-size:1.6rem;"></h2>
+                <div id="channelGroup" style="opacity:0.8;font-size:0.9rem;margin-top:5px;"></div>
+              </div>
+            </div>
+            
+            <div style="background:rgba(0,0,0,0.4);padding:15px;border-radius:10px;margin-bottom:1.5rem;">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:1rem;">
+                <div style="display:flex;align-items:center;">
+                  <label for="resolutionSelect" style="margin-right:10px;font-size:0.9rem;">Rezolucioni:</label>
+                  <select id="resolutionSelect" style="background:#0078d7;color:white;border:none;border-radius:5px;padding:8px 12px;font-weight:500;cursor:pointer;">
+                    <option value="4k">4K Ultra HD</option>
+                    <option value="1080p" selected>1080p Full HD</option>
+                    <option value="720p">720p HD</option>
+                    <option value="auto">Auto</option>
+                  </select>
+                </div>
+                <div id="playerControls" style="display:flex;gap:10px;">
+                  <button id="toggleFullscreen" style="background:#333;color:white;border:none;border-radius:5px;padding:8px 12px;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;">
+                    <span style="margin-right:5px;">⛶</span> Ekran i plotë
+                  </button>
+                  <button id="toggleMute" style="background:#333;color:white;border:none;border-radius:5px;padding:8px 12px;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;">
+                    <span style="margin-right:5px;">🔊</span> Zëri
+                  </button>
+                </div>
+              </div>
+              
+              <div id="videoContainer" style="position:relative;padding-top:56.25%;border-radius:8px;overflow:hidden;background:#000;">
+                <video id="mainVideoPlayer" controls style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;" poster="">
+                  <source id="videoSource" src="" type="application/x-mpegURL">
+                </video>
+                <div id="loadingOverlay" style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;justify-content:center;align-items:center;background:rgba(0,0,0,0.7);z-index:1;">
+                  <div style="text-align:center;">
+                    <div class="spinner" style="width:40px;height:40px;border:4px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;margin:0 auto 15px;animation:spin 1s linear infinite;"></div>
+                    <div>Duke ngarkuar video...</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:15px;">
+                <div id="playerStatus" style="color:#2ecc71;font-weight:500;"></div>
+                <div id="streamInfo" style="font-size:0.8rem;opacity:0.7;"></div>
+              </div>
+            </div>
+            
+            <style>
+              @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+              #mainVideoPlayer::-webkit-media-controls-panel {
+                background-image: linear-gradient(transparent, rgba(0,0,0,0.7));
+              }
+              #resolutionSelect:focus, #toggleFullscreen:focus, #toggleMute:focus {
+                outline: none;
+                box-shadow: 0 0 0 2px rgba(255,255,255,0.5);
+              }
+              #toggleFullscreen:hover, #toggleMute:hover, #resolutionSelect:hover {
+                background: #444;
+              }
+            </style>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        // Close button
+        modal.querySelector('#closePlayerBtn').onclick = () => {
+          modal.style.display = 'none';
+          const video = modal.querySelector('#mainVideoPlayer');
+          if (video) { video.pause(); video.src = ''; }
+        };
+      }
+      return modal;
+    }
+
+    // Open video player modal for a channel
+    function openVideoPlayer(channel) {
+      const modal = createPlayerModal();
+      modal.style.display = 'flex';
+      const titleEl = modal.querySelector('#playerTitle');
+      const logoEl = modal.querySelector('#channelLogo');
+      const groupEl = modal.querySelector('#channelGroup');
+      const videoEl = modal.querySelector('#mainVideoPlayer');
+      const sourceEl = modal.querySelector('#videoSource');
+      const statusEl = modal.querySelector('#playerStatus');
+      const streamInfoEl = modal.querySelector('#streamInfo');
+      const loadingOverlay = modal.querySelector('#loadingOverlay');
+      const resSel = modal.querySelector('#resolutionSelect');
+      const fullscreenBtn = modal.querySelector('#toggleFullscreen');
+      const muteBtn = modal.querySelector('#toggleMute');
+      
+      // Set title, logo and group
+      titleEl.textContent = channel.name || 'Kanal TV';
+      groupEl.textContent = channel.group || 'TV Channel';
+      
+      if (channel.logo && channel.logo.trim().length > 5) {
+        logoEl.src = channel.logo;
+        videoEl.poster = channel.logo;
+      } else {
+        logoEl.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIyIiB5PSI3IiB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHJ4PSIyIiByeT0iMiI+PC9yZWN0Pjxwb2x5bGluZSBwb2ludHM9IjE3IDIgMTIgNyA3IDIiPjwvcG9seWxpbmU+PC9zdmc+';
+      }
+      
+      statusEl.textContent = 'Duke përgatititur...';
+      streamInfoEl.textContent = '';
+
+      // Find best stream by resolution
+      function getStreamUrl(res) {
+        if (!channel.name) return channel.url;
+        
+        // Find all channels with same name and type
+        const sameChannels = allChannels.filter(c => c.name === channel.name && c.type === 'tv');
+        
+        // Look for the requested resolution or fall back to best available
+        const found4k = sameChannels.find(c => c.quality === '4k' || c.quality === '2160p');
+        const found1080 = sameChannels.find(c => c.quality === '1080p');
+        const found720 = sameChannels.find(c => c.quality === '720p');
+        
+        if (res === '4k' && found4k) return found4k.url;
+        if (res === '1080p' && found1080) return found1080.url;
+        if (res === '720p' && found720) return found720.url;
+        
+        // Auto or fallback - select best available quality
+        if (res === 'auto') {
+          if (found4k) return found4k.url;
+          if (found1080) return found1080.url;
+          if (found720) return found720.url;
+        }
+        
+        // Return original channel URL if no matches
+        if (sameChannels.length) return sameChannels[0].url;
+        return channel.url;
+      }
+
+      // Set default resolution and get stream URL
+      resSel.value = '1080p';  // Start with 1080p as default
+      let streamUrl = getStreamUrl(resSel.value);
+      
+      // Show loading overlay
+      loadingOverlay.style.display = 'flex';
+      
+      // Setup HLS.js for streaming
+      function setupHLS(url) {
+        if (window.Hls && window.Hls.isSupported()) {
+          // Clean up previous instance
+          if (window._hlsInstance) {
+            try { window._hlsInstance.destroy(); } catch(e){}
+          }
+          
+          // Create new HLS instance with optimized settings
+          window._hlsInstance = new window.Hls({
+            lowLatencyMode: true,
+            backBufferLength: 90,
+            maxBufferLength: 30,
+            maxMaxBufferLength: 600,
+            startLevel: -1, // Auto level selection
+            capLevelToPlayerSize: true,
+            debug: false
+          });
+          
+          // Error recovery
+          let recoverDecodingErrorDate = null;
+          let recoverSwapAudioCodecDate = null;
+          
+          window._hlsInstance.on(window.Hls.Events.ERROR, function(event, data) {
+            const now = Date.now();
+            
+            if (data.fatal) {
+              switch(data.type) {
+                case window.Hls.ErrorTypes.NETWORK_ERROR:
+                  statusEl.textContent = 'Gabim rrjeti: Duke u riprovuar...';
+                  window._hlsInstance.startLoad();
+                  break;
+                case window.Hls.ErrorTypes.MEDIA_ERROR:
+                  statusEl.textContent = 'Gabim media: Duke u riprovuar...';
+                  if (!recoverDecodingErrorDate || now - recoverDecodingErrorDate > 3000) {
+                    recoverDecodingErrorDate = now;
+                    window._hlsInstance.recoverMediaError();
+                  } else if (!recoverSwapAudioCodecDate || now - recoverSwapAudioCodecDate > 3000) {
+                    recoverSwapAudioCodecDate = now;
+                    window._hlsInstance.swapAudioCodec();
+                    window._hlsInstance.recoverMediaError();
+                  }
+                  break;
+                default:
+                  statusEl.textContent = 'Gabim: Duke provuar cilësinë automatike...';
+                  // Try auto quality if current fails
+                  streamUrl = getStreamUrl('auto');
+                  window._hlsInstance.loadSource(streamUrl);
+                  window._hlsInstance.startLoad();
+                  break;
+              }
+            } else {
+              // Non-fatal error, just show in status
+              statusEl.textContent = `Problem: ${data.details || data.type || 'i panjohur'}`;
+            }
+          });
+          
+          // Load the source
+          window._hlsInstance.loadSource(url);
+          window._hlsInstance.attachMedia(videoEl);
+          
+          // Setup quality levels and events
+          window._hlsInstance.on(window.Hls.Events.MANIFEST_PARSED, function(event, data) {
+            // Hide loading overlay
+            loadingOverlay.style.display = 'none';
+            
+            // Auto play
+            videoEl.play().catch(() => {
+              statusEl.textContent = 'Klikoni për të luajtur';
+            });
+            
+            // Stream info
+            let qualityLevels = data.levels.length;
+            let maxHeight = Math.max(...data.levels.map(level => level.height));
+            let maxBitrate = Math.max(...data.levels.map(level => level.bitrate));
+            streamInfoEl.textContent = `${qualityLevels} nivele video, max: ${maxHeight}p, ${(maxBitrate/1000000).toFixed(1)}Mbps`;
+          });
+        } else {
+          // Native HLS support fallback
+          videoEl.src = url;
+          videoEl.load();
+          videoEl.play().catch(() => {
+            statusEl.textContent = 'Klikoni për të luajtur';
+          });
+          loadingOverlay.style.display = 'none';
+        }
+      }
+
+      // Load HLS.js if not present
+      if (!window.Hls) {
+        const hlsScript = document.createElement('script');
+        hlsScript.src = 'https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js';
+        hlsScript.onload = () => setupHLS(streamUrl);
+        document.head.appendChild(hlsScript);
+      } else {
+        // Use HLS.js directly
+        setupHLS(streamUrl);
+      }
+
+      // Video events
+      videoEl.addEventListener('loadstart', () => {
+        loadingOverlay.style.display = 'flex';
+        statusEl.textContent = 'Duke ngarkuar...';
+      });
+      
+      videoEl.addEventListener('waiting', () => {
+        statusEl.textContent = 'Duke buffering...';
+      });
+      
+      videoEl.addEventListener('playing', () => {
+        loadingOverlay.style.display = 'none';
+        statusEl.textContent = 'Duke luajtur';
+        
+        // Update stream info with actual video dimensions when available
+        if (videoEl.videoWidth && videoEl.videoHeight) {
+          streamInfoEl.textContent = `${videoEl.videoWidth}×${videoEl.videoHeight}`;
+        }
+      });
+      
+      videoEl.addEventListener('pause', () => {
+        statusEl.textContent = 'Pauzë';
+      });
+      
+      videoEl.addEventListener('ended', () => {
+        statusEl.textContent = 'Përfundoi';
+      });
+      
+      videoEl.addEventListener('error', () => {
+        loadingOverlay.style.display = 'none';
+        statusEl.textContent = 'Gabim: Burimi video nuk është i disponueshëm';
+      });
+
+      // Resolution change event
+      resSel.addEventListener('change', function() {
+        loadingOverlay.style.display = 'flex';
+        statusEl.textContent = `Duke kaluar në ${resSel.value}...`;
+        
+        // Get stream URL for selected resolution
+        streamUrl = getStreamUrl(resSel.value);
+        
+        // Update the player with the new URL
+        if (window.Hls && window.Hls.isSupported()) {
+          window._hlsInstance.loadSource(streamUrl);
+        } else {
+          videoEl.src = streamUrl;
+          videoEl.load();
+          videoEl.play().catch(() => {});
+        }
+      });
+      
+      // Fullscreen button
+      fullscreenBtn.addEventListener('click', () => {
+        const videoContainer = document.getElementById('videoContainer');
+        
+        if (document.fullscreenElement) {
+          document.exitFullscreen().catch(err => console.error(err));
+          fullscreenBtn.innerHTML = '<span style="margin-right:5px;">⛶</span> Ekran i plotë';
+        } else {
+          if (videoContainer.requestFullscreen) {
+            videoContainer.requestFullscreen().catch(err => console.error(err));
+          } else if (videoContainer.webkitRequestFullscreen) {
+            videoContainer.webkitRequestFullscreen();
+          } else if (videoContainer.msRequestFullscreen) {
+            videoContainer.msRequestFullscreen();
+          }
+          fullscreenBtn.innerHTML = '<span style="margin-right:5px;">⊠</span> Dil nga ekrani i plotë';
+        }
+      });
+      
+      // Mute button
+      muteBtn.addEventListener('click', () => {
+        videoEl.muted = !videoEl.muted;
+        muteBtn.innerHTML = videoEl.muted ? 
+          '<span style="margin-right:5px;">🔇</span> Pa zë' : 
+          '<span style="margin-right:5px;">🔊</span> Zëri';
+      });
+      
+      // Monitor fullscreen changes
+      document.addEventListener('fullscreenchange', updateFullscreenButton);
+      document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+      document.addEventListener('mozfullscreenchange', updateFullscreenButton);
+      document.addEventListener('MSFullscreenChange', updateFullscreenButton);
+      
+      function updateFullscreenButton() {
+        if (document.fullscreenElement) {
+          fullscreenBtn.innerHTML = '<span style="margin-right:5px;">⊠</span> Dil nga ekrani i plotë';
+        } else {
+          fullscreenBtn.innerHTML = '<span style="margin-right:5px;">⛶</span> Ekran i plotë';
+        }
+      }
+    }
+    
+    // Open audio player modal for radio channels
+    function openAudioPlayer(channel) {
+      const modal = createAudioPlayerModal();
+      modal.style.display = 'flex';
+      
+      // Get elements
+      const titleEl = modal.querySelector('#radioTitle');
+      const logoEl = modal.querySelector('#radioLogo');
+      const groupEl = modal.querySelector('#radioGroup');
+      const audioEl = modal.querySelector('#mainAudioPlayer');
+      const statusEl = modal.querySelector('#audioPlayerStatus');
+      const streamInfoEl = modal.querySelector('#streamInfo');
+      const visualizationEl = modal.querySelector('#audioVisualization');
+      const audioCanvas = modal.querySelector('#audioCanvas');
+      const audioBars = modal.querySelector('.audio-bars');
+      
+      // Set channel info
+      titleEl.textContent = channel.name || 'Radio';
+      groupEl.textContent = channel.group || 'Radio Channel';
+      
+      // Set logo
+      if (channel.logo && channel.logo.trim().length > 5) {
+        logoEl.src = channel.logo;
+        logoEl.style.display = '';
+      } else {
+        // Use a default radio icon
+        logoEl.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJlY2M3MSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjIiPjwvY2lyY2xlPjxwYXRoIGQ9Ik0xNi4yNCA3Ljc2YTYgNiAwIDAgMSAwIDguNDltLTguNDggMGE2IDYgMCAwIDEgMC04LjQ5TTQuOTMgMTkuMDdhMTAgMTAgMCAwIDEgMC0xNC4xNE0xOS4wNyAxOS4wN2ExMCAxMCAwIDAgMCAwLTE0LjE0Ij48L3BhdGg+PC9zdmc+';
+        logoEl.style.display = '';
+      }
+      
+      // Clear any existing content
+      audioEl.innerHTML = '';
+      audioEl.crossOrigin = 'anonymous'; // Try to handle CORS issues
+      
+      // Reset status and info
+      statusEl.textContent = 'Duke përgatititur...';
+      streamInfoEl.textContent = '';
+      
+      // Reset visualization
+      audioBars.classList.remove('audio-playing', 'audio-paused');
+      
+      // Create a loading indicator
+      const loadingIndicator = document.createElement('div');
+      loadingIndicator.id = 'audioLoadingIndicator';
+      loadingIndicator.innerHTML = `
+        <div style="width:40px;height:40px;border:3px solid rgba(46,204,113,0.3);border-top-color:#2ecc71;border-radius:50%;margin:0 auto;animation:spin 1s linear infinite;"></div>
+        <div style="margin-top:10px;">Duke ngarkuar audio...</div>
+      `;
+      loadingIndicator.style.position = 'absolute';
+      loadingIndicator.style.top = '50%';
+      loadingIndicator.style.left = '50%';
+      loadingIndicator.style.transform = 'translate(-50%, -50%)';
+      loadingIndicator.style.textAlign = 'center';
+      loadingIndicator.style.zIndex = '5';
+      loadingIndicator.style.color = '#2ecc71';
+      
+      visualizationEl.appendChild(loadingIndicator);
+      
+      // Handle different stream types based on URL
+      if (channel.url.includes('.m3u8')) {
+        // Use HLS.js for m3u8 audio streams
+        function setupHLSAudio() {
+          if (window.Hls && window.Hls.isSupported()) {
+            if (window._audioHlsInstance) {
+              try { window._audioHlsInstance.destroy(); } catch(e) {}
+            }
+            
+            window._audioHlsInstance = new window.Hls({
+              enableWorker: true,
+              lowLatencyMode: true,
+              backBufferLength: 90
+            });
+            
+            // Add error handling
+            window._audioHlsInstance.on(window.Hls.Events.ERROR, function(_, data) {
+              console.error("HLS audio error:", data);
+              
+              if (data.fatal) {
+                switch(data.type) {
+                  case window.Hls.ErrorTypes.NETWORK_ERROR:
+                    statusEl.textContent = 'Gabim rrjeti: Duke u riprovuar...';
+                    window._audioHlsInstance.startLoad();
+                    break;
+                  case window.Hls.ErrorTypes.MEDIA_ERROR:
+                    statusEl.textContent = 'Gabim media: Duke u riprovuar...';
+                    window._audioHlsInstance.recoverMediaError();
+                    break;
+                  default:
+                    statusEl.textContent = 'Gabim: sinjali audio nuk është i disponueshëm';
+                    break;
+                }
+              }
+            });
+            
+            window._audioHlsInstance.loadSource(channel.url);
+            window._audioHlsInstance.attachMedia(audioEl);
+            
+            window._audioHlsInstance.on(window.Hls.Events.MANIFEST_PARSED, function(_, data) {
+              // Try to get audio format information
+              let audioCodec = 'Unknown format';
+              if (data && data.audioTracks && data.audioTracks.length) {
+                const track = data.audioTracks[0];
+                audioCodec = track.name || track.lang || 'HLS Audio';
+                
+                // If we have codec info
+                if (track.codec) {
+                  audioCodec += ` (${track.codec})`;
+                }
+              } else {
+                audioCodec = 'HLS Audio';
+              }
+              
+              streamInfoEl.textContent = audioCodec;
+              
+              // Remove loading indicator
+              const loadingIndicator = document.getElementById('audioLoadingIndicator');
+              if (loadingIndicator) {
+                loadingIndicator.remove();
+              }
+              
+              // Try to play
+              audioEl.play().catch(e => handlePlayError(e));
+            });
+          } else {
+            // Try native HLS support as fallback
+            audioEl.src = channel.url;
+            audioEl.play().catch(e => handlePlayError(e));
+            
+            // Remove loading indicator after a delay
+            setTimeout(() => {
+              const loadingIndicator = document.getElementById('audioLoadingIndicator');
+              if (loadingIndicator) {
+                loadingIndicator.remove();
+              }
+            }, 2000);
+          }
+        }
+        
+        // Check if HLS.js is loaded, if not, load it
+        if (!window.Hls) {
+          const hlsScript = document.createElement('script');
+          hlsScript.src = 'https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js';
+          hlsScript.onload = setupHLSAudio;
+          document.head.appendChild(hlsScript);
+        } else {
+          setupHLSAudio();
+        }
+      }
+      else if (channel.url.includes('.pls') || channel.url.includes('.m3u') || channel.url.includes('.asx')) {
+        // For playlist formats, try to fetch the actual stream URL
+        statusEl.textContent = 'Duke gjetur burimin nga playlist...';
+        streamInfoEl.textContent = 'Playlist format';
+        
+        fetchPlaylistStream(channel.url)
+          .then(streamUrl => {
+            console.log('Found stream URL from playlist:', streamUrl);
+            audioEl.src = streamUrl;
+            audioEl.play().catch(e => handlePlayError(e));
+            
+            // Remove loading indicator
+            const loadingIndicator = document.getElementById('audioLoadingIndicator');
+            if (loadingIndicator) {
+              loadingIndicator.remove();
+            }
+            
+            // Update stream info with format
+            const format = getAudioFormatFromUrl(streamUrl);
+            streamInfoEl.textContent = `${format} (nga playlist)`;
+          })
+          .catch(error => {
+            console.error('Error with playlist:', error);
+            // Fallback to direct play
+            audioEl.src = channel.url;
+            audioEl.play().catch(e => handlePlayError(e));
+            
+            // Remove loading indicator
+            const loadingIndicator = document.getElementById('audioLoadingIndicator');
+            if (loadingIndicator) {
+              loadingIndicator.remove();
+            }
+          });
+      } 
+      else {
+        // Handle direct streams with proxy support
+        const format = getAudioFormatFromUrl(channel.url);
+        streamInfoEl.textContent = format;
+        
+        // Use a series of proxies to handle CORS issues
+        let proxyIndex = 0;
+        const proxies = [
+          '', // Direct URL first (no proxy)
+          `https://cors-anywhere.herokuapp.com/`,
+          `https://api.allorigins.win/raw?url=`,
+          `https://corsproxy.io/?`
+        ];
+        
+        // Try each proxy in sequence
+        function tryNextProxy() {
+          if (proxyIndex >= proxies.length) {
+            statusEl.textContent = 'Gabim: asnjë burim nuk është i disponueshëm';
+            
+            // Remove loading indicator
+            const loadingIndicator = document.getElementById('audioLoadingIndicator');
+            if (loadingIndicator) {
+              loadingIndicator.remove();
+            }
+            
+            return;
+          }
+          
+          const currentProxy = proxies[proxyIndex];
+          statusEl.textContent = proxyIndex === 0 ? 
+            'Duke luajtur direkt...' : 
+            `Duke provuar proxy ${proxyIndex}...`;
+          
+          // Handle different proxy URL formats
+          let streamUrl;
+          if (currentProxy.includes('?url=')) {
+            streamUrl = `${currentProxy}${encodeURIComponent(channel.url)}`;
+          } else if (currentProxy === `https://corsproxy.io/?`) {
+            streamUrl = `${currentProxy}${encodeURIComponent(channel.url)}`;
+          } else {
+            streamUrl = `${currentProxy}${channel.url}`;
+          }
+          
+          console.log(`Trying proxy ${proxyIndex}:`, streamUrl);
+          audioEl.src = streamUrl;
+          
+          // Update display
+          if (proxyIndex > 0) {
+            streamInfoEl.textContent = `${format} (proxy ${proxyIndex})`;
+          }
+          
+          proxyIndex++;
+        }
+        
+        // Handle errors and try next proxy
+        audioEl.onerror = () => {
+          console.log(`Proxy ${proxyIndex-1} failed, trying next`);
+          tryNextProxy();
+        };
+        
+        // Start with first proxy (direct URL)
+        tryNextProxy();
+        
+        // Start playback
+        audioEl.play().catch(e => {
+          console.log('Initial play attempt failed:', e);
+          if (e.name === 'NotAllowedError') {
+            // This is normal - browser requires user interaction
+            statusEl.textContent = 'Klikoni për të luajtur audio';
+          } else {
+            // Try next proxy for other errors
+            tryNextProxy();
+          }
+        });
+        
+        // Remove loading indicator after a delay or on playing event
+        setTimeout(() => {
+          const loadingIndicator = document.getElementById('audioLoadingIndicator');
+          if (loadingIndicator) {
+            loadingIndicator.remove();
+          }
+        }, 3000);
+      }
+      
+      // Helper function for play errors
+      function handlePlayError(error) {
+        console.error('Play error:', error);
+        if (error.name === 'NotAllowedError') {
+          statusEl.textContent = 'Klikoni për të luajtur audio';
+        } else if (error.name === 'AbortError') {
+          statusEl.textContent = 'Luajtja u ndërpre';
+        } else if (error.name === 'NetworkError') {
+          statusEl.textContent = 'Gabim rrjeti: kontrolloni lidhjen';
+        } else if (error.message && error.message.includes('CORS')) {
+          statusEl.textContent = 'Gabim CORS: Duke provuar me proxy...';
+        } else {
+          statusEl.textContent = 'Gabim: burimi audio nuk është i disponueshëm';
+        }
+        
+        // Remove loading indicator on error
+        const loadingIndicator = document.getElementById('audioLoadingIndicator');
+        if (loadingIndicator) {
+          loadingIndicator.remove();
+        }
+      }
+      
+      // Helper function to detect audio format from URL
+      function getAudioFormatFromUrl(url) {
+        url = url.toLowerCase();
+        
+        if (url.includes('.mp3')) return 'MP3 Audio';
+        if (url.includes('.aac')) return 'AAC Audio';
+        if (url.includes('.ogg')) return 'OGG Audio';
+        if (url.includes('.flac')) return 'FLAC Audio';
+        if (url.includes('.wav')) return 'WAV Audio';
+        if (url.includes('.opus')) return 'OPUS Audio';
+        if (url.includes('.m4a')) return 'M4A Audio';
+        if (url.includes('type=mp3') || url.includes('format=mp3')) return 'MP3 Stream';
+        if (url.includes('audio/mpeg')) return 'MPEG Audio';
+        if (url.includes('audio/aacp') || url.includes('audio/aac')) return 'AAC Stream';
+        if (url.includes('icecast')) return 'Icecast Stream';
+        if (url.includes('shoutcast')) return 'Shoutcast Stream';
+        
+        return 'Audio Stream';
+      }
+      
+      // Audio events with improved visualization
+      audioEl.addEventListener('loadstart', () => {
+        statusEl.textContent = 'Duke ngarkuar...';
+      });
+      
+      audioEl.addEventListener('waiting', () => {
+        statusEl.textContent = 'Duke buffering...';
+      });
+      
+      audioEl.addEventListener('playing', () => {
+        statusEl.textContent = 'Duke luajtur 🎵';
+        
+        // Remove loading indicator
+        const loadingIndicator = document.getElementById('audioLoadingIndicator');
+        if (loadingIndicator) {
+          loadingIndicator.remove();
+        }
+        
+        // Start visualization
+        setupAudioVisualization(audioEl);
+        
+        // Try to get more detailed stream info
+        try {
+          // If we have metadata event
+          if (audioEl.textTracks && audioEl.textTracks.length) {
+            const track = audioEl.textTracks[0];
+            if (track && track.activeCues && track.activeCues.length) {
+              const cue = track.activeCues[0];
+              if (cue && cue.text) {
+                streamInfoEl.textContent = cue.text;
+              }
+            }
+          }
+          
+          // Try to get audio info after a short delay
+          setTimeout(() => {
+            try {
+              // Check if we have stream details in mediaSession API
+              if (navigator.mediaSession && navigator.mediaSession.metadata) {
+                const metadata = navigator.mediaSession.metadata;
+                let info = '';
+                if (metadata.title) info += metadata.title;
+                if (metadata.artist) info += info ? ` - ${metadata.artist}` : metadata.artist;
+                
+                if (info) {
+                  streamInfoEl.textContent = info;
+                }
+              }
+              
+              // Get audio codec info if available
+              if (audioEl.captureStream) {
+                const tracks = audioEl.captureStream().getAudioTracks();
+                if (tracks && tracks[0]) {
+                  const settings = tracks[0].getSettings();
+                  if (settings) {
+                    let details = '';
+                    if (settings.sampleRate) details += `${settings.sampleRate/1000}kHz`;
+                    if (settings.channelCount) {
+                      details += details ? `, ` : '';
+                      details += `${settings.channelCount}ch`;
+                    }
+                    
+                    if (details) {
+                      streamInfoEl.textContent += streamInfoEl.textContent ? ` (${details})` : details;
+                    }
+                  }
+                }
+              }
+            } catch (e) { 
+              // Silent fail on metadata extraction
+              console.log('Error getting detailed audio info:', e);
+            }
+          }, 2000);
+        } catch (e) {
+          console.log('Error in audio metadata handling:', e);
+        }
+      });
+      
+      audioEl.addEventListener('pause', () => {
+        statusEl.textContent = 'Pauzë';
+        audioBars.classList.add('audio-paused');
+        audioBars.classList.remove('audio-playing');
+      });
+      
+      audioEl.addEventListener('ended', () => {
+        statusEl.textContent = 'Përfundoi';
+        audioBars.classList.remove('audio-playing');
+      });
+      
+      audioEl.addEventListener('error', () => {
+        const errorCode = audioEl.error ? audioEl.error.code : 0;
+        let errorMessage;
+        
+        switch (errorCode) {
+          case 1: errorMessage = 'Procesi i marrjes së burimit audio u ndërpre'; break;
+          case 2: errorMessage = 'Gabim rrjeti'; break;
+          case 3: errorMessage = 'Gabim dekodimi'; break;
+          case 4: errorMessage = 'Formati audio nuk mbështetet'; break;
+          default: errorMessage = 'Burimi audio nuk është i disponueshëm'; break;
+        }
+        
+        statusEl.textContent = `Gabim: ${errorMessage}`;
+        
+        // Remove loading indicator
+        const loadingIndicator = document.getElementById('audioLoadingIndicator');
+        if (loadingIndicator) {
+          loadingIndicator.remove();
+        }
+      });
+      
+      // Enhanced audio visualization with multiple options
+      function setupAudioVisualization(audioElement) {
+        try {
+          // Only set up once
+          if (audioElement.visualizationSetup) return;
+          audioElement.visualizationSetup = true;
+          
+          // First, enable the simple CSS animation as a fallback
+          audioBars.classList.add('audio-playing');
+          audioBars.classList.remove('audio-paused');
+          
+          // Get the bars and canvas
+          const bars = document.querySelectorAll('.audio-bars .bar');
+          
+          // Create Web Audio API visualization if supported
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContext || !bars.length) {
+            // Use animated bars as fallback
+            document.querySelectorAll('.audio-bars .bar').forEach((bar, i) => {
+              bar.style.animation = `sound ${0.9 + Math.random() * 0.7}s ease-in-out infinite alternate`;
+              bar.style.animationDelay = `${i * 50}ms`;
+            });
+            return;
+          }
+          
+          try {
+            // Set up Web Audio API
+            const audioCtx = new AudioContext();
+            const analyser = audioCtx.createAnalyser();
+            const source = audioCtx.createMediaElementSource(audioElement);
+            
+            // Connect the nodes
+            source.connect(analyser);
+            analyser.connect(audioCtx.destination);
+            
+            // Configure analyzer
+            analyser.fftSize = 64;  // Good balance between detail and performance
+            analyser.smoothingTimeConstant = 0.8;  // Smooth transitions
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            
+            // Use canvas for alternative visualization if needed
+            const canvasCtx = audioCanvas.getContext('2d');
+            let useCanvas = false;
+            
+            // Function to update bar visualization
+            function updateBars() {
+              if (!document.getElementById('audioVisualization')) return;
+              
+              // Get current audio data
+              analyser.getByteFrequencyData(dataArray);
+              
+              // Calculate the number of bars to update
+              const numBars = Math.min(bars.length, bufferLength);
+              
+              // Update each bar height based on frequency data
+              for (let i = 0; i < numBars; i++) {
+                const barIndex = i % bars.length;
+                
+                // Scale the frequency value (0-255) to height (10-100%)
+                // We use frequency bins that correspond best with human hearing
+                const frequencyBin = Math.floor(i * (bufferLength / numBars));
+                const value = dataArray[frequencyBin] || 0;
+                
+                // Add a minimum height and scale the rest
+                const height = 10 + (value / 255) * 90;
+                
+                // Apply the height with a small transition
+                bars[barIndex].style.height = `${height}%`;
+              }
+              
+              // Continue the visualization loop
+              requestAnimationFrame(updateBars);
+            }
+            
+            // Start the visualization
+            updateBars();
+          } catch (vizError) {
+            // If web audio fails, fall back to CSS animation
+            console.error('Advanced visualization failed:', vizError);
+            
+            document.querySelectorAll('.audio-bars .bar').forEach((bar, i) => {
+              bar.style.animation = `sound ${0.9 + Math.random() * 0.7}s ease-in-out infinite alternate`;
+              bar.style.animationDelay = `${i * 50}ms`;
+            });
+          }
+        } catch (err) {
+          console.error('Audio visualization setup error:', err);
+          // Simple fallback
+          audioBars.classList.add('audio-playing');
+        }
+      }
+      
+      // Add play button and advanced controls
+      const controlsContainer = document.createElement('div');
+      controlsContainer.style.marginTop = '15px';
+      controlsContainer.style.display = 'flex';
+      controlsContainer.style.justifyContent = 'center';
+      controlsContainer.style.gap = '10px';
+      controlsContainer.style.flexWrap = 'wrap';
+      
+      controlsContainer.innerHTML = `
+        <button id="forcePlay" style="display:flex;align-items:center;padding:8px 15px;background:var(--primary-color);color:white;border:none;border-radius:6px;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,0.15);transition:all 0.2s ease;">
+          <span style="margin-right:6px;">▶</span> Luaj Radio
+        </button>
+        <button id="forceStop" style="display:flex;align-items:center;padding:8px 15px;background:#e74c3c;color:white;border:none;border-radius:6px;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,0.15);transition:all 0.2s ease;">
+          <span style="margin-right:6px;">■</span> Ndalo
+        </button>
+        <button id="toggleMute" style="display:flex;align-items:center;padding:8px 15px;background:#7f8c8d;color:white;border:none;border-radius:6px;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,0.15);transition:all 0.2s ease;">
+          <span style="margin-right:6px;">🔊</span> Zëri
+        </button>
+      `;
+      
+      // Add the controls after the audio element
+      const audioContainer = modal.querySelector('.audio-player-container');
+      audioContainer.insertBefore(controlsContainer, audioContainer.querySelector('#streamInfo').nextSibling);
+      
+      // Setup button event handlers
+      document.getElementById('forcePlay').addEventListener('click', () => {
+        audioEl.play().catch(e => handlePlayError(e));
+      });
+      
+      document.getElementById('forceStop').addEventListener('click', () => {
+        audioEl.pause();
+        audioEl.currentTime = 0;
+        statusEl.textContent = 'Ndalur';
+        audioBars.classList.remove('audio-playing');
+        audioBars.classList.add('audio-paused');
+      });
+      
+      document.getElementById('toggleMute').addEventListener('click', () => {
+        const muteBtn = document.getElementById('toggleMute');
+        audioEl.muted = !audioEl.muted;
+        
+        if (audioEl.muted) {
+          muteBtn.innerHTML = '<span style="margin-right:6px;">🔇</span> Pa zë';
+        } else {
+          muteBtn.innerHTML = '<span style="margin-right:6px;">🔊</span> Zëri';
+        }
+      });
+      
+      // Add hover effects for buttons
+      const buttons = controlsContainer.querySelectorAll('button');
+      buttons.forEach(button => {
+        button.addEventListener('mouseover', () => {
+          button.style.transform = 'translateY(-2px)';
+          button.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+        });
+        
+        button.addEventListener('mouseout', () => {
+          button.style.transform = 'translateY(0)';
+          button.style.boxShadow = '0 2px 5px rgba(0,0,0,0.15)';
+        });
+      });
+    }
+    
+    // Helper function to fetch actual stream URL from playlist files
+    async function fetchPlaylistStream(playlistUrl) {
+      try {
+        // Try direct fetch first
+        let response = await fetch(playlistUrl);
+        
+        // If CORS error, try with proxy
+        if (!response.ok) {
+          console.log('Trying playlist with CORS proxy');
+          response = await fetch(`https://cors-anywhere.herokuapp.com/${playlistUrl}`);
+        }
+        
+        if (!response.ok) throw new Error('Network response error');
+        const content = await response.text();
+        
+        // Parse PLS format
+        if (playlistUrl.includes('.pls')) {
+          const match = content.match(/File1=(.+)/i);
+          if (match && match[1]) {
+            return match[1];
+          }
+          
+          // Try additional formats
+          const fileMatch = content.match(/^File\d+=(.+)/im);
+          if (fileMatch && fileMatch[1]) {
+            return fileMatch[1];
+          }
+        }
+        
+        // Parse M3U format
+        if (playlistUrl.includes('.m3u')) {
+          const lines = content.split('\n');
+          for (const line of lines) {
+            if (line.trim() && !line.startsWith('#') && 
+                (line.includes('http://') || line.includes('https://'))) {
+              return line.trim();
+            }
+          }
+          
+          // Some m3u files have links after EXTINF entries
+          for (let i = 0; i < lines.length; i++) {
+            if (lines[i].includes('#EXTINF') && i + 1 < lines.length && 
+                lines[i+1].trim() && !lines[i+1].startsWith('#')) {
+              return lines[i+1].trim();
+            }
+          }
+        }
+        
+        // Fallback to original URL if parsing failed
+        return playlistUrl;
+      } catch (error) {
+        console.error('Error fetching playlist:', error);
+        return playlistUrl; // Return original URL as fallback
+      }
+    }
+
+    // Ngarko kanalet kur faqja të jetë gati
+    document.addEventListener('DOMContentLoaded', loadAndRenderChannels);
+  </script>
+</body>
+</html>

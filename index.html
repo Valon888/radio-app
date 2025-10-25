@@ -6,6 +6,32 @@
 <title>Mini IPTV + Radio</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="styles.css">
+<script>
+// Create an empty favicon to stop 404 errors
+document.addEventListener('DOMContentLoaded', function() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 16;
+  canvas.height = 16;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#0078d7'; // Blue color
+  ctx.fillRect(0, 0, 16, 16);
+
+  // Convert to blob and create URL
+  canvas.toBlob(function(blob) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('link');
+      link.rel = 'icon';
+      link.href = url;
+      document.head.appendChild(link);
+  });
+});
+</script>
+<!-- Load scripts in proper order to avoid variable redeclaration issues -->
+<script src="fallback-channels.js"></script>
+<script src="radio-channels.js"></script>
+<script src="radio-app.js"></script>
+<script src="turkish-channels.js"></script>
+<script src="playlist-loader.js"></script>
 <script src="items.js"></script>
 </head>
 <body>
@@ -18,6 +44,21 @@
     <option value="tv">TV</option>
     <option value="radio">Radio</option>
   </select>
+  <select id="filterGroup" aria-label="Filtri grupit">
+    <option value="">Të gjitha grupet</option>
+    <option value="Shqipëri">Shqipëri</option>
+    <option value="Kosovë">Kosovë</option>
+    <option value="Türkiye">Turqi</option>
+    <option value="German">Gjermane</option>
+    <option value="France">Francë</option>
+    <option value="Georgia">Gjeorgji</option>
+    <option value="German - Public TV">Gjermane - TV Publike</option>
+    <option value="German - News">Gjermane - Lajme</option>
+    <option value="German - Movies">Gjermane - Filma</option>
+    <option value="German - Music">Gjermane - Muzikë</option>
+    <option value="German - Kids">Gjermane - Fëmijë</option>
+  </select>
+  <button id="reloadAllBtn" class="reload-btn">Rikthe të gjithë kanalet</button>
 </header>
 <div class="wrap">
   <main>
@@ -32,12 +73,29 @@
         <select id="resolutionSel" class="resolution-select">
           <option value="1080p">1080p</option>
           <option value="720p">720p</option>
+          <option value="480p">480p</option>
+          <option value="2160p">2160p</option>
         </select>
       </div>
       <video id="video" controls></video>
       <audio id="audio" controls></audio>
+      <div id="status" class="muted">
+        <div class="signal-container">
+          <div class="signal-strength">
+            <div class="signal-bar signal-bar-1"></div>
+            <div class="signal-bar signal-bar-2"></div>
+            <div class="signal-bar signal-bar-3"></div>
+            <div class="signal-bar signal-bar-4"></div>
+          </div>
+          <div class="signal-text">Duke ngarkuar...</div>
+          <div class="signal-stats">0 Kbps</div>
+        </div>
+        <div class="connection-info">
+          <span class="icon">⚡</span>
+          <span class="connection-status">Duke u lidhur...</span>
+        </div>
+      </div>
     </div>
-    <div id="status" class="muted"></div>
   </main>
   <aside id="list" aria-label="Lista e kanaleve"></aside>
 </div>
@@ -47,36 +105,102 @@
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
 <script>
+// Deklarim global i variablave
+window._channelsList = []; // Private backing array for channels
+
 // Përdor window.items nga items.js
-console.log('window.items:', window.items);
-let items = window.items;
-console.log('items:', items);
+console.log('[Mini IPTV] Initial window.items:', window.items);
+
+// Update channels reference when items are updated
+Object.defineProperty(window, 'items', {
+  get: function() { return this._items || []; },
+  set: function(newItems) { 
+    console.log('[Mini IPTV] window.items updated:', newItems ? newItems.length : 0);
+    this._items = newItems;
+    
+    // Update channelsList
+    window._channelsList.length = 0;
+    if (Array.isArray(newItems)) {
+      newItems.forEach(item => window._channelsList.push(item));
+    }
+    console.log('[Mini IPTV] Channels list updated:', window._channelsList.length);
+    
+    // If DOM is ready, update UI
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      updateUIWithChannels();
+    }
+  }
+});
 
 const listEl   = document.querySelector('#list');
 const searchEl = document.querySelector('#search');
 const typeSel  = document.querySelector('#filterType');
+const groupSel = document.querySelector('#filterGroup');
 const videoEl  = document.querySelector('#video');
-// const audioEl  = document.querySelector('#audio');
+const audioEl  = document.querySelector('#audio');
 const titleEl  = document.querySelector('#title');
 const epgEl    = document.querySelector('#epg');
 const statusEl = document.querySelector('#status');
 
-let filtered = [...items];
+let filtered = [];
 let currentIndex = -1;
 let hls;
 
 /* --------- 2) Listimi + kërkimi/filtër --------- */
 function renderList(){
   listEl.innerHTML = '';
+  if (!Array.isArray(filtered) || filtered.length === 0) {
+    listEl.innerHTML = '<div class="chan-error">Nuk u gjetën kanale! Kontrollo items.js ose rifresko faqen.</div>';
+    console.error('Nuk ka kanale për të shfaqur.');
+    
+    // Try to load channels from window.items if available
+    if (Array.isArray(window.items) && window.items.length > 0) {
+      console.log('[Mini IPTV] Attempting to recover with window.items:', window.items.length);
+      filtered = window.items.slice();
+      window._channelsList = window.items.slice();
+    } else {
+      // Add a test channel as fallback
+      const testChannel = {
+        id: "test-channel",
+        name: "Test Channel",
+        url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        type: "tv",
+        group: "Test",
+        logo: "",
+        quality: "720p"
+      };
+      filtered = [testChannel];
+      window._channelsList = [testChannel];
+      window.items = [testChannel];
+      console.log('[Mini IPTV] Fallback to test channel');
+    }
+    
+    if (filtered.length > 0) {
+      listEl.innerHTML = '';
+    } else {
+      return; // No channels to display
+    }
+  }
   filtered.forEach((c,i)=>{
     // Shto klasën 'islamic' për kanalet islame
     const isIslamic = (c.group && c.group.toLowerCase().includes('islam')) || (c.name && c.name.toLowerCase().includes('quran'));
+    const isRadio = (c.type === 'radio');
+    
     const row = document.createElement('div');
-    row.className = 'chan' + (isIslamic ? ' islamic' : '') + (i===currentIndex ? ' active' : '');
+    row.className = 'chan' + 
+                   (isIslamic ? ' islamic' : '') + 
+                   (isRadio ? ' radio-chan' : '') +
+                   (i===currentIndex ? ' active' : '');
     row.dataset.index = i;
+    
+    // Add icon for radio vs TV channels
+    const iconType = isRadio ? '📻' : '📺';
+    
     row.innerHTML = `
       <div class="chan-info">
-        <div class="chan-title">${c.name}</div>
+        <div class="chan-title">${iconType} ${c.name}${c.quality ? ` (${c.quality})` : ''}</div>
+        ${c.group ? `<div class="chan-group">${c.group}</div>` : ''}
+        ${c.description ? `<div class="chan-description">${c.description}</div>` : ''}
       </div>
     `;
     row.onclick = () => selectIndex(i);
@@ -87,35 +211,57 @@ function renderList(){
 function applyFilters(){
   const q = searchEl.value.trim().toLowerCase();
   const t = typeSel.value; // "", "tv", "radio"
-  filtered = items.filter(it=>{
+  const g = groupSel.value; // "", "Shqipëri", "Kosovë", "Türkiye", "German"
+  
+  filtered = window._channelsList.filter(it=>{
     const matchQ = !q || [it.name,it.group,it.type].filter(Boolean).join(' ').toLowerCase().includes(q);
     const matchT = !t || (it.type||'tv')===t;
-    return matchQ && matchT;
+    const matchG = !g || (it.group && (
+      it.group === g || 
+      (g === "German" && (it.group.includes("German") || it.group === "Germany")) ||
+      (g === "Türkiye" && (it.group.includes("Türk") || it.group === "Turqi"))
+    ));
+    return matchQ && matchT && matchG;
   });
-  if (filtered.length && !filtered.includes(items[currentIndex])) currentIndex = 0;
+  
+  if (filtered.length && currentIndex >= 0 && currentIndex < filtered.length) {
+    // keep current index if possible
+  } else if (filtered.length) {
+    currentIndex = 0;
+  } else {
+    currentIndex = -1;
+  }
   renderList();
 }
 
 searchEl.addEventListener('input', applyFilters);
 typeSel.addEventListener('change', applyFilters);
+groupSel.addEventListener('change', applyFilters);
 
 /* --------- 3) Luajtësi i unifikuar --------- */
 function playMedia(entry){
+  if (!entry) return;
+  
+  // Reset audio and video elements
+  videoEl.style.display = 'none';
+  audioEl.style.display = 'none';
+  
+  // Reset signal indicator
+  updateSignalIndicator(0);
+  setConnectionStatus('Duke u lidhur...', 'connecting');
+  
   // Shfaq logon e kanalit
   const logoEl = document.getElementById('chanLogo');
   if (entry.logo && entry.logo.length > 6) {
     logoEl.src = entry.logo;
     logoEl.style.display = '';
-    videoEl.setAttribute('poster', entry.logo);
+    // Set logo as video poster if it's a TV channel
+    if (entry.type === 'tv') {
+      videoEl.setAttribute('poster', entry.logo);
+    }
   } else {
     logoEl.style.display = 'none';
     videoEl.removeAttribute('poster');
-  }
-  if (entry.logo && entry.logo.length > 6) {
-    logoEl.src = entry.logo;
-    logoEl.style.display = '';
-  } else {
-    logoEl.style.display = 'none';
   }
 
   // Zgjidh automatikisht stream-in me cilësi më të lartë (prefer 1080p)
@@ -132,10 +278,11 @@ function playMedia(entry){
 
   if (entry.type === 'external'){
     window.open(entry.url, '_blank');
-    statusEl.textContent = 'Radio Pendimi u hap në një faqe të re.';
+    setConnectionStatus('Radio Pendimi u hap në një faqe të re', 'external');
     return;
   }
-  statusEl.textContent = 'Duke ngarkuar…';
+  
+  setConnectionStatus('Duke ngarkuar...', 'loading');
   const kind = (entry.type || 'tv').toLowerCase();
 
   // Shfaq vetëm video player-in për TV
@@ -146,7 +293,7 @@ function playMedia(entry){
   let customFrame = document.getElementById('customFrame');
   if (customFrame) customFrame.remove();
 
-  // ç’aktivizo HLS nëse ishte në përdorim
+  // ç'aktivizo HLS nëse ishte në përdorim
   if (hls){ try{ hls.destroy(); }catch(e){} hls = null; }
 
   if (kind === 'iframe'){
@@ -160,14 +307,37 @@ function playMedia(entry){
     iframe.scrolling = 'no';
     iframe.frameBorder = 'no';
     playerDiv.appendChild(iframe);
-    statusEl.textContent = 'Radio Pendimi (iframe)';
+    setConnectionStatus('Radio Pendimi (iframe)', 'connected');
+    updateSignalIndicator(100);
   } else if (kind === 'radio'){
-    var audioEl = document.getElementById('audio');
-    audioEl.style.display = '';
-    audioEl.src = entry.url;
-    audioEl.play().catch(()=>{});
+    // Hide video player and show audio player for radio
     videoEl.style.display = 'none';
-    statusEl.textContent = 'Duke luajtur radio.';
+    audioEl.style.display = '';
+    
+    // Set the audio source and play
+    audioEl.src = entry.url;
+    audioEl.play().catch(e => {
+      console.error('Error playing radio:', e);
+      setConnectionStatus('Gabim luajtja e radios: ' + (e.message || 'i panjohur'), 'error');
+      updateSignalIndicator(0);
+    });
+    
+    // Update status with radio station info
+    setConnectionStatus('Duke luajtur radio: ' + entry.name, 'connected');
+    
+    // Add event listeners for radio playback
+    audioEl.onplaying = () => {
+      setConnectionStatus('Radio duke luajtur: ' + entry.name, 'connected');
+      updateSignalIndicator(100); // Radio has perfect signal when playing
+    };
+    audioEl.onpause = () => {
+      setConnectionStatus('Radio pauzë: ' + entry.name, 'paused');
+      updateSignalIndicator(80); // Reduce signal indicator when paused
+    };
+    audioEl.onerror = () => {
+      setConnectionStatus('Gabim radio: burimi është i padisponueshëm', 'error');
+      updateSignalIndicator(0);
+    };
   } else if (entry.url.startsWith('https://www.twitch.tv/')) {
     // Twitch: shfaq iframe
     const playerDiv = document.querySelector('.player');
@@ -180,24 +350,165 @@ function playMedia(entry){
     iframe.allowFullscreen = true;
     iframe.frameBorder = '0';
     playerDiv.appendChild(iframe);
-    statusEl.textContent = 'Twitch duke luajtur';
+    setConnectionStatus('Twitch duke luajtur', 'connected');
+    updateSignalIndicator(90);
+    
+    // Simulate signal fluctuation for Twitch
+    startSignalMonitoring();
   } else {
     // TV (HLS)
     videoEl.style.display = '';
+    
     if (videoEl.canPlayType('application/vnd.apple.mpegurl')) {
       videoEl.src = url;
       videoEl.play().catch(()=>{});
-    } else if (Hls.isSupported()){
-      hls = new Hls({lowLatencyMode:true, backBufferLength:90});
+      
+      videoEl.addEventListener('loadedmetadata', () => {
+        updateSignalIndicator(85);
+        setConnectionStatus('Stream i ngarkuar', 'connected');
+      });
+      
+      videoEl.addEventListener('waiting', () => {
+        updateSignalIndicator(40);
+        setConnectionStatus('Duke bufferuar...', 'buffering');
+      });
+      
+      videoEl.addEventListener('playing', () => {
+        updateSignalIndicator(95);
+        setConnectionStatus('Duke luajtur', 'connected');
+        startSignalMonitoring();
+      });
+      
+    } else if (Hls.isSupported()) {
+      hls = new Hls({
+        lowLatencyMode: true,
+        backBufferLength: 90,
+        xhrSetup: function(xhr) {
+          // Monitor XHR requests for statistics
+          const startTime = performance.now();
+          xhr.addEventListener('load', () => {
+            const duration = performance.now() - startTime;
+            const size = xhr.getResponseHeader('Content-Length');
+            
+            if (size) {
+              const kbps = Math.round((size * 8) / (duration / 1000) / 1000);
+              updateBitrateDisplay(kbps);
+              
+              // Update signal strength based on bitrate
+              if (kbps > 5000) updateSignalIndicator(100);
+              else if (kbps > 3000) updateSignalIndicator(90);
+              else if (kbps > 1500) updateSignalIndicator(80);
+              else if (kbps > 800) updateSignalIndicator(60);
+              else if (kbps > 400) updateSignalIndicator(40);
+              else updateSignalIndicator(20);
+            }
+          });
+        }
+      });
+      
+      hls.on(Hls.Events.MANIFEST_LOADING, () => {
+        setConnectionStatus('Duke ngarkuar manifestin...', 'loading');
+        updateSignalIndicator(20);
+      });
+      
+      hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
+        setConnectionStatus(`Manifest i ngarkuar (${data.levels.length} nivele)`, 'connected');
+        updateSignalIndicator(80);
+        videoEl.play().catch(()=>{});
+        
+        // Get max bitrate from levels
+        const maxBitrate = Math.max(...data.levels.map(level => level.bitrate));
+        updateBitrateDisplay(Math.round(maxBitrate / 1000));
+      });
+      
+      hls.on(Hls.Events.LEVEL_SWITCHED, (event, data) => {
+        const level = hls.levels[data.level];
+        if (level) {
+          updateBitrateDisplay(Math.round(level.bitrate / 1000));
+          
+          // Update quality indicator based on level
+          const quality = Math.min(100, Math.max(0, Math.round((data.level / (hls.levels.length - 1)) * 100)));
+          updateSignalIndicator(quality);
+        }
+      });
+      
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        console.error('HLS error:', data);
+        
+        if (data.fatal) {
+          setConnectionStatus(`Gabim stream: ${data.details || data.type || 'i panjohur'}`, 'error');
+          updateSignalIndicator(0);
+          
+          switch(data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              setConnectionStatus('Duke tentuar të rilidhet...', 'reconnecting');
+              updateSignalIndicator(20);
+              hls.startLoad();
+              break;
+              
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              setConnectionStatus('Duke riparuar streamin...', 'repairing');
+              updateSignalIndicator(40);
+              hls.recoverMediaError();
+              break;
+              
+            default:
+              hls.destroy();
+              break;
+          }
+        } else {
+          // Non-fatal errors - reduce signal quality
+          updateSignalIndicator(60);
+        }
+      });
+      
+      hls.on(Hls.Events.BUFFER_CREATED, () => {
+        setConnectionStatus('Buffer i krijuar', 'buffering');
+        updateSignalIndicator(50);
+      });
+      
+      hls.on(Hls.Events.BUFFER_APPENDING, () => {
+        setConnectionStatus('Duke bufferuar...', 'buffering');
+        updateSignalIndicator(70);
+      });
+      
       hls.loadSource(url);
       hls.attachMedia(videoEl);
-      hls.on(Hls.Events.MANIFEST_PARSED, ()=>videoEl.play().catch(()=>{}));
-      hls.on(Hls.Events.ERROR, (_,data)=>{ statusEl.textContent = 'Gabim stream: '+(data?.details||data?.type||'i panjohur'); });
+      
+      // Start monitoring the video playback
+      startSignalMonitoring();
+      
     } else {
-      statusEl.textContent = 'Shfletuesi nuk mbështet HLS.';
+      setConnectionStatus('Shfletuesi nuk mbështet HLS', 'error');
+      updateSignalIndicator(0);
     }
-    videoEl.onplaying=()=>statusEl.textContent='Duke luajtur';
-    videoEl.onpause=()=>statusEl.textContent='Pauzë';
+    
+    // Video event listeners for better signal indication
+    videoEl.onplaying = () => {
+      setConnectionStatus('Duke luajtur', 'connected');
+      updateSignalIndicator(95);
+    };
+    
+    videoEl.onwaiting = () => {
+      setConnectionStatus('Duke bufferuar...', 'buffering');
+      updateSignalIndicator(50);
+    };
+    
+    videoEl.onpause = () => {
+      setConnectionStatus('Pauzë', 'paused');
+      // When paused, reduce signal indicator but don't set to zero
+      updateSignalIndicator(70);
+    };
+    
+    videoEl.onstalled = () => {
+      setConnectionStatus('Stream i ngecur', 'stalled');
+      updateSignalIndicator(30);
+    };
+    
+    videoEl.onerror = () => {
+      setConnectionStatus('Gabim video', 'error');
+      updateSignalIndicator(0);
+    };
   }
 }
 
@@ -205,35 +516,19 @@ function selectIndex(i){
   if (i<0 || i>=filtered.length) return;
   currentIndex = i;
   const ch = filtered[i];
-  titleEl.textContent = ch.name;
-  epgEl.textContent = ch.group ? `Grupi: ${ch.group}` : '—';
+  titleEl.textContent = ch.name + (ch.quality ? ` (${ch.quality})` : '');
+  
+  let infoText = ch.group ? `Grupi: ${ch.group}` : '';
+  if (ch.description) {
+    infoText += infoText ? ' | ' : '';
+    infoText += ch.description;
+  }
+  epgEl.textContent = infoText || '—';
+  
   localStorage.setItem('miniiptv_last_id', ch.id);
   renderList();
   playMedia(ch);
 }
-
-
-// Ngarko nga file
-// document.getElementById('loadM3U').onclick = ()=>document.getElementById('m3uInput').click();
-// document.getElementById('m3uInput').addEventListener('change', async e=>{
-//   const file = e.target.files[0]; if(!file) return;
-//   const text = await file.text();
-//   importM3U(text);
-// });
-
-// // Ngarko nga URL
-// document.getElementById('importM3UUrl').onclick = async ()=>{
-//   const url = document.getElementById('m3uUrlInput').value.trim();
-//   if(!url) return alert('Vendos URL-në e M3U!');
-//   try {
-//     const res = await fetch(url);
-//     if (!res.ok) throw new Error('Gabim në shkarkim');
-//     const text = await res.text();
-//     importM3U(text);
-//   } catch (e) {
-//     alert('Gabim në shkarkim ose format: '+e.message);
-//   }
-// };
 
 function importM3U(text){
   // Lexo EPG nga x-tvg-url në rreshtin e parë
@@ -242,14 +537,33 @@ function importM3U(text){
   const epgMatch = firstLine.match(/x-tvg-url="([^"]+)"/);
   if(epgMatch) epgUrls = epgMatch[1].split(',').map(x=>x.trim());
   window.m3uEpgUrls = epgUrls;
+  
   // Importo kanalet
-  const tvs = parseM3U(text);
-  if (tvs.length){
-    items = [...tvs, ...items.filter(x=>x.type==='radio')];
+  const channels = parseM3U(text);
+  
+  if (channels.length){
+    // Keep existing radio channels if we're importing TV channels
+    const existingRadioChannels = window._channelsList.filter(x=>x.type==='radio');
+    
+    // Check if the imported list contains radio channels
+    const hasRadioChannels = channels.some(c => c.group && c.group.toLowerCase().includes('radio'));
+    
+    // If the imported list doesn't explicitly have radio channels, preserve existing ones
+    const combinedChannels = hasRadioChannels ? 
+      channels : 
+      [...channels, ...existingRadioChannels];
+    
+    // Update through the items setter
+    window.items = combinedChannels;
+    
     applyFilters();
     selectIndex(0);
-    if(epgUrls.length) statusEl.textContent = 'EPG gjetur: '+epgUrls.length+' burime';
-  } else alert('S’u gjetën kanale TV në M3U.');
+    
+    statusEl.textContent = `U importuan ${channels.length} kanale` +
+      (epgUrls.length ? ' dhe ' + epgUrls.length + ' burime EPG' : '');
+  } else {
+    alert('S\'u gjetën kanale në M3U.');
+  }
 }
 
 function parseM3U(txt){
@@ -262,9 +576,32 @@ function parseM3U(txt){
       const tvgName   = (l.match(/tvg-name="([^"]+)"/) || [])[1];
       const group     = (l.match(/group-title="([^"]+)"/) || [])[1];
       const logo      = (l.match(/tvg-logo="([^"]+)"/) || [])[1];
-      meta = { name:(tvgName || (nameMatch?nameMatch[1]:'TV')), group:group||'', logo:logo||'' };
+      meta = { 
+        name: (tvgName || (nameMatch ? nameMatch[1] : 'TV')), 
+        group: group || '', 
+        logo: logo || '' 
+      };
     } else if (!l.startsWith('#') && meta){
-      out.push({ id:`tv-${out.length}-${Date.now()}`, name:meta.name.trim(), url:l, type:'tv', group:meta.group, logo:meta.logo });
+      // Determine if this is a radio channel based on:
+      // 1. Group title containing "radio"
+      // 2. Name containing "radio"
+      // 3. URL pattern typical for radio streams (e.g., ends with .mp3, .aac, .pls, etc.)
+      const isRadio = 
+        (meta.group && meta.group.toLowerCase().includes('radio')) ||
+        (meta.name && meta.name.toLowerCase().includes('radio')) ||
+        l.match(/\.(mp3|aac|ogg|pls|m3u)($|\?)/i);
+      
+      const channelType = isRadio ? 'radio' : 'tv';
+      const channelId = `${channelType}-${out.length}-${Date.now()}`;
+      
+      out.push({ 
+        id: channelId, 
+        name: meta.name.trim(), 
+        url: l, 
+        type: channelType, 
+        group: meta.group, 
+        logo: meta.logo 
+      });
       meta=null;
     }
   }
@@ -282,49 +619,719 @@ document.addEventListener('keydown', e=>{
   if (e.key==='ArrowUp'){ e.preventDefault(); selectIndex(Math.max(currentIndex-1, 0)); }
 });
 
-
-// URL M3U për import automatik
-const AUTO_M3U_URL = "http://192.168.1.2:5501/al.m3u"; // ndryshoje sipas nevojës
-
-async function autoImportM3U(){
-  try {
-    const res = await fetch(AUTO_M3U_URL);
-    if (!res.ok) throw new Error('Gabim në shkarkim');
-    const text = await res.text();
-    // Lexo EPG nga x-tvg-url në rreshtin e parë
-    const firstLine = text.split(/\r?\n/)[0];
-    let epgUrls = [];
-    const epgMatch = firstLine.match(/x-tvg-url="([^"]+)"/);
-    if(epgMatch) epgUrls = epgMatch[1].split(',').map(x=>x.trim());
-    window.m3uEpgUrls = epgUrls;
-    importM3U(text);
-    if(epgUrls.length) statusEl.textContent = 'EPG gjetur: '+epgUrls.length+' burime';
-  } catch (e) {
-    statusEl.textContent = 'Gabim në import automatik: '+e.message;
-    applyFilters();
-    const lastId = localStorage.getItem('miniiptv_last_id');
-    if (lastId){
-      const j = items.findIndex(x=>x.id===lastId);
-      if (j>=0){ filtered=[...items]; renderList(); selectIndex(j); return; }
-    }
-    if (filtered.length) selectIndex(0);
+// Update UI with channels
+function updateUIWithChannels() {
+  // Make sure channels are properly loaded into filtered
+  filtered = Array.isArray(window._channelsList) && window._channelsList.length > 0 ? 
+    window._channelsList.slice() : 
+    (Array.isArray(window.items) && window.items.length > 0 ? window.items.slice() : []);
+  
+  console.log('[Mini IPTV] Updating UI with', filtered.length, 'channels');
+  
+  // Ensure there are channels to display
+  if (filtered.length === 0) {
+    console.warn('[Mini IPTV] No channels available for display! Using fallback channels');
+    // Add at least one fallback channel
+    filtered = [{
+      id: "test-channel",
+      name: "Test Channel",
+      url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+      type: "tv",
+      group: "Test",
+      logo: "",
+      quality: "720p"
+    }];
+    // Update the internal array
+    window._channelsList = filtered.slice();
   }
+  
+  // Render the list and select the first item
+  renderList();
+  if (filtered.length) selectIndex(0);
 }
-
 
 // Inicializo listën e kanaleve nga items.js kur faqja hapet
 window.addEventListener('DOMContentLoaded', () => {
-  applyFilters();
-  if (filtered.length) selectIndex(0);
-  // Event për ndërrimin e rezolucionit
+  console.log('[Mini IPTV] DOMContentLoaded triggered');
+  
+  // Initialize signal display elements
+  setTimeout(() => {
+    initializeSignalDisplay();
+    console.log('[Mini IPTV] Signal display elements initialized');
+  }, 500);
+  
+  // Vendos rezolucionin default 1080p
   const resSel = document.getElementById('resolutionSel');
+  if (resSel) resSel.value = '1080p';
+
+  // Event për ndërrimin e rezolucionit
   if (resSel) {
     resSel.addEventListener('change', ()=>{
       if (filtered.length && currentIndex>=0) playMedia(filtered[currentIndex]);
     });
   }
+  
+  // Initialize signal display
+  updateSignalIndicator(0);
+  setConnectionStatus('Gati për luajtje', 'ready');
+
+  // Fillimisht shfaq kanalet e caktuara manualisht nëse items.js nuk ka kanale të gatshme
+  if (!Array.isArray(window.items) || window.items.length === 0) {
+    console.log('[Mini IPTV] Using default hardcoded channels');
+    window.items = [
+      { id: "rtk1", name: "RTK 1", url: "https://viamotionhsi.netplus.ch/live/eds/rtk1/browser-HLS8/rtk1.m3u8", type: "tv", group: "General", logo: "https://i.imgur.com/KTcWcO6.png" },
+      { id: "testchannel", name: "Test Channel", url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type: "tv", group: "Test", logo: "", quality: "720p" }
+    ];
+  } else {
+    updateUIWithChannels();
+  }
+  
+  // Clean up when leaving the page
+  window.addEventListener('beforeunload', () => {
+    stopSignalMonitoring();
+    if (hls) {
+      try {
+        hls.destroy();
+      } catch (e) {
+        console.error('Error destroying HLS:', e);
+      }
+    }
+  });
+  
+  // Add event handler for reload button
+  const reloadBtn = document.getElementById('reloadAllBtn');
+  if (reloadBtn) {
+    reloadBtn.addEventListener('click', async () => {
+      reloadBtn.disabled = true;
+      reloadBtn.textContent = 'Duke ngarkuar...';
+      
+      try {
+        if (typeof window.riktheTeGjitheKanalet === 'function') {
+          await window.riktheTeGjitheKanalet();
+          statusEl.textContent = 'Të gjitha kanalet u rifreskuan me sukses!';
+          statusEl.className = 'success';
+        } else {
+          console.warn('Funksioni riktheTeGjitheKanalet nuk është i disponueshëm!');
+          
+          // Fallback method if the function isn't available
+          if (window.playlistLoader) {
+            window.playlistLoader.clearCache = true;
+            const allChannels = await window.playlistLoader.loadAllPlaylists();
+            window.items = allChannels;
+            updateUIWithChannels();
+            statusEl.textContent = `Të gjitha kanalet u rifreskuan (${allChannels.length})`;
+          } else {
+            statusEl.textContent = 'Gabim: Playlist loader nuk u gjet!';
+            statusEl.className = 'error';
+          }
+        }
+      } catch (error) {
+        console.error('Gabim gjatë rifreskimit të kanaleve:', error);
+        statusEl.textContent = `Gabim gjatë rifreskimit të kanaleve: ${error.message}`;
+        statusEl.className = 'error';
+      } finally {
+        reloadBtn.disabled = false;
+        reloadBtn.textContent = 'Rikthe të gjithë kanalet';
+      }
+    });
+  }
+});
+
+// Signal strength monitoring functions
+let signalMonitoringInterval = null;
+
+// Initialize the signal display if it doesn't exist
+function initializeSignalDisplay() {
+  console.log('[Signal Indicator] Initializing signal display elements...');
+  
+  // Check if the status section exists, if not create it
+  let statusSection = document.getElementById('status');
+  if (!statusSection) {
+    statusSection = document.createElement('div');
+    statusSection.id = 'status';
+    
+    // Find appropriate place to insert status section
+    const player = document.querySelector('.player');
+    if (player) {
+      player.appendChild(statusSection);
+    } else {
+      // Fallback to body if player not found
+      document.body.appendChild(statusSection);
+    }
+  }
+  
+  // Check if signal container exists, if not create it
+  let signalContainer = document.querySelector('.signal-container');
+  if (!signalContainer) {
+    signalContainer = document.createElement('div');
+    signalContainer.className = 'signal-container';
+    statusSection.appendChild(signalContainer);
+    
+    // Create signal strength bar container
+    const signalStrength = document.createElement('div');
+    signalStrength.className = 'signal-strength';
+    signalContainer.appendChild(signalStrength);
+    
+    // Create 4 signal bars
+    for (let i = 1; i <= 4; i++) {
+      const bar = document.createElement('div');
+      bar.className = `signal-bar signal-bar-${i}`;
+      signalStrength.appendChild(bar);
+    }
+    
+    // Create signal text
+    const signalText = document.createElement('div');
+    signalText.className = 'signal-text';
+    signalText.textContent = 'Inicializimi...';
+    signalContainer.appendChild(signalText);
+    
+    // Create signal stats
+    const signalStats = document.createElement('div');
+    signalStats.className = 'signal-stats';
+    signalStats.textContent = 'Duke inicializuar...';
+    signalContainer.appendChild(signalStats);
+  }
+  
+  // Check if connection info exists, if not create it
+  let connectionInfo = document.querySelector('.connection-info');
+  if (!connectionInfo) {
+    connectionInfo = document.createElement('div');
+    connectionInfo.className = 'connection-info';
+    statusSection.appendChild(connectionInfo);
+    
+    // Create connection icon
+    const icon = document.createElement('span');
+    icon.className = 'icon';
+    icon.textContent = '🔄';
+    connectionInfo.appendChild(icon);
+    
+    // Create connection status
+    const connectionStatus = document.createElement('span');
+    connectionStatus.className = 'connection-status';
+    connectionStatus.textContent = 'Duke u lidhur...';
+    connectionInfo.appendChild(connectionStatus);
+  }
+  
+  console.log('[Signal Indicator] Signal display elements initialized');
+}
+
+// Update the signal indicator based on strength (0-100)
+function updateSignalIndicator(strength) {
+  // Safety check - ensure all required elements exist
+  const signalBars = document.querySelectorAll('.signal-bar');
+  const signalText = document.querySelector('.signal-text');
+  const signalContainer = document.querySelector('.signal-container');
+  
+  // If any required element is missing, log a warning and return
+  if (!signalContainer) {
+    console.warn('[Signal Indicator] Container element not found, initializing signal display...');
+    initializeSignalDisplay();
+    return;
+  }
+  
+  if (!signalText) {
+    console.warn('[Signal Indicator] Text element not found');
+    return;
+  }
+  
+  // Track if the signal level has changed significantly to trigger animations
+  const prevClass = Array.from(signalContainer.classList)
+    .find(cls => cls.startsWith('signal-')) || '';
+  const prevStrength = signalContainer.dataset.signalStrength || 0;
+  const significantChange = Math.abs(strength - prevStrength) > 15;
+  
+  // Store current strength for future comparison
+  signalContainer.dataset.signalStrength = strength;
+  
+  // Remove all signal classes
+  signalContainer.classList.remove('signal-excellent', 'signal-good', 'signal-fair', 'signal-poor', 'signal-critical');
+  
+  // Update text and add appropriate class
+  if (strength >= 85) {
+    signalText.textContent = 'Sinjal i shkëlqyeshëm';
+    signalContainer.classList.add('signal-excellent');
+    if (significantChange && prevClass !== 'signal-excellent') {
+      signalContainer.classList.add('signal-improved');
+      setTimeout(() => signalContainer.classList.remove('signal-improved'), 2000);
+    }
+  } else if (strength >= 60) {
+    signalText.textContent = 'Sinjal i mirë';
+    signalContainer.classList.add('signal-good');
+  } else if (strength >= 30) {
+    signalText.textContent = 'Sinjal mesatar';
+    signalContainer.classList.add('signal-fair');
+  } else if (strength > 10) {
+    signalText.textContent = 'Sinjal i dobët';
+    signalContainer.classList.add('signal-poor');
+    // Add warning animation for poor signal
+    if (significantChange && strength < parseInt(prevStrength)) {
+      signalContainer.classList.add('signal-warning');
+      setTimeout(() => signalContainer.classList.remove('signal-warning'), 2000);
+    }
+  } else {
+    signalText.textContent = 'Nuk ka sinjal';
+    signalContainer.classList.add('signal-critical');
+    // Add critical animation for no signal
+    signalContainer.classList.add('signal-critical-animation');
+    setTimeout(() => signalContainer.classList.remove('signal-critical-animation'), 2000);
+  }
+  
+  // Update individual bars with improved animations
+  signalBars.forEach((bar, index) => {
+    // Calculate more granular thresholds based on strength
+    // This provides better visual representation of exact signal level
+    const barThreshold = (index + 1) * 20; // 20, 40, 60, 80, 100
+    
+    // Add a slight delay to each bar for a cascade effect
+    setTimeout(() => {
+      // Store previous state to detect changes
+      const wasActive = !bar.classList.contains('inactive');
+      const willBeActive = strength >= barThreshold;
+      
+      if (willBeActive) {
+        bar.classList.remove('inactive');
+        
+        // Add pulse animation only if the bar was previously inactive
+        if (!wasActive || significantChange) {
+          bar.classList.add('pulse');
+          setTimeout(() => bar.classList.remove('pulse'), 600);
+        }
+        
+        // Add strength-based coloring for better visual feedback
+        bar.classList.remove('strength-low', 'strength-medium', 'strength-high');
+        if (strength >= 85) {
+          bar.classList.add('strength-high');
+        } else if (strength >= 50) {
+          bar.classList.add('strength-medium');
+        } else {
+          bar.classList.add('strength-low');
+        }
+      } else {
+        bar.classList.add('inactive');
+        bar.classList.remove('strength-low', 'strength-medium', 'strength-high');
+        
+        // Fade out animation
+        if (wasActive) {
+          bar.classList.add('fade-out');
+          setTimeout(() => bar.classList.remove('fade-out'), 500);
+        }
+      }
+    }, index * 120);
+  });
+  
+  // Update the document title with enhanced signal information
+  if (currentIndex >= 0 && filtered[currentIndex]) {
+    const channelName = filtered[currentIndex].name;
+    let signalEmoji = '📶';
+    
+    if (strength >= 85) signalEmoji = '📶';
+    else if (strength >= 60) signalEmoji = '📶';
+    else if (strength >= 30) signalEmoji = '📱';
+    else if (strength > 0) signalEmoji = '📴';
+    else signalEmoji = '⚠️';
+    
+    document.title = `${signalEmoji} ${channelName} - Mini IPTV`;
+  }
+}
+
+// Update the bitrate display with enhanced statistics
+function updateBitrateDisplay(info) {
+  const signalStats = document.querySelector('.signal-stats');
+  if (!signalStats) {
+    console.warn('[Bitrate Display] Stats element not found, initializing signal display...');
+    initializeSignalDisplay();
+    return;
+  }
+  
+  // Store previous value to animate changes
+  const prevValue = signalStats.dataset.prevValue || '';
+  signalStats.dataset.prevValue = info;
+  
+  // Format the display based on content
+  if (typeof info === 'number') {
+    // Handle numeric bitrate
+    const kbps = info;
+    let qualityLabel = '';
+    
+    if (kbps > 5000) qualityLabel = ' (HD+)';
+    else if (kbps > 2500) qualityLabel = ' (HD)';
+    else if (kbps > 1000) qualityLabel = ' (SD+)';
+    else if (kbps > 500) qualityLabel = ' (SD)';
+    else qualityLabel = ' (Low)';
+    
+    signalStats.textContent = `${kbps} Kbps${qualityLabel}`;
+    
+    // Highlight changes in bitrate
+    if (prevValue !== info.toString() && prevValue) {
+      const prevKbps = parseInt(prevValue, 10);
+      if (!isNaN(prevKbps)) {
+        if (kbps > prevKbps) {
+          // Bitrate improved
+          signalStats.classList.add('stats-improved');
+          setTimeout(() => signalStats.classList.remove('stats-improved'), 2000);
+        } else if (kbps < prevKbps) {
+          // Bitrate reduced
+          signalStats.classList.add('stats-reduced');
+          setTimeout(() => signalStats.classList.remove('stats-reduced'), 2000);
+        }
+      }
+    }
+  } else {
+    // Handle string information (like resolution or audio info)
+    signalStats.textContent = info;
+    
+    // Highlight when the info changes
+    if (prevValue !== info && prevValue) {
+      signalStats.classList.add('stats-updated');
+      setTimeout(() => signalStats.classList.remove('stats-updated'), 1500);
+    }
+  }
+}
+
+// Set connection status with enhanced visuals and diagnostics
+function setConnectionStatus(message, state) {
+  // Check if elements exist, initialize if needed
+  const connectionContainer = document.querySelector('.connection-info');
+  if (!connectionContainer) {
+    console.warn('[Connection Status] Container not found, initializing signal display...');
+    initializeSignalDisplay();
+    return;
+  }
+  
+  const connectionStatus = document.querySelector('.connection-status');
+  const connectionIcon = document.querySelector('.connection-info .icon');
+  
+  if (!connectionStatus || !connectionIcon) {
+    console.warn('[Connection Status] Required elements not found');
+    return;
+  }
+  
+  // Store previous state to detect changes
+  const prevState = connectionContainer.dataset.state || '';
+  const isNewState = prevState !== state;
+  
+  // Store current state
+  connectionContainer.dataset.state = state;
+  
+  // Remove all state classes
+  connectionContainer.classList.remove(
+    'state-connected', 'state-connecting', 'state-loading',
+    'state-buffering', 'state-paused', 'state-error', 
+    'state-reconnecting', 'state-repairing', 'state-external',
+    'state-stalled'
+  );
+  
+  // Add current state class
+  connectionContainer.classList.add(`state-${state}`);
+  
+  // Add transition animation for state changes
+  if (isNewState) {
+    connectionContainer.classList.add('state-transition');
+    setTimeout(() => connectionContainer.classList.remove('state-transition'), 800);
+  }
+  
+  // Update status message with timestamp for important states
+  if (connectionStatus) {
+    let statusMessage = message;
+    
+    // Add timestamp for important states
+    if (['error', 'reconnecting', 'repairing', 'stalled'].includes(state)) {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+      statusMessage = `${message} (${timeStr})`;
+      
+      // Log connection issues for diagnostics
+      console.log(`[${timeStr}] Connection state: ${state} - ${message}`);
+    }
+    
+    connectionStatus.textContent = statusMessage;
+    
+    // Animate message change
+    if (isNewState) {
+      connectionStatus.classList.add('message-transition');
+      setTimeout(() => connectionStatus.classList.remove('message-transition'), 800);
+    }
+  }
+  
+  if (connectionIcon) {
+    // Store previous icon
+    const prevIcon = connectionIcon.textContent;
+    
+    // Update icon based on state
+    let newIcon = '';
+    switch(state) {
+      case 'connected':
+        newIcon = '✅';
+        break;
+      case 'connecting':
+      case 'loading':
+        newIcon = '⏳';
+        break;
+      case 'buffering':
+        newIcon = '🔄';
+        break;
+      case 'paused':
+        newIcon = '⏸️';
+        break;
+      case 'error':
+        newIcon = '❌';
+        break;
+      case 'reconnecting':
+      case 'repairing':
+        newIcon = '🔧';
+        break;
+      case 'external':
+        newIcon = '🔗';
+        break;
+      case 'stalled':
+        newIcon = '⚠️';
+        break;
+      default:
+        newIcon = '📶';
+    }
+    
+    // Set new icon
+    connectionIcon.textContent = newIcon;
+    
+    // Animate icon change
+    if (prevIcon !== newIcon) {
+      connectionIcon.classList.add('icon-transition');
+      setTimeout(() => connectionIcon.classList.remove('icon-transition'), 800);
+    }
+  }
+  
+  // Update data attributes for potential use by other functions
+  connectionContainer.dataset.lastUpdated = Date.now();
+  connectionContainer.dataset.lastMessage = message;
+}
+
+// Start monitoring video playback quality for real-time updates
+function startSignalMonitoring() {
+  // Clear any existing interval
+  if (signalMonitoringInterval) {
+    clearInterval(signalMonitoringInterval);
+  }
+  
+  // Keep track of previous readings to smooth out fluctuations
+  let previousReadings = [50, 50, 50]; // Start with neutral values
+  
+  // Check if we're using HLS.js
+  if (hls) {
+    signalMonitoringInterval = setInterval(() => {
+      try {
+        // Get current level and stats
+        const currentLevel = hls.currentLevel;
+        const levels = hls.levels;
+        
+        if (currentLevel >= 0 && levels && levels.length > 0) {
+          const level = levels[currentLevel];
+          if (level) {
+            // Update bitrate display with more information
+            const bitrateKbps = Math.round(level.bitrate / 1000);
+            const videoCodec = level.videoCodec || 'unknown';
+            updateBitrateDisplay(`${bitrateKbps} Kbps (${videoCodec})`);
+            
+            // Calculate quality percentage
+            const qualityPercentage = Math.min(100, Math.max(0, Math.round((currentLevel / (levels.length - 1)) * 100)));
+            
+            // Get buffering info
+            const bufferLength = hls.media ? hls.media.buffered.length : 0;
+            let bufferHealth = 0;
+            
+            if (bufferLength > 0 && hls.media) {
+              const currentTime = hls.media.currentTime;
+              const bufferedEnd = hls.media.buffered.end(bufferLength - 1);
+              bufferHealth = Math.min(100, Math.max(0, Math.round((bufferedEnd - currentTime) * 10))); // 10% per second of buffer
+            }
+            
+            // Check dropped frames if available
+            let droppedFrames = 0;
+            let totalFrames = 1; // Avoid division by zero
+            
+            if (hls.media && hls.media.getVideoPlaybackQuality) {
+              const quality = hls.media.getVideoPlaybackQuality();
+              droppedFrames = quality.droppedVideoFrames;
+              totalFrames = quality.totalVideoFrames || 1;
+            }
+            
+            // Calculate frame drop penalty (0-20%)
+            const frameDropPenalty = Math.min(20, Math.round((droppedFrames / totalFrames) * 100));
+            
+            // Combined quality score with more factors
+            // 50% level quality, 30% buffer health, 20% frame drop penalty
+            let combinedScore = Math.round((qualityPercentage * 0.5) + (bufferHealth * 0.3) - frameDropPenalty);
+            
+            // Smooth out readings using moving average
+            previousReadings.push(combinedScore);
+            if (previousReadings.length > 3) previousReadings.shift();
+            
+            const averageScore = previousReadings.reduce((sum, val) => sum + val, 0) / previousReadings.length;
+            const finalScore = Math.min(100, Math.max(0, Math.round(averageScore)));
+            
+            updateSignalIndicator(finalScore);
+            
+            // Update connection status based on combined score
+            if (finalScore >= 85) {
+              setConnectionStatus('Lidhje e shkëlqyeshme', 'connected');
+            } else if (finalScore >= 60) {
+              setConnectionStatus('Lidhje e mirë', 'connected');
+            } else if (finalScore >= 30) {
+              setConnectionStatus('Lidhje mesatare', 'connected');
+            } else {
+              setConnectionStatus('Lidhje e dobët', 'buffering');
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error in signal monitoring:', error);
+      }
+    }, 1500); // Update slightly faster for better responsiveness
+  } 
+  // Handle native video element
+  else if (videoEl.style.display !== 'none') {
+    signalMonitoringInterval = setInterval(() => {
+      try {
+        if (videoEl.readyState >= 3) { // HAVE_FUTURE_DATA or HAVE_ENOUGH_DATA
+          // Calculate buffer health
+          const bufferLength = videoEl.buffered.length;
+          let bufferHealth = 0;
+          
+          if (bufferLength > 0) {
+            const currentTime = videoEl.currentTime;
+            const bufferedEnd = videoEl.buffered.end(bufferLength - 1);
+            bufferHealth = Math.min(100, Math.max(0, Math.round((bufferedEnd - currentTime) * 10))); // 10% per second of buffer
+          }
+          
+          // Quality estimation based on resolution
+          let qualityScore = 60; // Default medium quality
+          
+          // Try to determine quality from video dimensions
+          if (videoEl.videoWidth && videoEl.videoHeight) {
+            if (videoEl.videoHeight >= 1080) qualityScore = 95;
+            else if (videoEl.videoHeight >= 720) qualityScore = 80;
+            else if (videoEl.videoHeight >= 480) qualityScore = 65;
+            else qualityScore = 50;
+          }
+          
+          // Add quality information to bitrate display
+          const resolution = videoEl.videoWidth && videoEl.videoHeight ? `${videoEl.videoWidth}×${videoEl.videoHeight}` : 'N/A';
+          updateBitrateDisplay(`Rezolucioni: ${resolution}`);
+          
+          // Network check
+          const connectionType = navigator.connection ? navigator.connection.effectiveType : 'unknown';
+          
+          // Calculate network penalty based on connection type
+          let networkPenalty = 0;
+          if (connectionType === '2g') networkPenalty = 20;
+          else if (connectionType === '3g') networkPenalty = 10;
+          else if (connectionType === 'slow-4g') networkPenalty = 5;
+          
+          // Combined score with buffer health and network penalty
+          const combinedScore = Math.round((qualityScore * 0.6) + (bufferHealth * 0.4) - networkPenalty);
+          
+          // Smooth out readings using moving average
+          previousReadings.push(combinedScore);
+          if (previousReadings.length > 3) previousReadings.shift();
+          
+          const averageScore = previousReadings.reduce((sum, val) => sum + val, 0) / previousReadings.length;
+          const finalScore = Math.min(100, Math.max(0, Math.round(averageScore)));
+          
+          updateSignalIndicator(finalScore);
+          
+          // Update connection status based on score
+          if (finalScore >= 80) {
+            setConnectionStatus('Video duke luajtur', 'connected');
+          } else if (finalScore >= 50) {
+            setConnectionStatus('Video luhet me cilësi të reduktuar', 'connected');
+          } else {
+            setConnectionStatus('Cilësi e dobët e videos', 'buffering');
+          }
+        } else {
+          updateSignalIndicator(30); // Low signal during loading
+          setConnectionStatus('Video po ngarkohet...', 'loading');
+        }
+      } catch (error) {
+        console.error('Error in video signal monitoring:', error);
+      }
+    }, 1500);
+  }
+  // For audio streams
+  else if (audioEl.style.display !== 'none') {
+    signalMonitoringInterval = setInterval(() => {
+      try {
+        if (!audioEl.paused && !audioEl.ended && audioEl.readyState > 2) {
+          // For audio, we'll use a simpler model based mainly on buffer
+          const bufferLength = audioEl.buffered.length;
+          let signalStrength = 80; // Default good signal for audio
+          
+          if (bufferLength > 0) {
+            const currentTime = audioEl.currentTime;
+            const bufferedEnd = audioEl.buffered.end(bufferLength - 1);
+            const bufferHealth = Math.min(100, Math.max(0, Math.round((bufferedEnd - currentTime) * 20))); // More weight on buffer for audio
+            
+            signalStrength = Math.min(100, Math.max(60, bufferHealth)); // Keep minimum 60% for playing audio
+          }
+          
+          // Smooth out readings
+          previousReadings.push(signalStrength);
+          if (previousReadings.length > 3) previousReadings.shift();
+          
+          const averageScore = previousReadings.reduce((sum, val) => sum + val, 0) / previousReadings.length;
+          const finalScore = Math.min(100, Math.max(0, Math.round(averageScore)));
+          
+          updateSignalIndicator(finalScore);
+          
+          // Extract audio information if possible
+          let audioInfo = 'Radio Stream';
+          if (audioEl.src.includes('mp3')) audioInfo = 'MP3 Audio';
+          else if (audioEl.src.includes('aac')) audioInfo = 'AAC Audio';
+          else if (audioEl.src.includes('ogg')) audioInfo = 'OGG Audio';
+          
+          // Update bitrate display with audio info
+          updateBitrateDisplay(audioInfo);
+          
+          // Update connection status based on score
+          if (finalScore >= 80) {
+            setConnectionStatus('Radio duke luajtur', 'connected');
+          } else {
+            setConnectionStatus('Radio luhet me cilësi të reduktuar', 'connected');
+          }
+        } else {
+          updateSignalIndicator(40); // Low signal during loading or paused
+          setConnectionStatus('Radio në pauzë ose duke ngarkuar', 'paused');
+        }
+      } catch (error) {
+        console.error('Error in audio signal monitoring:', error);
+      }
+    }, 1500);
+  }
+}
+
+// Stop the signal monitoring
+function stopSignalMonitoring() {
+  if (signalMonitoringInterval) {
+    clearInterval(signalMonitoringInterval);
+    signalMonitoringInterval = null;
+  }
+}
+
+// Listen for channels ready event from items.js
+window.addEventListener('channels-ready', () => {
+  console.log('[Mini IPTV] Channels ready event received, items:', window.items ? window.items.length : 0);
+  
+  // Make sure items are loaded into window._channelsList
+  if (Array.isArray(window.items) && window.items.length > 0) {
+    window._channelsList = [];
+    window.items.forEach(item => window._channelsList.push(item));
+    console.log('[Mini IPTV] Loaded', window._channelsList.length, 'channels from window.items');
+  }
+  
+  updateUIWithChannels();
+  
+  // Initialize signal display
+  updateSignalIndicator(0);
+  setConnectionStatus('Gati për luajtje', 'ready');
 });
 </script>
 </body>
 </html>
-
