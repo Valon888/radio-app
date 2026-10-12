@@ -291,8 +291,9 @@ async function buildCandidates(rawUrl) {
   const hasProxy = await isProxyAvailable();
   const mixed = location.protocol === 'https:' && isHttpUrl(direct);
   if (!hasProxy) return mixed ? [] : [direct];
-  // Në HTTPS një URL http nuk mund të luhet direkt; përndryshe provo direkt, pastaj proxy
-  return mixed ? [proxied] : [direct, proxied];
+  // Proxy fillimisht: kalon CORS, certifikata të prishura dhe mixed content pa pritur
+  // dështimin e provës direkte; direkt mbetet rezervë (jo për http në faqe HTTPS)
+  return mixed ? [proxied] : [proxied, direct];
 }
 
 async function playTv(rawUrl) {
