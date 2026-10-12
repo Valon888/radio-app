@@ -19,6 +19,8 @@ const MIME_TYPES = {
   '.m3u': 'audio/x-mpegurl',
   '.m3u8': 'application/vnd.apple.mpegurl',
   '.ico': 'image/x-icon',
+  '.webmanifest': 'application/manifest+json',
+  '.mjs': 'text/javascript',
 };
 
 const https = require('https');
@@ -48,9 +50,21 @@ function rewritePlaylist(text, baseUrl) {
 }
 
 function handleProxy(req, res, redirects = 0, forcedTarget) {
+  // Mbrojtje: mos lejo faqe të tjera (cross-site) ta përdorin proxy-n tënd lokal
+  const origin = req.headers.origin;
+  if (origin) {
+    let ok = false;
+    try { ok = new URL(origin).host === req.headers.host; } catch { /* i pavlefshëm */ }
+    if (!ok) {
+      res.writeHead(403, { 'Content-Type': 'text/plain' });
+      res.end('Forbidden origin');
+      return;
+    }
+  }
+
   if (req.url.startsWith('/proxy?ping=1')) {
-    res.writeHead(200, { ...CORS_HEADERS, "Content-Type": "text/plain" });
-    res.end("mini-iptv-proxy");
+    res.writeHead(200, { ...CORS_HEADERS, 'Content-Type': 'text/plain' });
+    res.end('mini-iptv-proxy');
     return;
   }
 
@@ -367,8 +381,22 @@ const server = http.createServer((req, res) => {
   let filePath = '.' + req.url;
   
   // Remove query parameters from URL
-  filePath = decodeURIComponent(filePath.split('?')[0]);
-  
+  try {
+    filePath = decodeURIComponent(filePath.split('?')[0]);
+  } catch (e) {
+    res.writeHead(400, { 'Content-Type': 'text/plain' });
+    res.end('Bad request');
+    return;
+  }
+
+  // Mos lejo dalje nga dosja e projektit (../)
+  const resolved = path.resolve(filePath);
+  if (resolved !== process.cwd() && !resolved.startsWith(process.cwd() + path.sep)) {
+    res.writeHead(403, { 'Content-Type': 'text/plain' });
+    res.end('Forbidden');
+    return;
+  }
+
   // Handle root URL or directories
   if (filePath === './' || filePath === '.' || !path.extname(filePath)) {
     filePath = './index.html';
@@ -451,7 +479,10 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}/`);
+// Si parazgjedhje dëgjon vetëm te localhost (proxy-ja nuk duhet të jetë e hapur për rrjetin).
+// Për ta hapur nga telefoni/TV në LAN: HOST=0.0.0.0 node server.js
+const HOST = process.env.HOST || '127.0.0.1';
+server.listen(PORT, HOST, () => {
+  console.log(`Server running at http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}/`);
   console.log(`Open http://localhost:${PORT}/ in your browser`);
 });
