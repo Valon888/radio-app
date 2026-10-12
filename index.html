@@ -277,8 +277,9 @@ const isPlaylistUrl = (u) => /\.m3u8?(\?|#|$)/i.test(u);
 // A ka server.js /proxy në këtë origjinë? (jo në GitHub Pages)
 function isProxyAvailable() {
   if (!proxyAvailablePromise) {
-    proxyAvailablePromise = fetch('/proxy', { cache: 'no-store' })
-      .then(r => (proxyKnown = r.status === 400))
+    proxyAvailablePromise = fetch('/proxy?ping=1', { cache: 'no-store' })
+      .then(r => r.ok ? r.text() : '')
+      .then(t => (proxyKnown = t === 'mini-iptv-proxy'))
       .catch(() => false);
   }
   return proxyAvailablePromise;

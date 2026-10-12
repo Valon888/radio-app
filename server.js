@@ -48,6 +48,12 @@ function rewritePlaylist(text, baseUrl) {
 }
 
 function handleProxy(req, res, redirects = 0, forcedTarget) {
+  if (req.url.startsWith('/proxy?ping=1')) {
+    res.writeHead(200, { ...CORS_HEADERS, "Content-Type": "text/plain" });
+    res.end("mini-iptv-proxy");
+    return;
+  }
+
   if (req.method === 'OPTIONS') {
     res.writeHead(204, CORS_HEADERS);
     res.end();
