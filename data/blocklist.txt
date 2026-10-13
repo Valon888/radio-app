@@ -22,3 +22,5 @@ vipottbpkstream.vip.hr/Content/onevip-hls/Live/
 vs.sednastream.com:1936/alportv/
 5d00db0e0fcd5.streamlock.net/7236/
 gjirafa-video-live.gjirafa.net/gjvideo-live/2dw-zuf-1c9-pxu/
+# Ba/Rs: gateway udpxy 185.81.240.65:15000 kthen 200 pa asnjë bajt (multicast nuk jepet): RTS 3, Federalna televizija
+185.81.240.65:15000/udp/
