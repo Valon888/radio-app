@@ -11,3 +11,10 @@ directv-iptv-player.vercel.app/
 # T7 (Kosovë) dhe TV Arbëria 3/4/Retro: URL kthen 404, nuk gjendet burim i ri publik
 gjirafa-video-live.gjirafa.net/gjvideo-livestream-specific/1z8-byc-4ee-lc9/
 ssh101.bozztv.com/ssh101/rtvarberia
+# Maqedoni: burime të vdekura (404/ENOTFOUND/403/500) ose relé e bllokuar gjeografikisht (vip.hr, ECONNREFUSED)
+stream.nasatv.com.mk/jazztv/
+stream.nasatv.com.mk/rocktv/
+live.muzickatv.mk/
+s2.teve.mk/
+mnet.mk/hls/
+vipottbpkstream.vip.hr/Content/onevip-hls/Live/

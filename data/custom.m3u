@@ -52,3 +52,6 @@ https://gjirafa-video-live.gjirafa.net/gjvideo-livestream/rtk4/index.m3u8
 https://gjirafa-video-live.gjirafa.net/gjvideo-livestream/lj9-pxm-o53-rp0/index.m3u8
 #EXTINF:-1 tvg-id="RTV21.xk" group-title="Kosovë",RTV21
 https://gjirafa-video-live.gjirafa.net/gjvideo-live/2cz-npl-jfn-9he/index.m3u8
+# Maqedoni: Kanal 5 (adresa e vjetër s2.teve.mk ka SSL të dëmtuar; teve.mk punon)
+#EXTINF:-1 tvg-id="Kanal5.mk@SD" group-title="Maqedoni",Kanal 5
+https://teve.mk/tvstanici/2/playlist.m3u8
