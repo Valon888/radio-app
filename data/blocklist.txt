@@ -24,3 +24,8 @@ vs.sednastream.com:1936/alportv/
 gjirafa-video-live.gjirafa.net/gjvideo-live/2dw-zuf-1c9-pxu/
 # Ba/Rs: gateway udpxy 185.81.240.65:15000 kthen 200 pa asnjë bajt (multicast nuk jepet): RTS 3, Federalna televizija
 185.81.240.65:15000/udp/
+# Host-e që nuk zgjidhen më (ENOTFOUND/ECONNREFUSED/SSL): dens.tv swiftserve, secured.albportal, streamlock 7064
+op-group1-swiftservehd-1.dens.tv/
+op-group1-swiftservesd-1.dens.tv/
+secured.albportal.net:2083/
+5d00db0e0fcd5.streamlock.net/
