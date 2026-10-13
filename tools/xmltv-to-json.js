@@ -44,4 +44,12 @@ while ((m = re.exec(xml))) {
     start: s.toISOString(), end: e.toISOString(), title: decode(title.trim()),
   });
 }
+// Alias sipas <display-name>, që js/epg.js të gjejë kanalin edhe me emër (p.sh. "RTK 2" për "RTK2.xk@SD")
+const cre = /<channel\s+id="([^"]+)"[^>]*>([\s\S]*?)<\/channel>/g;
+let c;
+while ((c = cre.exec(xml))) {
+  const id = decode(c[1]);
+  const dn = (/<display-name[^>]*>([\s\S]*?)<\/display-name>/.exec(c[2]) || [])[1];
+  if (dn && out[id] && !out[decode(dn.trim())]) out[decode(dn.trim())] = out[id];
+}
 process.stdout.write(JSON.stringify(out));

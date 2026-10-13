@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channels>
+  <channel site="ipko.tv" site_id="24-tv" lang="tr" xmltv_id="24TV.tr@SD">24 TV</channel>
+  <channel site="ipko.tv" site_id="a2" lang="tr" xmltv_id="A2TV.tr@SD">A2</channel>
+  <channel site="ipko.tv" site_id="a-haber" lang="tr" xmltv_id="AHaber.tr@SD">A Haber</channel>
+  <channel site="ipko.tv" site_id="a-news" lang="en" xmltv_id="ANews.tr@SD">A News</channel>
+  <channel site="ipko.tv" site_id="a-para" lang="tr" xmltv_id="APara.tr@SD">A Para</channel>
+  <channel site="ipko.tv" site_id="al-jazeera" lang="en" xmltv_id="AlJazeera.qa@English">Al Jazeera</channel>
+  <channel site="ipko.tv" site_id="dream-turk" lang="tr" xmltv_id="DreamTurk.tr@SD">Dream Türk</channel>
+  <channel site="ipko.tv" site_id="euro-star" lang="tr" xmltv_id="EuroStar.tr@SD">Euro Star</channel>
+  <channel site="ipko.tv" site_id="halk-tv" lang="tr" xmltv_id="HalkTV.tr@SD">Halk TV</channel>
+  <channel site="ipko.tv" site_id="kanal-7" lang="tr" xmltv_id="Kanal7.tr@SD">Kanal 7</channel>
+  <channel site="ipko.tv" site_id="rtk-2" lang="sq" xmltv_id="RTK2.xk@SD">RTK 2</channel>
+  <channel site="ipko.tv" site_id="rtk-3" lang="sq" xmltv_id="RTK3.xk@SD">RTK 3</channel>
+  <channel site="ipko.tv" site_id="rtsh-1" lang="sq" xmltv_id="RTSH1.al@SD">RTSH 1</channel>
+  <channel site="ipko.tv" site_id="rtsh-24" lang="sq" xmltv_id="RTSH24.al@SD">RTSH 24</channel>
+  <channel site="ipko.tv" site_id="rtsh-shqip" lang="sq" xmltv_id="RTSHShqip.al@SD">RTSH Shqip</channel>
+  <channel site="ipko.tv" site_id="rtv-21" lang="sq" xmltv_id="RTV21.xk@SD">RTV 21</channel>
+  <channel site="ipko.tv" site_id="sky-360" lang="tr" xmltv_id="360.tr@SD">360</channel>
+  <channel site="ipko.tv" site_id="syri-tv" lang="sq" xmltv_id="Syri.al@SD">Syri TV</channel>
+  <channel site="ipko.tv" site_id="t7" lang="sq" xmltv_id="T7.xk@SD">T7</channel>
+  <channel site="ipko.tv" site_id="tgrt-haber" lang="tr" xmltv_id="TGRTHaber.tr@SD">TGRT Haber</channel>
+  <channel site="ipko.tv" site_id="trt-1" lang="tr" xmltv_id="TRT1.tr@SD">TRT 1</channel>
+  <channel site="ipko.tv" site_id="trt-belgesel" lang="tr" xmltv_id="TRTBelgesel.tr@SD">TRT Belgesel</channel>
+  <channel site="ipko.tv" site_id="trt-cocuk" lang="tr" xmltv_id="TRTCocuk.tr@SD">TRT Çocuk</channel>
+  <channel site="ipko.tv" site_id="trt-haber" lang="tr" xmltv_id="TRTHaber.tr@SD">TRT Haber</channel>
+  <channel site="ipko.tv" site_id="trt-muzik" lang="tr" xmltv_id="TRTMuzik.tr@SD">TRT Müzik</channel>
+  <channel site="ipko.tv" site_id="trt-spor" lang="tr" xmltv_id="TRTSpor.tr@SD">TRT Spor</channel>
+  <channel site="ipko.tv" site_id="trt-turk" lang="tr" xmltv_id="TRTTurk.tr@SD">TRT Türk</channel>
+  <channel site="ipko.tv" site_id="trt-world" lang="en" xmltv_id="TRTWorld.tr@SD">TRT World</channel>
+  <channel site="ipko.tv" site_id="tv-4" lang="tr" xmltv_id="TV4.tr@SD">TV 4</channel>
+  <channel site="ipko.tv" site_id="tv-arta" lang="sq" xmltv_id="TVArta.xk@SD">TV Arta</channel>
+  <channel site="tvim.tv" site_id="NBATV" lang="sq" xmltv_id="NBATVInternational.us@SD">NBA TV</channel>
+</channels>

@@ -154,8 +154,31 @@ Mbështetet **EPG bazik** nga `data/epg.json`:
 
 Çelësi është id e kanalit (me ose pa `@SD`) ose emri. Për XMLTV:
 `node tools/xmltv-to-json.js guide.xml > data/epg.json`.
-Nëse skedari mungon, EPG nuk shfaqet. **TODO**: marrje automatike e XMLTV nga një burim publik dhe harta e
-ID-ve tvg-id → kanal.
+Nëse skedari mungon, EPG nuk shfaqet.
+
+### Gjenerimi i EPG me iptv-org/epg (pa Docker)
+
+```bash
+git clone --depth 1 -b master https://github.com/iptv-org/epg.git D:/epg
+cd D:/epg && npm install
+
+# 1. (një herë, ose pas ndryshimit të listës) channels.xml nga kanalet e projektit
+cd D:/mini-iptv
+node tools/build-epg-channels.js D:/epg > epg/channels.xml
+
+# 2. merr programin (burimet: ipko.tv, tvim.tv)
+cd D:/epg
+npx tsx scripts/commands/epg/grab.ts -c D:/mini-iptv/epg/channels.xml -o D:/epg/guide.xml --days 2 --maxConnections 5
+
+# 3. shndërro në JSON për aplikacionin
+cd D:/mini-iptv
+node tools/xmltv-to-json.js D:/epg/guide.xml > data/epg.json
+```
+
+`build-epg-channels.js` përputh emrat e kanaleve me listat e `ipko.tv` dhe `tvim.tv` (vetëm nga i njëjti shtet).
+Aktualisht mbulohen ~30 kanale (RTSH, RTK 2/3, RTV21, T7, TV Arta, Syri dhe kanalet turke). Programi ruan
+vetëm 36 orët e ardhshme, ndaj përsërite hapin 2–3 çdo ditë (p.sh. me Task Scheduler). Për më shumë kanale,
+shto emrat te listat ose një `custom.m3u` me të njëjtat emra si në `ipko.tv.channels.xml`.
 
 ## Cast / AirPlay
 
