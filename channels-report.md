@@ -1,19 +1,18 @@
 # Raporti i kanaleve
 
-Gjeneruar: 2026-10-12T21:32:12.545Z  
+Gjeneruar: 2026-10-13T04:30:18.423Z  
 Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 
-- Kanale të testuara: **2956** (URL: 3194)
-- Punojnë plotësisht: **1982**
-- Punojnë pjesërisht (një burim i vdekur, tjetri jo): **32**
-- Të bllokuara (401/403, gjeo ose autorizim): **325**
-- Offline (të gjitha burimet): **617**
+- Kanale të testuara: **2959** (URL: 3201)
+- Punojnë plotësisht: **1976**
+- Punojnë pjesërisht (një burim i vdekur, tjetri jo): **33**
+- Të bllokuara (401/403, gjeo ose autorizim): **323**
+- Offline (të gjitha burimet): **627**
 
 ## Offline
 
 | Kanali | Grupi | Lloji | Gjendja | URL kryesore |
 |---|---|---|---|---|
-| Alpo TV | Albania | tv | offline (ERR_SSL_TLSV1_ALERT_INTERNAL_ERROR) | https://5d00db0e0fcd5.streamlock.net/7236/7236/playlist.m3u8 |
 | Toonami Aftermath East | Animation | tv | offline (HTTP 500) | http://api.toonamiaftermath.com:3000/est/playlist.m3u8 |
 | BBC Three/CBBC | Animation;Family;Kids | tv | offline (timeout) | https://viamotionhsi.netplus.ch/live/eds/bbc3cbbc/browser-HLS8/bbc3cbbc.m3u8 |
 | BBC Four/CBeebies | Animation;General;Kids | tv | offline (timeout) | https://viamotionhsi.netplus.ch/live/eds/bbc4cbeebies/browser-HLS8/bbc4cbeebies.m3u8 |
@@ -117,9 +116,12 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Saudi Arabia Radio 97 | Arabia Saudite | radio | offline (HTTP 404) | https://stream.radiojar.com/saudiarabic97 |
 | Saudi Arabia Radio 98 | Arabia Saudite | radio | offline (HTTP 404) | https://stream.radiojar.com/saudiarabic98 |
 | Saudi Arabia Radio 99 | Arabia Saudite | radio | offline (HTTP 404) | https://stream.radiojar.com/saudiarabic99 |
+| 30A We Love Cars | Auto | tv | offline (UND_ERR_SOCKET) | https://30a-tv.com/feeds/vidaa/cars.m3u8 |
 | Asharq News | Business;News | tv | offline (HTTP 503) | https://bcovlive-a.akamaihd.net/0b75ef0a49e24704a4ca023d3a82c2df/ap-south-1/62033119410... |
 | Asharq News Portrait | Business;News | tv | offline (HTTP 503) | https://bcovlive-a.akamaihd.net/ed81ac1118414d4fa893d3a83ccec9be/eu-central-1/620331194... |
+| Asharq Radio | Business;News | tv | offline (HTTP 404) | https://svs.itworkscdn.net/asharqradiovlive/asharqradiov/playlist.m3u8 |
 | Rotana Classic | Classic | tv | offline (HTTP 503) | https://bcovlive-a.akamaihd.net/0debf5648e584e5fb795c3611c5c0252/eu-central-1/605795590... |
+| 30A Ridiculous TV | Comedy | tv | offline (UND_ERR_SOCKET) | https://30a-tv.com/feeds/720p/63.m3u8 |
 | Laff | Comedy | tv | offline (timeout) | http://72.46.118.193/Laff/index.m3u8 |
 | Nick/Comedy Central +1 HD | Comedy;Kids | tv | offline (timeout) | https://viamotionhsi.netplus.ch/live/eds/comedycentralnick/browser-HLS8/comedycentralni... |
 | Channel S | Culture | tv | offline (timeout) | https://cdn149.anystream.uk:8082/g1/tvchsuk03/playlist.m3u8 |
@@ -181,6 +183,7 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Al Dafrah TV | General | tv | offline (segment HTTP 503) | https://rtmp-live-ingest-eu-west-3-universe-dacast-com.akamaized.net/transmuxv1/streams... |
 | Al Mashhad | General | tv | offline (HTTP 503) | https://bcovlive-a.akamaihd.net/rbcb04b715757430f92099ecc84ca472f/ap-south-1/6313884884... |
 | Alma TV | General | tv | offline (timeout) | http://151.0.207.99:1935/AlmaTv/AlmaTv/playlist.m3u8 |
+| Alpo TV | General | tv | blocked (HTTP 403)<br>offline (ERR_SSL_TLSV1_ALERT_INTERNAL_ERROR) | https://vs.sednastream.com:1936/alportv/alportv/playlist.m3u8 |
 | Altenburg TV | General | tv | offline (timeout) | https://58de7a369a9c4.streamlock.net/abgtv/abgtv_1080p/playlist.m3u8 |
 | Amga TV | General | tv | offline (HTTP 503) | https://streamer1.connectto.com/AMGA_WEB_1202/playlist.m3u8 |
 | Antenna Sud | General | tv | offline (timeout) | https://live.antennasudwebtv.it:9443/hls/vod.m3u8 |
@@ -215,6 +218,7 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Duna World | General | tv | offline (timeout) | http://146.59.85.40:89/dunaworld/index.m3u8 |
 | El Talisman | General | tv | offline (HTTP 400) | https://stream.ads.ottera.tv/playlist.m3u8?network_id=1079 |
 | El Watania 1 | General | tv | offline (timeout) | https://viamotionhsi.netplus.ch/live/eds/tunisienationale/browser-HLS8/tunisienationale... |
+| Fieri Tv | General | tv | offline (timeout) | http://valashop.online:8090/fieritv.m3u8 |
 | Flow Caribe | General | tv | offline (HTTP 400) | https://stream.ads.ottera.tv/playlist.m3u8?network_id=1083 |
 | France 2 | General | tv | offline (timeout) | http://69.64.57.208/france2/mono.m3u8 |
 | France 2 HD | General | tv | offline (timeout) | https://viamotionhsi.netplus.ch/live/eds/france2hd/browser-dash/france2hd.mpd |
@@ -263,7 +267,7 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Nessma El Jadida | General | tv | offline (timeout) | https://fl1002.bozztv.com/ga-nessmatv/tracks-v1a1/mono.m3u8 |
 | Novelas Turcas | General | tv | offline (HTTP 400) | https://stream.ads.ottera.tv/playlist.m3u8?network_id=5088 |
 | Nuova TV 1 | General | tv | offline (HTTP 404) | https://nuovatv.net:8443/tv/stream.m3u8 |
-| Odeon 24 | General | tv | offline (timeout) | https://streaming.softwarecreation.it/Odeon/Odeon/playlist.m3u8 |
+| Odeon 24 | General | tv | offline (HTTP 404) | https://streaming.softwarecreation.it/Odeon/Odeon/playlist.m3u8 |
 | Otto Channel | General | tv | offline (variant HTTP 404) | https://ottop-live-meride.akamaized.net/hls/live/2039996/ch1/playlist.m3u8 |
 | Passione Lotto | General | tv | offline (timeout) | http://185.63.52.103:8080/hls/passionelotto/1_2/index.m3u8 |
 | Planeta de Aventuras | General | tv | offline (HTTP 400) | https://stream.ads.ottera.tv/playlist.m3u8?network_id=4311 |
@@ -283,7 +287,7 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Rai Gulp HD | General | tv | offline (timeout)<br>offline (timeout) | https://viamotionhsi.netplus.ch/live/eds/raigulp/browser-dash/raigulp.mpd |
 | RAI Italia Asia | General | tv | offline (timeout) | http://210.210.155.37/x6bnqe/s/s63/index2.m3u8 |
 | Rai Movie | General | tv | offline (jo playlist HLS)<br>offline (timeout) | https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=747002 |
-| Rai News 24 HD | General | tv | offline (timeout)<br>offline (ECONNRESET) | https://viamotionhsi.netplus.ch/live/eds/rainews/browser-dash/rainews.mpd |
+| Rai News 24 HD | General | tv | offline (timeout)<br>offline (timeout) | https://viamotionhsi.netplus.ch/live/eds/rainews/browser-dash/rainews.mpd |
 | Rai Premium | General | tv | offline (jo playlist HLS)<br>offline (timeout) | https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=746992 |
 | Rai Scuola | General | tv | offline (jo playlist HLS) | https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=747011 |
 | Rai Scuola HD | General | tv | offline (timeout)<br>offline (timeout) | https://viamotionhsi.netplus.ch/live/eds/raiscuola/browser-dash/raiscuola.mpd |
@@ -299,7 +303,6 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Ritmos Inolvidables | General | tv | offline (HTTP 400) | https://stream.ads.ottera.tv/playlist.m3u8?network_id=1081 |
 | RTL | General | tv | offline (timeout) | https://bpcdnmanprod.nexttv.ht.hr/bpk-tv/RTL/default/index.mpd |
 | RTL 2 | General | tv | offline (timeout) | https://bpcdnmanprod.nexttv.ht.hr/bpk-tv/RTL2/default/index.mpd |
-| RTP Internacional | General | tv | offline (HTTP 204) | https://streaming-live.rtp.pt/liverepeater/smil:rtpi.smil/playlist.m3u8 |
 | RTH-TV1 | General | tv | offline (variant HTTP 404) | https://2-fss-2.streamhoster.com/pl_120/amlst:206708-4203440/playlist.m3u8 |
 | Rustavi 2 | General | tv | offline (timeout)<br>blocked (HTTP 403) | http://31.146.5.178:8087/play/a008/index.m3u8 |
 | Saab TV | General | tv | offline (timeout) | https://ap02.iqplay.tv:8082/iqb8002/s03btv/playlist.m3u8 |
@@ -336,6 +339,7 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | TV2 Canal Algérie | General | tv | offline (timeout) | http://149.62.177.98:8000/play/a01s/index.m3u8 |
 | TV4 Tamazight TV | General | tv | offline (timeout) | http://149.62.177.98:8000/play/a01t/index.m3u8 |
 | TV5Monde France Belgium Switzerland Monaco HD | General | tv | offline (timeout) | https://viamotionhsi.netplus.ch/live/eds/tv5mondefbs/browser-HLS8/tv5mondefbs.m3u8 |
+| TV7 Benevento | General | tv | offline (HTTP 404) | http://streaming.senecadot.com/live/flv:tv7.sdp/playlist.m3u8 |
 | TVC | General | tv | offline (timeout) | http://31.146.5.178:8087/play/a009/index.m3u8 |
 | TVM Internacional | General | tv | offline (timeout) | http://online.tvm.co.mz:1935/live/smil:Channel2.smil/playlist.m3u8 |
 | TVSN Beauty | General | tv | offline (timeout) | https://live-tvsn.simplestreamcdn.com/live12/tvsnbeauty/bitrate1.isml/.m3u8 |
@@ -365,7 +369,6 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Radio Blue Sky | Kosovë | radio | offline (timeout) | https://stream.radiobluesky.com:8000/bluesky.mp3 |
 | Radio Gjakova | Kosovë | radio | offline (timeout) | https://stream.radiogjakova.com:8000/gjakova.mp3 |
 | Radio Rinia | Kosovë | radio | offline (timeout) | https://stream.radiorinia.com:8000/rinia.mp3 |
-| CNN Radio | Lajme | radio | offline (HTTP 502) | http://tunein.streamguys1.com/cnn |
 | DW News | Lajme | radio | offline (HTTP 400) | http://dwstream4-lh.akamaihd.net/i/dwstream4_live@123456/master.m3u8 |
 | LCP | Legislative | tv | offline (timeout) | https://viamotionhsi.netplus.ch/live/eds/lcp/browser-HLS8/lcp.m3u8 |
 | TV9 El-Barlamaniya | Legislative | tv | offline (timeout) | http://149.62.177.98:8000/play/a01y/index.m3u8 |
@@ -379,12 +382,12 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Rotana Cinema KSA | Movies | tv | offline (HTTP 503) | https://bcovlive-a.akamaihd.net/9527a892aeaf43019fd9eeb77ad1516e/eu-central-1/605795590... |
 | Sony Canal Novelas | Movies | tv | offline (HTTP 504) | https://a89829b8dca2471ab52ea9a57bc28a35.mediatailor.us-east-1.amazonaws.com/v1/master/... |
 | TF1 Series Films | Movies | tv | offline (timeout) | https://viamotionhsi.netplus.ch/live/eds/hd1/browser-HLS8/hd1.m3u8 |
-| 30A Music | Music | tv | offline (UND_ERR_SOCKET) | https://30a-tv.com/music.m3u8 |
 | Abdulmajeed Abdullah | Music | tv | offline (variant HTTP 404) | https://d2hng5r56zpsbw.cloudfront.net/out/v1/9c4c990f44bb4767bb46271f326dd574/index.m3u8 |
 | Clubbing TV France | Music | tv | offline (HTTP 504) | https://d1j2csarxnwazk.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d... |
 | Dijlah Tarab | Music | tv | offline (timeout) | https://ghaasiflu.online/tarab/index.m3u8 |
 | KurdMax Music | Music | tv | offline (timeout) | https://6476e46b58f91.streamlock.net/music/livestream/playlist.m3u8 |
 | Mohammed Abdo | Music | tv | offline (variant HTTP 404) | https://d2ow8h651gs7dx.cloudfront.net/out/v1/371fb663da604e659a2fb99bf89d92d4/index.m3u8 |
+| Radio U TV | Music | tv | offline (segment HTTP 404) | https://1826200335.rsc.cdn77.org/1826200335/index.m3u8 |
 | Rashid AlMajed | Music | tv | offline (variant HTTP 404) | https://dphwv2ufgnfsq.cloudfront.net/out/v1/59cd80dfe93a479eb8b4d79bc6f225ca/index.m3u8 |
 | TZiK | Music | tv | offline (timeout) | https://54627d4fc5996.streamlock.net/tzik/tzik/chunklist.m3u8 |
 | Club FM | Muzikë | radio | offline (timeout) | http://5.39.71.159:8100/ |
@@ -404,6 +407,7 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Al Qahera News | News | tv | offline (HTTP 503) | https://bcovlive-a.akamaihd.net/d30cbb3350af4cb7a6e05b9eb1bfd850/eu-west-1/605795590600... |
 | BBC Arabic | News | tv | offline (jo playlist HLS) | https://vs-cmaf-pushb-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_arabic_tv/pc... |
 | BBC Persian | News | tv | offline (jo playlist HLS) | https://vs-cmaf-pushb-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_persian_tv/p... |
+| BFM Paris Île-de-France | News | tv | offline (HTTP 404) | https://ncdn-live-bfm.pfd.sfr.net/shls/LIVE$BFM_PARIS/index.m3u8?end=END&start=LIVE |
 | CBS News Bay Area | News | tv | offline (variant HTTP 404) | https://cbsn-sf.cbsnstream.cbsnews.com/out/v1/dac63c1abb3f4a2dac9f508f44bb072a/master.m3u8 |
 | CBS News Boston | News | tv | offline (variant HTTP 404) | https://cbsn-bos.cbsnstream.cbsnews.com/out/v1/589d66ec6eb8434c96c28de0370d1326/master.... |
 | CBS News Chicago | News | tv | offline (variant HTTP 404) | https://cbsn-chi.cbsnstream.cbsnews.com/out/v1/b2fc0d5715d54908adf07f97d2616646/master.... |
@@ -414,7 +418,7 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | CBS News New York | News | tv | offline (variant HTTP 404) | https://cbsn-ny.cbsnstream.cbsnews.com/out/v1/ec3897d58a9b45129a77d67aa247d136/master.m3u8 |
 | CBS News Philadelphia | News | tv | offline (variant HTTP 404) | https://cbsn-phi.cbsnstream.cbsnews.com/out/v1/5c9ad3e215984b0e9ad845b335216b72/master.... |
 | CBS News Pittsburgh | News | tv | offline (variant HTTP 404) | https://cbsn-pit.cbsnstream.cbsnews.com/out/v1/6966dabf8150405ab26f854e3cd6a2b8/master.... |
-| CGTN Français | News | tv | offline (HTTP 404) | https://francais-livews.cgtn.com/hls/LSvev95OuFZtKLc6CeKEFYXj220802LSTeV6PO0Ut9r71Uq3k5... |
+| CGTN Français | News | tv | offline (timeout) | https://francais-livews.cgtn.com/hls/LSvev95OuFZtKLc6CeKEFYXj220802LSTeV6PO0Ut9r71Uq3k5... |
 | Euronews French HD | News | tv | offline (timeout) | https://viamotionhsi.netplus.ch/live/eds/euronews/browser-HLS8/euronews.m3u8 |
 | For You TV | News | tv | offline (timeout) | https://stream.az-multimedia.com:3793/live/foryoutvlive.m3u8 |
 | Humraaz TV | News | tv | offline (timeout) | https://cdn61.liveonlineservices.com/hls/humraaz.m3u8 |
@@ -427,8 +431,6 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Nabaa TV | News | tv | offline (timeout) | http://31.14.40.237:1935/live/Nabaa/playlist.m3u8 |
 | NewsNet | News | tv | offline (variant HTTP 404) | https://2-fss-2.streamhoster.com/pl_138/amlst:201950-1311088/playlist.m3u8 |
 | On E | News | tv | offline (HTTP 503) | https://bcovlive-a.akamaihd.net/3dc60bab470f4c9fbf00408ecb7c3d7a/eu-west-1/605795590600... |
-| RT en Español | News | tv | offline (segment HTTP 404) | https://cloud.odysee.live/content/9f638b94d11d879726ae55dd5a0923621b96a45b/master.m3u8 |
-| RT France | News | tv | offline (segment HTTP 404) | https://rt-fra.rttv.com/dvr/rtfrance/playlist.m3u8 |
 | TV3 Algeria | News | tv | offline (timeout) | http://149.62.177.98:8000/play/a01z/index.m3u8 |
 | Zoom TV Kurdish | News | tv | offline (timeout) | https://live.zoomnews.info/live/Zoom_playlist.m3u8 |
 | 24 Horas Internacional | News;Public | tv | offline (timeout) | https://viamotionhsi.netplus.ch/live/eds/canal24horas/browser-HLS8/canal24horas.m3u8 |
@@ -444,7 +446,7 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Al-Aimma TV | Religious | tv | offline (timeout) | http://stream.alaimma.tv/hls/alaimma/h3b1rd584cpq8p60okoj01rnfigdcnia.m3u8 |
 | Al-Fady TV | Religious | tv | offline (variant HTTP 404) | https://5d658d7e9f562.streamlock.net/alfadytv.tv/alfadytv.smil/playlist.m3u8 |
 | Alerth Alnabawi Channel | Religious | tv | offline (segment HTTP 404) | http://82.212.74.2:8000/live/7307.m3u8 |
-| Alkerazatv | Religious | tv | offline (timeout) | https://hwlive.streamingmediahosting.com/14221-live/0_ahgiewbd/playlist.m3u8 |
+| Alkerazatv | Religious | tv | offline (HTTP 502) | https://hwlive.streamingmediahosting.com/14221-live/0_ahgiewbd/playlist.m3u8 |
 | Angel TV Africa | Religious | tv | offline (HTTP 421) | https://cdn3.wowza.com/5/TDJ0aWNkNXFxWWta/angeltvcloud/ngrp:angelafrica_all/playlist.m3u8 |
 | Angel TV America | Religious | tv | offline (HTTP 421) | https://cdn3.wowza.com/5/TDJ0aWNkNXFxWWta/angeltvcloud/ngrp:angelamerica_all/playlist.m3u8 |
 | Angel TV Arabia | Religious | tv | offline (HTTP 421) | https://cdn3.wowza.com/5/TDJ0aWNkNXFxWWta/angeltvcloud/ngrp:angelarabia_all/playlist.m3u8 |
@@ -457,7 +459,6 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Angel TV Spanish | Religious | tv | offline (HTTP 421) | https://cdn3.wowza.com/5/TDJ0aWNkNXFxWWta/angeltvcloud/ngrp:angelspanish_all/playlist.m3u8 |
 | APTIM TV | Religious | tv | offline (HTTP 421) | https://stream.commec.tv/6447b2559d8b0711e2fa75cc/live_222c2dc0b69f11ee8c3c99218c8c67c4... |
 | Aviation TV | Religious | tv | offline (timeout) | http://streamer02.nbo1.angani.co:1935/aviationtv/myStream/playlist.m3u8 |
-| Boonniyom TV | Religious | tv | offline (segment HTTP 404) | https://live.x2.co.th/live/bntv.m3u8 |
 | Canal 27 | Religious | tv | offline (timeout) | https://live.canal27.tv:3633/live/canal27live.m3u8 |
 | Canal 65 | Religious | tv | offline (timeout) | https://panel.streamingtv-mediacp.online:1936/tv65/tv65/playlist.m3u8 |
 | CBN Español | Religious | tv | offline (HTTP 503) | https://bcovlive-a.akamaihd.net/r21fb8503a4a74d098b798f16922b2a36/us-east-1/73454620700... |
@@ -474,18 +475,23 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Espíritu Santo Y Fuego TV | Religious | tv | offline (timeout) | https://inliveserver.com:1936/8392/8392/playlist.m3u8 |
 | Fajar TV | Religious | tv | offline (timeout) | http://122.248.43.138:1935/ch27/myStream/playlist.m3u8 |
 | Freedom Experience TV | Religious | tv | offline (timeout) | https://panel.freedomflixtv.org:3934/hybrid/play.m3u8 |
+| GDNS Ludhiana | Religious | tv | offline (HTTP 404) | http://akalmultimedia.net:1935/gdnslive/gdns-live/chunklist.m3u8 |
 | Good Shepherd TV | Religious | tv | offline (timeout) | http://162.250.201.58:8032/goodshepherd/web/index.fmp4.m3u8 |
 | GoodTV | Religious | tv | offline (timeout) | http://mobliestream.c3tv.com:1935/live/goodtv.sdp/playlist.m3u8 |
 | Gran TV | Religious | tv | offline (timeout) | https://stream.medialive.hu/gran/grantvlive/playlist.m3u8 |
 | GSG TV | Religious | tv | offline (timeout) | https://schurch1.bozztv.com/livecdn69/live/playlist.m3u8 |
+| Holy Quran Radio Nablus | Religious | tv | offline (HTTP 503) | http://streaming.zaytonatube.com:8080/holyquran/holyquran/video.m3u8 |
 | Hope Channel German | Religious | tv | offline (HTTP 204) | https://customer-x8zydurm357k8j9p.cloudflarestream.com/5b46490d20cdd87fcac238b0027813e0... |
 | Hope Channel Ghana | Religious | tv | offline (HTTP 204) | https://videodelivery.net/dfbdca87f2a6291aa4fdc8fe3290769b/manifest/video.m3u8 |
 | Hope Channel India | Religious | tv | offline (HTTP 204) | https://videodelivery.net/98334a974d26e45759c6baa8bceabbcf/manifest/video.m3u8 |
+| Hosanna Vision | Religious | tv | offline (HTTP 404) | https://1206618505.rsc.cdn77.org/LS-ATL-59020-1/playlist.m3u8 |
 | I AM CHANNEL | Religious | tv | offline (timeout) | http://iamchannel.org:1935/tes/1/playlist.m3u8 |
 | IMPD TV | Religious | tv | offline (timeout) | https://58a4464faef53.streamlock.net/impd/ngrp:impd_all/playlist.m3u8 |
 | Iqra TV | Religious | tv | offline (timeout) | https://cdn149.anystream.uk:8082/app/iq53la/playlist.m3u8 |
+| Isaac TV | Religious | tv | offline (variant HTTP 404) | https://livecdn.live247stream.com/isaac/tv/playlist.m3u8 |
 | Islam Channel | Religious | tv | offline (timeout) | https://live.islamchannel.tv/live11/islamtv_english/bitrate1.isml/live.m3u8 |
 | Islam Channel Urdu | Religious | tv | offline (timeout) | https://live-islamtv-urdu.simplestreamcdn.com/live13/islamtv_urdu/bitrate1.isml/live.m3u8 |
+| Izzah TV | Religious | tv | offline (segment HTTP 404) | https://streaming.radiosalamjambi.com/izzahtv.m3u8 |
 | JBN Canal 39 | Religious | tv | offline (HTTP 502) | https://hdbox.chunklistv.com/live?stream=jbn39 |
 | KICCTV | Religious | tv | offline (timeout) | https://live.mdc.akamaized.net/hls/livestream/kicctv/playlist.m3u8 |
 | KKRtv | Religious | tv | offline (timeout) | http://stream.kkr.dk/live/kkr/playlist.m3u8 |
@@ -507,7 +513,9 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Nieta TV | Religious | tv | offline (timeout) | http://69.64.57.208/nieta/playlist.m3u8 |
 | Omega | Religious | tv | offline (HTTP 500) | https://196914.global.ssl.fastly.net/63fe5f3a8f037f47ac36fb2a/live_1d411f00b7a411eda9b5... |
 | ONE-TV | Religious | tv | offline (timeout) | https://core.live-apc.eu:5443/LiveApp/streams/backup.m3u8 |
+| Peniel Musical | Religious | tv | offline (segment HTTP 404) | https://s.emisoras.tv:8081/penielmusical/index.m3u8 |
 | Phenomenal Life TV | Religious | tv | offline (timeout) | https://5be80bd118c27.streamlock.net:433/phenomenaltv/phenomenal/playlist.m3u8 |
+| Praise Jesus Tower TV | Religious | tv | offline (segment HTTP 404) | https://vsrv1.az-streamingserver.com:3555/live/dyjoqlgklive.m3u8 |
 | Quo Vadis Ministry TV | Religious | tv | offline (timeout) | https://qvmstream.tulix.tv/720p/720p/playlist.m3u8 |
 | Radio Télé Amen FM | Religious | tv | offline (timeout) | http://184.173.179.163:1935/daniel/daniel/playlist.m3u8 |
 | Sada-E-Haq TV | Religious | tv | offline (timeout) | https://live.relentlessinnovations.net:1936/sadaehaq/sadaehaq/playlist.m3u8 |
@@ -520,16 +528,16 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Trinity TV | Religious | tv | offline (ERR_SSL_TLSV1_ALERT_INTERNAL_ERROR) | https://5d00db0e0fcd5.streamlock.net/7410/7410/playlist.m3u8 |
 | Trust TV | Religious | tv | offline (timeout) | https://panel.freedomflixtv.org:3900/hybrid/play.m3u8 |
 | TV Al Bayane | Religious | tv | offline (timeout) | http://69.64.57.208/albayanetv/index.m3u8 |
-| TV Padre Cicero | Religious | tv | offline (timeout) | https://video01.logicahost.com.br/tvpadrecicero/tvpadrecicero/playlist.m3u8 |
 | TV45-3ABN Nicaragua | Religious | tv | offline (timeout) | https://hdbox.chunklistv.com/live?stream=3abn-nicaragua |
 | TV5 Coran TV | Religious | tv | offline (timeout) | http://149.62.177.98:8000/play/a01u/index.m3u8 |
+| TVCARiB Gospel | Religious | tv | offline (HTTP 404) | https://cdn.mycloudstream.io/hls/live/broadcast/wokrhjkd/index.m3u8 |
+| Unife TV | Religious | tv | offline (HTTP 404) | https://cdn.mycloudstream.io/hls/live/broadcast/ic1frrzz/index.m3u8 |
 | Way TV | Religious | tv | offline (timeout) | http://213.13.26.11:1935/live/sobrenaturaltv/livestream.m3u8 |
 | Whole Word TV | Religious | tv | offline (ECONNRESET) | https://mn-nl.mncdn.com/wholewordtv/wholewordtv/index.m3u8 |
 | Novelisima | Series | tv | offline (HTTP 400) | https://stream.ads.ottera.tv/playlist.m3u8?network_id=2380 |
 | We TV | Series | tv | offline (timeout) | http://cors.tundracast.com:2000/https://streamer1.nexgen.bz/WE_TV/index.m3u8 |
 | MUTV | Sports | tv | offline (HTTP 503) | https://bcovlive-a.akamaihd.net/r2d2c4ca5bf57456fb1d16255c1a535c8/eu-west-1/60580042030... |
 | Poker Night in America | Sports | tv | offline (variant bosh) | https://d2njbreu8qyfxo.cloudfront.net/scheduler/scheduleMaster/216.m3u8 |
-| TVS Women Sports | Sports | tv | offline (HTTP 404) | https://rpn.bozztv.com/gusa/gusa-tvswsn/index.m3u8 |
 | 1-2-3 TV | Shop | tv | offline (timeout) | https://123tv-mx1.flex-cdn.net/index.m3u8 |
 | QVC 2 Germany | Shop | tv | offline (variant HTTP 404) | https://qvcde-live.akamaized.net/hls/live/2097104/qps/master.m3u8 |
 | QVC Style Germany | Shop | tv | offline (variant HTTP 404) | https://qvcde-live.akamaized.net/hls/live/2097104/qby/master.m3u8 |
@@ -547,9 +555,9 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | TRT Belgesel | Turkish - Documentary | tv | offline (timeout) | http://185.234.111.229:8000/play/a00f |
 | Agro TV | Turkish - Education;Outdoor | tv | offline (timeout) | http://185.234.111.229:8000/play/a011 |
 | EuroStar | Turkish - Entertainment | tv | offline (timeout) | http://185.234.111.229:8000/play/a01h |
+| MC TV | Turkish - Entertainment | tv | offline (segment HTTP 404) | https://rrr.sz.xlcdn.com/?account=mceutv&file=mc2&output=playlist.m3u8&protocol=https&s... |
 | A2TV | Turkish - General | tv | offline (timeout) | http://185.234.111.229:8000/play/a01m |
 | Anadolu Dernek TV | Turkish - General | tv | offline (timeout) | http://185.234.111.229:8000/play/a020 |
-| ATV | Turkish - General | tv | offline (timeout) | https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/atv/atv.m3u8 |
 | DRT TV | Turkish - General | tv | offline (timeout) | http://185.234.111.229:8000/play/a06a |
 | Ekin Turk | Turkish - General | tv | offline (timeout) | http://185.234.111.229:8000/play/a025 |
 | Kanal 26 | Turkish - General | tv | offline (timeout) | http://185.234.111.229:8000/play/a04e |
@@ -577,6 +585,7 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Al-Zahra TV Turkic | Turkish - Religious | tv | offline (timeout) | http://185.234.111.229:8000/play/a00t |
 | Diyanet TV | Turkish - Religious | tv | offline (timeout) | http://185.234.111.229:8000/play/a05j |
 | Diyar TV | Turkish - Religious | tv | offline (timeout) | http://185.234.111.229:8000/play/a051 |
+| Dost TV | Turkish - Religious | tv | offline (HTTP 404) | https://dost.stream.emsal.im/tv/live.m3u8 |
 | HTSpor TV | Turkish - Sports | tv | offline (timeout) | http://185.234.111.229:8000/play/a016 |
 | TRT Spor | Turkish - Sports | tv | offline (timeout) | http://185.234.111.229:8000/play/a00e |
 | ATV Avrupa | Turkish - Undefined | tv | offline (timeout) | http://185.234.111.229:8000/play/a018 |
@@ -585,6 +594,7 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | BRT 3 | Turkish - Undefined | tv | offline (timeout) | http://185.234.111.229:8000/play/a07e |
 | Mercan TV | Turkish - Undefined | tv | offline (timeout) | http://185.234.111.229:8000/play/a04k |
 | Rumeli TV | Turkish - Undefined | tv | offline (timeout) | http://185.234.111.229:8000/play/a023 |
+| Tarim TV | Turkish - Undefined | tv | offline (segment HTTP 404) | https://content.tvkur.com/l/c7e1da7mm25p552d9u9g/master.m3u8 |
 | Tele 1 | Turkish - Undefined | tv | offline (timeout) | http://185.234.111.229:8000/play/a01y |
 | TRT Turk | Turkish - Undefined | tv | offline (timeout) | http://185.234.111.229:8000/play/a00h |
 | Turksat Saat | Turkish - Undefined | tv | offline (timeout) | http://185.234.111.229:8000/play/a01f |
@@ -635,7 +645,6 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 
 | Kanali | Grupi | Lloji | Gjendja | URL kryesore |
 |---|---|---|---|---|
-| RTK 2 | Kosovë | tv | blocked (variant HTTP 403) | https://gjirafa-video-live.gjirafa.net/gjvideo-livestream/rtk2/index.m3u8 |
 | BabyFirst Spanish | Kids | tv | blocked (HTTP 401) | https://streams2.sofast.tv/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/be6f9eac-... |
 | Brat TV | Kids | tv | blocked (HTTP 403) | https://amg00350-amg00350c1-klowdtv-us-2536.playouts.now.amagi.tv/playlist/amg00350-bra... |
 | CBBC HD | Kids | tv | blocked (HTTP 403) | https://vs-cmaf-pushb-uk-live.akamaized.net/x=4/i=urn:bbc:pips:service:cbbc_hd/iptv_mse... |
@@ -790,7 +799,6 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Kajou TV | Culture | tv | blocked (HTTP 403) | https://dvrfl03.bozztv.com/hdirect/hdirect-kajoutv/index.m3u8 |
 | Kalemeh TV | Religious | tv | blocked (HTTP 403) | https://live20.bozztv.com/gin-trn09/gp-kalemehnews/index.m3u8 |
 | Kavkasia TV | General | tv | blocked (HTTP 403) | http://dvrfl05.bozztv.com/gin-kavkasia/index.m3u8 |
-| King TV | Religious | tv | blocked (segment HTTP 403) | https://streamer12.vdn.dstreamone.net/kingtv/kingtv/playlist.m3u8 |
 | Kolalnas TV | News | tv | blocked (HTTP 403) | https://htvint.mada.ps/kolalnas/index.m3u8 |
 | LA7 | General | tv | blocked (HTTP 403)<br>blocked (HTTP 403) | https://d15umi5iaezxgx.cloudfront.net/LA7/CLN/HLS-B/Live.m3u8 |
 | Lacrosse TV | Sports | tv | blocked (HTTP 403) | https://1840769862.rsc.cdn77.org/FTF/LSN_SCTE.m3u8 |
@@ -965,7 +973,8 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 
 | Kanali | Grupi | Lloji | Gjendja | URL kryesore |
 |---|---|---|---|---|
-| TV 7 Albania | Shqipëri | tv | online<br>offline (ERR_SSL_TLSV1_ALERT_INTERNAL_ERROR) | https://rpn3.bozztv.com/albaniatv/Med7-TV7Tirana/index.m3u8 |
+| AlbKanale Music TV | Shqipëri-Muzikë | tv | online<br>offline (ECONNREFUSED) | https://albportal.net/albkanalemusic.m3u8 |
+| TV 7 Albania | Shqipëri | tv | online<br>blocked (HTTP 403)<br>offline (ERR_SSL_TLSV1_ALERT_INTERNAL_ERROR) | https://rpn3.bozztv.com/albaniatv/Med7-TV7Tirana/index.m3u8 |
 | Toon Goggles | Kids | tv | online<br>blocked (HTTP 403) | https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=37 |
 | TRT 1 | Türkiye | tv | online<br>offline (timeout) | https://tv-trt1.medya.trt.com.tr/master.m3u8 |
 | AccuWeather Now | us_plex | tv | online<br>blocked (HTTP 403) | https://cdn-ue1-prod.tsv2.amagi.tv/linear/amg00684-accuweather-accuweather-plex/playlis... |
@@ -995,5 +1004,5 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | WildEarth | Undefined | tv | blocked (HTTP 403)<br>online | https://cdn-ue1-prod.tsv2.amagi.tv/linear/amg01290-wildearthmediap-wildearth-samsungnl/... |
 | World Poker Tour | Sports | tv | offline (HTTP 504)<br>online<br>online | https://dth07jsr8atug.cloudfront.net/v1/master/9d062541f2ff39b5c0f48b743c6411d25f62fc25... |
 | Yahoo! Finance | Business | tv | online<br>blocked (HTTP 403)<br>offline (variant HTTP 503)<br>online | https://d1ewctnvcwvvvu.cloudfront.net/playlist.m3u8 |
-| АБАЗА-ТВ | General | tv | blocked (HTTP 403)<br>online<br>online<br>online<br>online<br>online<br>online<br>online<br>online | https://public.apsny.camera/tv_abaza_tv_to_site/index.m3u8 |
+| АБАЗА-ТВ | General | tv | blocked (HTTP 403)<br>online<br>online<br>online<br>offline (HTTP 503)<br>online<br>online<br>online<br>online | https://public.apsny.camera/tv_abaza_tv_to_site/index.m3u8 |
 | Глас | Religious | tv | online<br>offline (timeout) | http://85.238.112.69:8811/hls_sec/239.0.4.18-.m3u8 |
