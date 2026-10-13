@@ -1,0 +1,13 @@
+{
+  "source": "https://tvmak.com/ (faqe publike)",
+  "imported": "2026-10-13",
+  "pages": 110,
+  "uniqueUrls": 81,
+  "live": 23,
+  "rejected": {
+    "pa videoSrc": 1,
+    "HTTP 404": 5,
+    "klip/VOD (ENDLIST), jo live": 52,
+    "jo playlist HLS": 1
+  }
+}
