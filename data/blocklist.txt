@@ -30,3 +30,5 @@ secured.albportal.net:2083/
 
 # TV Arbëria 3/4/Retro (rtvarberia): URL kthen 404# Super TV Media (BA): mirtv.club kthen faqe HTML, jo HLS
 mirtv.club/live/
+# tvmak.com: agregator i palës së tretë, jo burim zyrtar — hequr me kërkesë
+tvmak.com/
