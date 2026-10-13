@@ -1,0 +1,16 @@
+{
+  "name": "Mini IPTV + Radio",
+  "short_name": "Mini IPTV",
+  "description": "Kanale TV dhe radio live me rilidhje automatike dhe burime rezervë.",
+  "lang": "sq",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b1020",
+  "theme_color": "#0b1020",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

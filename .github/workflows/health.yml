@@ -1,0 +1,55 @@
+name: Health-check i kanaleve
+
+# Çdo të hënë në 03:00 UTC ose me dorë (Actions -> Run workflow).
+on:
+  schedule:
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+    inputs:
+      country:
+        description: 'Vetëm këto shtete (p.sh. xk,al,mk). Bosh = të gjitha.'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: health-check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Teste të njësisë (filtra dhe të dhëna)
+        run: node --test tests/*.test.js
+
+      - name: Health-check (manifest -> niveli -> segmenti i parë)
+        env:
+          COUNTRY: ${{ github.event.inputs.country }}
+        run: |
+          if [ -n "$COUNTRY" ]; then
+            node tools/check-channels.js --concurrency=40 --timeout=10000 --country="$COUNTRY"
+          else
+            node tools/check-channels.js --concurrency=40 --timeout=10000
+          fi
+
+      - name: Commit i rezultateve
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/health channels-report.md
+          if git diff --cached --quiet; then
+            echo "Pa ndryshime."
+          else
+            git commit -m "chore: health-check automatik $(date -u +%Y-%m-%d)"
+            git push
+          fi
