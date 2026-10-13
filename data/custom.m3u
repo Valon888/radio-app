@@ -45,3 +45,10 @@ https://tringliveviz.akamaized.net/delta/105/out/u/qwaszxerdfcvrtryuy.m3u8
 https://zjarr.future.al/hls/playlist.m3u8
 #EXTINF:-1 tvg-id="FieriTv.al@HD" group-title="Shqipëri",Fieri Tv
 http://valashop.online:8090/fieritv.m3u8
+# Kosovë: RTK 4 (burim publik i RTK-së në Gjirafa Live) dhe playlist-et master (ABR) për Kohavision/RTV21
+#EXTINF:-1 tvg-id="RTK4.xk@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/RTK_4_logo.svg/512px-RTK_4_logo.svg.png" group-title="Kosovë",RTK 4
+https://gjirafa-video-live.gjirafa.net/gjvideo-livestream/rtk4/index.m3u8
+#EXTINF:-1 tvg-id="Kohavision.xk" group-title="Kosovë",Kohavision
+https://gjirafa-video-live.gjirafa.net/gjvideo-livestream/lj9-pxm-o53-rp0/index.m3u8
+#EXTINF:-1 tvg-id="RTV21.xk" group-title="Kosovë",RTV21
+https://gjirafa-video-live.gjirafa.net/gjvideo-live/2cz-npl-jfn-9he/index.m3u8

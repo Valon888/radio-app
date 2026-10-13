@@ -225,7 +225,10 @@ function build() {
   const channels = list;
   for (const ch of channels) {
     // HTTPS para HTTP; e ruan radhën tjetër
-    ch.sources.sort((a, b) => (/^https:/.test(b.url) ? 1 : 0) - (/^https:/.test(a.url) ? 1 : 0));
+    // playlist-i master (ABR) para një niveli të vetëm (/tracks-v1a1/…), pastaj HTTPS para HTTP
+    const isVariant = (u) => /\/tracks-v\d/i.test(u);
+    ch.sources.sort((a, b) => (isVariant(a.url) ? 1 : 0) - (isVariant(b.url) ? 1 : 0)
+      || (/^https:/.test(b.url) ? 1 : 0) - (/^https:/.test(a.url) ? 1 : 0));
     ch.order = Math.min(ch.order, COUNTRY_ORDER[ch.country] || 100);
   }
   const seen = new Set();

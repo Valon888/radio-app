@@ -8,3 +8,6 @@ d2xeo83q8fcni6.cloudfront.net/
 livehd.vedge.infomaniak.com/livecast/livehd/
 # Mbështjellës i palicencuar i një shërbimi me pagesë (DirecTV) në Vercel
 directv-iptv-player.vercel.app/
+# T7 (Kosovë) dhe TV Arbëria 3/4/Retro: URL kthen 404, nuk gjendet burim i ri publik
+gjirafa-video-live.gjirafa.net/gjvideo-livestream-specific/1z8-byc-4ee-lc9/
+ssh101.bozztv.com/ssh101/rtvarberia
