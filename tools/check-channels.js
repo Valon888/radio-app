@@ -43,6 +43,8 @@ for (const code of wanted) {
     channels.push(c);
   }
 }
+// vendmbajtësit "Së shpejti" (pa burim) nuk testohen dhe nuk hyjnë në statistika
+channels = channels.filter((c) => c.sources.length);
 if (args.type) channels = channels.filter((c) => c.type === args.type);
 if (args.group) channels = channels.filter((c) => (c.group || '').toLowerCase().includes(String(args.group).toLowerCase()));
 if (args.limit) channels = channels.slice(0, Number(args.limit));

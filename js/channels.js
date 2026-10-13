@@ -20,7 +20,7 @@ const countryCache = new Map();
 export function loadCountry(code) {
   if (!countryCache.has(code)) {
     const p = getJson(`${CONFIG.COUNTRY_DIR}/${encodeURIComponent(code)}.json`).then((data) => {
-      const list = (data.channels || []).filter((c) => c && c.name && Array.isArray(c.sources) && c.sources.length);
+      const list = (data.channels || []).filter((c) => c && c.name && Array.isArray(c.sources) && (c.sources.length || c.soon));
       for (const c of list) {
         c._cc = code;
         c._search = strip(`${c.name} ${c.group || ''} ${c.country || ''}`);

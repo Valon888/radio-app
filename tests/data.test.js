@@ -40,7 +40,7 @@ test('asnjë kanal për të rritur', () => {
 test('çdo kanal ka id unike dhe të paktën një burim', () => {
   const ids = new Set();
   for (const { ch } of all) {
-    assert.ok(ch.sources.length > 0, ch.name);
+    assert.ok(ch.sources.length > 0 || ch.soon, ch.name);
     assert.ok(!ids.has(ch.id), `id e përsëritur: ${ch.id}`);
     ids.add(ch.id);
   }

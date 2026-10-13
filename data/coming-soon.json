@@ -1,3 +1,141 @@
 [
-  "t7"
+  "t7",
+  {
+    "id": "soon.xk.3tv",
+    "name": "3TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.a9tv",
+    "name": "A9TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.art",
+    "name": "ART",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.click-channel",
+    "name": "Click Channel",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.dasma-tv",
+    "name": "Dasma TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.herc-tv",
+    "name": "Herc TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.kosova-channel",
+    "name": "Kosova Channel",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.kutia-tv",
+    "name": "Kutia TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.3plushd-music",
+    "name": "3+HD Music",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.men-tv",
+    "name": "Men TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.metro-tv",
+    "name": "Metro TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.news-tv",
+    "name": "News TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.next-tv",
+    "name": "Next TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.olti-tv",
+    "name": "Olti TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.pro-channel",
+    "name": "Pro Channel",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv-balkan",
+    "name": "RTV Balkan",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv-fan",
+    "name": "RTV Fan",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.top-kosova",
+    "name": "Top Kosova",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-glob",
+    "name": "TV Glob",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-most",
+    "name": "TV Most",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-skenderaj",
+    "name": "TV Skenderaj",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tribuna-channel",
+    "name": "Tribuna Channel",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.visa-channel",
+    "name": "Visa Channel",
+    "group": "Kosovë",
+    "country": "xk"
+  }
 ]
