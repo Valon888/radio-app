@@ -211,7 +211,7 @@ function build() {
 /* ---------- 5) Ndarja sipas shtetit ---------- */
 const COUNTRY_ORDER = { xk: 1, al: 2, mk: 3, me: 3, rs: 3, gr: 3, tr: 4, it: 5, de: 5, ch: 5 };
 // shtetet që ngarkohen në nisje (Kosovë, Shqipëri, fqinjët) + radio
-const INITIAL = ['xk', 'al', 'mk', 'me', 'rs', 'gr', 'radio'];
+const INITIAL = ['xk', 'al', 'mk', 'me', 'rs', 'gr', 'radio', 'us', 'cn', 'ps'];
 const SPECIAL_NAMES = { xk: 'Kosovë', radio: 'Radio', other: 'Të tjera (VOD, të ndryshme)', uk: 'Mbretëria e Bashkuar' };
 
 function bucketOf(ch) {

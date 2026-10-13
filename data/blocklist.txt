@@ -3,3 +3,6 @@
 vipottbpkstream.vip.hr/Content/onevip-hls/Live/Channel(Alsat_M)
 # bin.webhookrelay.com: endpoint webhook-i (UUID në rrugë), jo stream; kthen 429
 bin.webhookrelay.com/v1/webhooks/
+# SKI TV: domeni cloudfront nuk zgjidhet më (ENOTFOUND); Canal 9: livehd.vedge kthen 403
+d2xeo83q8fcni6.cloudfront.net/
+livehd.vedge.infomaniak.com/livecast/livehd/
