@@ -131,5 +131,89 @@
     "name": "Visa Channel",
     "group": "Kosovë",
     "country": "xk"
+  },
+  {
+    "id": "soon.xk.mtv-kosova",
+    "name": "MTV Kosova",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-shenja",
+    "name": "TV Shenja",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.klan-macedonia",
+    "name": "Klan Macedonia",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv21-maqedoni",
+    "name": "TV 21 Maqedoni",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.istogu-channel",
+    "name": "Istogu Channel",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.club-tv",
+    "name": "Club TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-arberia-1",
+    "name": "TV Arbëria 1",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-arberia-2",
+    "name": "TV Arbëria 2",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-arberia-3",
+    "name": "TV Arbëria 3 - Fëmijë",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv21-mix",
+    "name": "RTV 21 Mix",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.amol-tv",
+    "name": "AMOL TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.shota-tv",
+    "name": "Shota TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv-ilirida-film",
+    "name": "RTV Ilirida Film",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.aa-new-york",
+    "name": "AA New York TV",
+    "group": "Kosovë",
+    "country": "xk"
   }
 ]
