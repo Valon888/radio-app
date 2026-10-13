@@ -226,6 +226,10 @@ function build() {
   }
 
   const channels = list;
+  // data/name-overrides.json: {"<id>": "Emri i ri"}
+  const namesFile = path.join(ROOT, 'data', 'name-overrides.json');
+  const NAME_OVERRIDES = fs.existsSync(namesFile) ? JSON.parse(fs.readFileSync(namesFile, 'utf8')) : {};
+  for (const ch of channels) if (NAME_OVERRIDES[ch.id]) ch.name = NAME_OVERRIDES[ch.id];
   for (const ch of channels) {
     // HTTPS para HTTP; e ruan radhën tjetër
     // playlist-i master (ABR) para një niveli të vetëm (/tracks-v1a1/…), pastaj HTTPS para HTTP
