@@ -2,13 +2,13 @@
  * Service worker: cache VETËM për asset-et statike të aplikacionit.
  * Streamet (m3u8/ts/mp3/...), /proxy dhe çdo kërkesë cross-origin NUK preken kurrë.
  */
-const VERSION = 'miniiptv-v12';
+const VERSION = 'miniiptv-v13';
 const SHELL = [
   './',
   'index.html',
   'css/app.css',
   'js/main.js', 'js/config.js', 'js/storage.js', 'js/network.js', 'js/channels.js',
-  'js/health.js', 'js/player.js', 'js/ui.js', 'js/epg.js',
+  'js/health.js', 'js/player.js', 'js/ui.js', 'js/epg.js', 'js/mobile.js', 'js/diagnostics.js',
   'icons/icon.svg',
   'manifest.webmanifest',
 ];
@@ -45,14 +45,35 @@ self.addEventListener('fetch', (e) => {
     );
     return;
   }
-  // asset-e: cache fillimisht, rifresko në sfond
+  // faqja dhe kodi (html/js/css): rrjeti fillimisht, që telefonat të marrin menjëherë versionin e ri;
+  // cache vetëm si rezervë offline ose kur rrjeti vonon mbi 4 sekonda
+  const isShell = req.mode === 'navigate' || url.pathname.endsWith('/') || /\.(?:html|js|css|webmanifest)$/.test(url.pathname);
+  if (isShell) { e.respondWith(networkFirst(req)); return; }
+
+  // pjesa tjetër (ikona, imazhe): cache fillimisht, rifresko në sfond
   e.respondWith(
     caches.match(req).then((hit) => {
       const net = fetch(req).then((res) => {
-        if (res.ok) caches.open(VERSION).then((c) => c.put(req, res.clone()));
+        if (res.ok) { const copy = res.clone(); caches.open(VERSION).then((c) => c.put(req, copy)); }
         return res;
       }).catch(() => hit);
       return hit || net;
     }),
   );
 });
+
+function networkFirst(req) {
+  return new Promise((resolve) => {
+    let settled = false;
+    const done = (res) => { if (!settled && res) { settled = true; resolve(res); } };
+    const timer = setTimeout(() => { caches.match(req).then(done); }, 4000);
+    fetch(req).then((res) => {
+      clearTimeout(timer);
+      if (res.ok) { const copy = res.clone(); caches.open(VERSION).then((c) => c.put(req, copy)); }
+      done(res);
+    }).catch(() => {
+      clearTimeout(timer);
+      caches.match(req).then((hit) => { settled ? null : done(hit || Response.error()); });
+    });
+  });
+}
