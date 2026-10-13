@@ -55,3 +55,5 @@ https://gjirafa-video-live.gjirafa.net/gjvideo-live/2cz-npl-jfn-9he/index.m3u8
 # Maqedoni: Kanal 5 (adresa e vjetër s2.teve.mk ka SSL të dëmtuar; teve.mk punon)
 #EXTINF:-1 tvg-id="Kanal5.mk@SD" group-title="Maqedoni",Kanal 5
 https://teve.mk/tvstanici/2/playlist.m3u8
+#EXTINF:-1 tvg-id="ATV.xk" tvg-logo="https://g0eylj1rzj.gjirafa.net/storage/images/channel/desktop/atv-live.jpg" group-title="Kosovë",ATV
+https://gjirafa-video-live.gjirafa.net/gjvideo-live/0nj-g63-92x-few/index.m3u8
