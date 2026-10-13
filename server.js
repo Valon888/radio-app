@@ -33,19 +33,19 @@ const CORS_HEADERS = {
   'Access-Control-Expose-Headers': '*',
 };
 
-function proxyUrl(target) {
-  return '/proxy?url=' + encodeURIComponent(target);
+function proxyUrl(target, ref) {
+  return '/proxy?url=' + encodeURIComponent(target) + (ref ? '&ref=' + encodeURIComponent(ref) : '');
 }
 
 // Rewrite every URI inside an HLS playlist so segments/keys also go through the proxy
-function rewritePlaylist(text, baseUrl) {
+function rewritePlaylist(text, baseUrl, ref) {
   const abs = (u) => { try { return new URL(u, baseUrl).toString(); } catch (e) { return u; } };
   return text.split(/\r?\n/).map((line) => {
     if (!line.trim()) return line;
     if (line.startsWith('#')) {
-      return line.replace(/URI="([^"]+)"/g, (m, u) => `URI="${proxyUrl(abs(u))}"`);
+      return line.replace(/URI="([^"]+)"/g, (m, u) => `URI="${proxyUrl(abs(u), ref)}"`);
     }
-    return proxyUrl(abs(line.trim()));
+    return proxyUrl(abs(line.trim()), ref);
   }).join('\n');
 }
 
@@ -93,12 +93,20 @@ function handleProxy(req, res, redirects = 0, forcedTarget) {
     return;
   }
 
+  // Referer i kërkuar nga burimi (#EXTVLCOPT:http-referrer te iptv-org), vetëm http(s)
+  let refParam = '';
+  let refOrigin = '';
+  try {
+    const r = new URL(req.url, 'http://localhost').searchParams.get('ref');
+    if (r && /^https?:\/\//i.test(r)) { refParam = r; refOrigin = new URL(r).origin; }
+  } catch (e) { /* ignore */ }
+
   const lib = u.protocol === 'https:' ? https : http;
   const headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
     'Accept': '*/*',
-    'Referer': u.origin + '/',
-    'Origin': u.origin,
+    'Referer': refParam || (u.origin + '/'),
+    'Origin': refOrigin || u.origin,
   };
   if (req.headers.range) headers.Range = req.headers.range;
 
@@ -131,7 +139,7 @@ function handleProxy(req, res, redirects = 0, forcedTarget) {
           res.end('Upstream did not return a valid playlist');
           return;
         }
-        const out = rewritePlaylist(body, target);
+        const out = rewritePlaylist(body, target, refParam);
         res.writeHead(200, {
           ...CORS_HEADERS,
           'Content-Type': 'application/vnd.apple.mpegurl',

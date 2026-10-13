@@ -37,8 +37,9 @@ exports.handler = async (event) => {
   }
 
   const self = `https://${event.headers.host}${event.path}`;
+  const ref = /^https?:\/\//i.test(q.ref || '') ? q.ref : '';
   const upstream = await fetch(t.toString(), {
-    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MiniIPTV-Proxy)', Referer: `${t.origin}/` },
+    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MiniIPTV-Proxy)', Referer: ref || `${t.origin}/` },
     redirect: 'follow',
   });
   const ctype = upstream.headers.get('content-type') || '';
@@ -48,7 +49,7 @@ exports.handler = async (event) => {
     const text = await upstream.text();
     if (!text.trimStart().startsWith('#EXTM3U')) return { statusCode: 502, headers: cors, body: 'Not a playlist' };
     const base = upstream.url || t.toString();
-    const wrap = (u) => `${self}?url=${encodeURIComponent(new URL(u, base).toString())}`;
+    const wrap = (u) => `${self}?url=${encodeURIComponent(new URL(u, base).toString())}${ref ? `&ref=${encodeURIComponent(ref)}` : ''}`;
     const body = text.split(/\r?\n/).map((line) => {
       if (!line.trim()) return line;
       if (line.startsWith('#')) return line.replace(/URI="([^"]+)"/g, (_m, u) => `URI="${wrap(u)}"`);

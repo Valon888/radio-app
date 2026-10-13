@@ -30,9 +30,9 @@ function allowed(env, origin) {
   return list.includes('*') || (origin && list.includes(origin));
 }
 
-function rewrite(text, base, selfUrl) {
+function rewrite(text, base, selfUrl, ref) {
   const abs = (u) => { try { return new URL(u, base).toString(); } catch { return u; } };
-  const wrap = (u) => `${selfUrl}?url=${encodeURIComponent(abs(u))}`;
+  const wrap = (u) => `${selfUrl}?url=${encodeURIComponent(abs(u))}${ref ? `&ref=${encodeURIComponent(ref)}` : ''}`;
   return text.split(/\r?\n/).map((line) => {
     if (!line.trim()) return line;
     if (line.startsWith('#')) return line.replace(/URI="([^"]+)"/g, (_m, u) => `URI="${wrap(u)}"`);
@@ -60,10 +60,14 @@ export default {
       return new Response('Target not allowed', { status: 400, headers: cors });
     }
 
+    // Referer opsional (nga #EXTVLCOPT:http-referrer), vetëm http(s)
+    const refRaw = reqUrl.searchParams.get('ref') || '';
+    const ref = /^https?:\/\//i.test(refRaw) ? refRaw : '';
+
     const upstream = await fetch(t.toString(), {
       headers: {
         'User-Agent': 'Mozilla/5.0 (compatible; MiniIPTV-Proxy)',
-        Referer: `${t.origin}/`,
+        Referer: ref || `${t.origin}/`,
         ...(request.headers.get('Range') ? { Range: request.headers.get('Range') } : {}),
       },
       redirect: 'follow',
@@ -75,7 +79,7 @@ export default {
       const body = await upstream.text();
       if (!body.trimStart().startsWith('#EXTM3U')) return new Response('Not a playlist', { status: 502, headers: cors });
       const self = `${reqUrl.origin}${reqUrl.pathname}`;
-      return new Response(rewrite(body, upstream.url || t.toString(), self), {
+      return new Response(rewrite(body, upstream.url || t.toString(), self, ref), {
         status: 200,
         headers: { ...cors, 'Content-Type': 'application/vnd.apple.mpegurl', 'Cache-Control': 'no-cache' },
       });
