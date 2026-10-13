@@ -175,6 +175,8 @@ function build() {
   const byUrl = new Map(); // lloj|url -> kanal
   const blockFile = path.join(ROOT, 'data', 'blocklist.txt');
   loadHealthKinds();
+  const overridesFile = path.join(ROOT, 'data', 'country-overrides.json');
+  const COUNTRY_OVERRIDES = fs.existsSync(overridesFile) ? JSON.parse(fs.readFileSync(overridesFile, 'utf8')) : {};
   const BLOCKED = fs.existsSync(blockFile)
     ? fs.readFileSync(blockFile, 'utf8').split(String.fromCharCode(10)).map((l) => l.trim()).filter((l) => l && !l.startsWith('#'))
     : [];
@@ -196,7 +198,8 @@ function build() {
     const type = c.type === 'radio' ? 'radio' : (c.type === 'tv' || !c.type ? 'tv' : null);
     if (!type) { drop('lloj'); continue; }
     const name = cleanName(c.name || c.title || '') || 'Kanal';
-    const country = String(c.countryHint || '').toLowerCase() || countryOf(c);
+    // data/country-overrides.json: {"<tvg-id>": "xk"} për kanale që iptv-org i ka në shtet tjetër
+    const country = COUNTRY_OVERRIDES[c.id] || String(c.countryHint || '').toLowerCase() || countryOf(c);
     const nameKey = `${type}|${strip(name).toLowerCase().replace(/[^a-z0-9]+/g, '')}`;
 
     let ch = byUrl.get(`${type}|${url}`);
