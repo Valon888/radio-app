@@ -49,7 +49,7 @@ function rewritePlaylist(text, baseUrl, ref) {
   }).join('\n');
 }
 
-function handleProxy(req, res, redirects = 0, forcedTarget) {
+function handleProxy(req, res, redirects = 0, forcedTarget, level = 0) {
   // Mbrojtje: mos lejo faqe të tjera (cross-site) ta përdorin proxy-n tënd lokal
   const origin = req.headers.origin;
   if (origin) {
@@ -108,6 +108,10 @@ function handleProxy(req, res, redirects = 0, forcedTarget) {
     'Referer': refParam || (u.origin + '/'),
     'Origin': refOrigin || u.origin,
   };
+  // disa burime (p.sh. RTRS) refuzojnë Referer/Origin ose kombinime të caktuara kokash:
+  // niveli 1 = pa Referer/Origin, niveli 2 = edhe pa Accept
+  if (level >= 1) { delete headers.Referer; delete headers.Origin; }
+  if (level >= 2) delete headers.Accept;
   if (req.headers.range) headers.Range = req.headers.range;
 
   const upstream = lib.request({
@@ -123,6 +127,12 @@ function handleProxy(req, res, redirects = 0, forcedTarget) {
     if (up.statusCode >= 300 && up.statusCode < 400 && up.headers.location && redirects < 5) {
       up.resume();
       handleProxy(req, res, redirects + 1, new URL(up.headers.location, target).toString());
+      return;
+    }
+
+    if ((up.statusCode === 401 || up.statusCode === 403) && level < 2 && !refParam) {
+      up.resume();
+      handleProxy(req, res, redirects, target, level + 1);
       return;
     }
 

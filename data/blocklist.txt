@@ -28,4 +28,5 @@ op-group1-swiftservesd-1.dens.tv/
 secured.albportal.net:2083/
 5d00db0e0fcd5.streamlock.net/
 
-# TV Arbëria 3/4/Retro (rtvarberia): URL kthen 404
+# TV Arbëria 3/4/Retro (rtvarberia): URL kthen 404# Super TV Media (BA): mirtv.club kthen faqe HTML, jo HLS
+mirtv.club/live/

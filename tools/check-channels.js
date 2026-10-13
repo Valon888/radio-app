@@ -67,11 +67,17 @@ async function http(url, opts = {}) {
   try {
     const origin = new URL(url).origin;
     const ref = refByUrl.get(url);
-    const res = await fetch(url, {
-      signal: ctl.signal,
-      redirect: 'follow',
-      headers: { 'User-Agent': UA, Referer: ref || `${origin}/`, Origin: origin, ...(opts.headers || {}) },
-    });
+    const go = (headers) => fetch(url, { signal: ctl.signal, redirect: 'follow', headers: { 'User-Agent': UA, ...headers, ...(opts.headers || {}) } });
+    let res = await go({ Referer: ref || `${origin}/`, Origin: origin });
+    // disa burime refuzojnë Referer/Origin ose kombinime kokash: provo pa ta (si proxy-ja)
+    if ((res.status === 401 || res.status === 403) && !ref) {
+      try { await res.body.cancel(); } catch { /* ok */ }
+      res = await go({ Accept: '*/*' });
+      if (res.status === 401 || res.status === 403) {
+        try { await res.body.cancel(); } catch { /* ok */ }
+        res = await go({});
+      }
+    }
     return { res, timer, ctl };
   } catch (e) {
     clearTimeout(timer);
