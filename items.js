@@ -101,7 +101,6 @@ const albanianChannels = [
   { id: "syritv", name: "Syri TV (Shqipëri)", url: "https://stream.syritv.al/live/syritv/playlist.m3u8", type: "tv", group: "Shqipëri", logo: "https://i.imgur.com/4zVyj1M.png", quality: "720p" },
   { id: "tropojatv", name: "Tropoja Televizion", url: "https://live.prostream.al/al/smil:tropojatv.smil/playlist.m3u8", type: "tv", group: "Shqipëri", logo: "https://i.imgur.com/D3hNOVS.png", quality: "720p" },
   { id: "tv7albania", name: "TV 7 Albania", url: "https://rpn3.bozztv.com/albaniatv/Med7-TV7Tirana/index.m3u8", type: "tv", group: "Shqipëri", logo: "https://i.imgur.com/k9WqPLZ.png", quality: "720p" },
-  { id: "tvapollon", name: "TV Apollon", url: "https://live.apollon.tv/Apollon-Web/video.m3u8?token=tnt9u76reF0d1", type: "tv", group: "Shqipëri", logo: "https://i.imgur.com/gUz2AjM.png", quality: "720p" },
   { id: "albkanalemusic", name: "AlbKanale Music TV", url: "https://albportal.net/albkanalemusic.m3u8", type: "tv", group: "Shqipëri-Muzikë", logo: "https://i.imgur.com/JdKxscs.png", quality: "720p" },
   { id: "cnaalbania", name: "CNA", url: "https://live1.mediadesk.al/cnatvlive.m3u8", type: "tv", group: "Shqipëri", logo: "https://codeit.al/wp-content/uploads/2020/08/cna.png", quality: "720p" },
   { id: "vizionplus_tv", name: "Vizion Plus", url: "https://tringliveviz.akamaized.net/delta/105/out/u/qwaszxerdfcvrtryuy.m3u8", type: "tv", group: "Shqipëri", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Vizion_Plus.svg/512px-Vizion_Plus.svg.png", quality: "1080p" },
