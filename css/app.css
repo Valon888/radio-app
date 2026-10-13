@@ -236,3 +236,11 @@ button, select, input { font: inherit; color: inherit; }
 /* butoni-lidhje brenda mesazheve të listës */
 .link { background: none; border: 0; color: var(--accent, #4da3ff); cursor: pointer; text-decoration: underline; font: inherit; padding: 4px 0; }
 #countrySelect { max-width: 14rem; }
+
+/* maskë mbi logon e burimit (tvmak.com) në qoshen e sipërme djathtas */
+.logo-mask {
+  position: absolute; top: 2.5%; right: 2%; z-index: 2; display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px 6px 8px; border-radius: 10px; background: #0b1020; color: #fff;
+  font-weight: 700; font-size: 14px; pointer-events: none; box-shadow: 0 0 0 4px #0b1020;
+}
+.logo-mask[hidden] { display: none; }

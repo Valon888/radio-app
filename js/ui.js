@@ -42,7 +42,7 @@ export class UI {
       nowName: $('#nowName'), nowSub: $('#nowSub'), nowLogo: $('#nowLogo'),
       signal: $('#signal'), statusText: $('#statusText'), statsText: $('#statsText'),
       epg: $('#epg'), epgNow: $('#epgNow'), epgNext: $('#epgNext'),
-      radioArt: $('#radioArt'), radioLogo: $('#radioLogo'),
+      radioArt: $('#radioArt'), radioLogo: $('#radioLogo'), logoMask: $('#logoMask'),
       count: $('#countText'), healthText: $('#healthText'), progress: $('#healthProgress'),
     };
   }
@@ -325,6 +325,7 @@ export class UI {
     if (c.soon && this.health.statusOf(c) === 'soon') {
       // ende pa transmetim: mos e provo; testo në sfond dhe luaj automatikisht kur të nisë
       this._soonId = c.id;
+      this.el.logoMask.hidden = true;
       this.player.stop(true);
       this.el.overlay.hidden = false;
       this.el.spinner.hidden = true;
@@ -337,6 +338,8 @@ export class UI {
       return;
     }
     this._soonId = null;
+    // burimet nga tvmak.com kanë logon e tyre në video: e mbulojmë me logon e Mini IPTV
+    this.el.logoMask.hidden = !(c.type !== 'radio' && c.sources.some((s) => /(^|\/\/|\.)tvmak\.com[/:]/i.test(s.url)));
     this.player.play(c, { sourceIndex });
     // preload i kanalit pasardhës
     const next = this.view[(idx + 1) % Math.max(1, this.view.length)];
