@@ -34,8 +34,13 @@ async function boot() {
 
   const health = new HealthMonitor();
   const epg = new Epg();
-  const [, , epgOk] = await Promise.all([health.init([...loaded]), detectProxy(), epg.load()]);
-  void epgOk;
+  // Mos e blloko UI-n në rrjet të ngadaltë (telefon): prit maksimumi 3s, pastaj vazhdo me listën
+  // dhe ri-aplikoj filtrat kur mbarojnë health/EPG/proxy.
+  const background = Promise.all([health.init([...loaded]), detectProxy(), epg.load()]).catch(() => {});
+  const finishedInTime = await Promise.race([
+    background.then(() => true),
+    new Promise((resolve) => setTimeout(() => resolve(false), 3000)),
+  ]);
 
   const player = new Player({
     video: document.getElementById('video'),
@@ -51,6 +56,7 @@ async function boot() {
 
   ui.init();
   ui.refreshStatuses();
+  if (!finishedInTime) background.then(() => { ui.applyFilters(); ui.refreshStatuses(); });
 
   // faqja shërbehet nga një server statik (p.sh. Live Server) pa /proxy: shumë burime do të bllokohen nga CORS
   if (!proxyState().mode && /^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
