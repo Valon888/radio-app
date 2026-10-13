@@ -272,9 +272,3 @@ Shih `LICENSE` nëse ekziston; përndryshe të gjitha të drejtat i përkasin au
 për Kosovë, Shqipëri, Maqedoni e Veriut, Mal të Zi, Kroaci, Slloveni dhe Serbi, i teston me lidhje të vërtetë
 (audio ose playlist HLS) dhe ruan vetëm ato që punojnë te `data/sources/radio/`. Pastaj `npm run build:channels`.
 Aplikacioni përdor Media Session (kontrolle në ekranin e kyçur dhe tastet e kufjeve).
-
-## Kanale nga tvmak.com
-
-`node tools/import-tvmak.js` lexon faqet publike të kanaleve te [tvmak.com](https://tvmak.com), heq query-n
-(cache-buster), testo me lidhje të vërtetë dhe pranon vetëm transmetime **live** (playlist pa `#EXT-X-ENDLIST`).
-Rezultati ruhet te `data/sources/tvmak/`; shteti caktohet te `data/country-overrides.json`.

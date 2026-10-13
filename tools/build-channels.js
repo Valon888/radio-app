@@ -104,19 +104,6 @@ function loadRadio() {
   return out;
 }
 
-/** Kanale nga tvmak.com (data/sources/tvmak, krijohen nga tools/import-tvmak.js); shteti vjen nga country-overrides.json. */
-function loadTvmak() {
-  const dir = path.join(ROOT, 'data', 'sources', 'tvmak');
-  if (!fs.existsSync(dir)) return [];
-  const out = [];
-  for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.m3u')).sort()) {
-    for (const e of parseM3U(fs.readFileSync(path.join(dir, f), 'utf8'))) {
-      out.push({ id: e.id, name: e.name, url: e.url, type: 'tv', group: 'General', _src: 'tvmak/' + f });
-    }
-  }
-  return out;
-}
-
 /* ---------- 3) Normalizim ---------- */
 const strip = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
 function cleanName(name) {
@@ -182,7 +169,6 @@ function build() {
   const iptvOrg = loadIptvOrg();
   raw.push(...iptvOrg);
   raw.push(...loadRadio());
-  raw.push(...loadTvmak());
 
   // Bashkim: (1) i njëjti URL = i njëjti kanal; (2) i njëjti emër + lloj (vendi përputhet ose mungon)
   const byName = new Map(); // lloj|emër -> [kanal]
