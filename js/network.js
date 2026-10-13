@@ -31,7 +31,9 @@ export function detectProxy() {
       if (await ping(base)) { state = { mode: 'remote', base }; return state; }
       console.warn('[proxy] PROXY_URL nuk u përgjigj te ping; po e injoroj.');
     }
-    if (await ping('/proxy')) state = { mode: 'local', base: '/proxy' };
+    // GitHub Pages është statik: nuk ka /proxy, mos e provo (shmang 404 në konsolë)
+    const staticHost = /.github.io$/i.test(location.hostname);
+    if (!staticHost && await ping('/proxy')) state = { mode: 'local', base: '/proxy' };
     return state;
   })();
   return detecting;
