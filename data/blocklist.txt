@@ -18,3 +18,7 @@ live.muzickatv.mk/
 s2.teve.mk/
 mnet.mk/hls/
 vipottbpkstream.vip.hr/Content/onevip-hls/Live/
+# Shqipëri: Alpo TV (403 nga sednastream + 502/ENOTFOUND te streamlock) dhe Euronews Albania (404)
+vs.sednastream.com:1936/alportv/
+5d00db0e0fcd5.streamlock.net/7236/
+gjirafa-video-live.gjirafa.net/gjvideo-live/2dw-zuf-1c9-pxu/
