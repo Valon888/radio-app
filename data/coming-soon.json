@@ -215,5 +215,29 @@
     "name": "AA New York TV",
     "group": "Kosovë",
     "country": "xk"
+  },
+  {
+    "id": "soon.xk.hi-music",
+    "name": "Hi Music",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-tema",
+    "name": "TV Tema",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv-ilirida-femije",
+    "name": "RTV Ilirida Fëmijë",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.spin-tv",
+    "name": "SPIN TV",
+    "group": "Kosovë",
+    "country": "xk"
   }
 ]
