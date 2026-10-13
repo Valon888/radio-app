@@ -97,6 +97,7 @@ export class Player extends EventTarget {
     other.load();
     this.media.volume = this.volume;
     this.media.muted = this.muted;
+    this._applyGain(channel.gain || 0);
 
     this._emitState('loading', 'Duke u lidhur…', {});
     await detectProxy();
@@ -168,6 +169,23 @@ export class Player extends EventTarget {
   togglePause() {
     const m = this.media;
     if (m.paused) { this.userPaused = false; m.play().catch(() => {}); } else { this.userPaused = true; m.pause(); }
+  }
+
+  /** Përforcim zëri (dB) për burime me audio shumë të ulët; Web Audio krijohet vetëm kur duhet. */
+  _applyGain(db) {
+    try {
+      if (!this._gainNode) {
+        if (!db) return;
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;
+        this._actx = new Ctx();
+        const src = this._actx.createMediaElementSource(this.video);
+        this._gainNode = this._actx.createGain();
+        src.connect(this._gainNode).connect(this._actx.destination);
+      }
+      this._gainNode.gain.value = Math.pow(10, db / 20);
+      if (this._actx.state === 'suspended') this._actx.resume().catch(() => {});
+    } catch { /* pa Web Audio: luan me zërin origjinal */ }
   }
 
   setVolume(v) {

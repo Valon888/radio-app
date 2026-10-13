@@ -257,6 +257,10 @@ function build() {
   const namesFile = path.join(ROOT, 'data', 'name-overrides.json');
   const NAME_OVERRIDES = fs.existsSync(namesFile) ? JSON.parse(fs.readFileSync(namesFile, 'utf8')) : {};
   for (const ch of channels) if (NAME_OVERRIDES[ch.id]) ch.name = NAME_OVERRIDES[ch.id];
+  // data/gain-overrides.json: {"<id>": dB} përforcim zëri për burime me audio shumë të ulët (matur me ffmpeg volumedetect)
+  const gainFile = path.join(ROOT, 'data', 'gain-overrides.json');
+  const GAINS = fs.existsSync(gainFile) ? JSON.parse(fs.readFileSync(gainFile, 'utf8')) : {};
+  for (const ch of channels) if (Number.isFinite(GAINS[ch.id])) ch.gain = Math.min(24, Math.max(0, GAINS[ch.id]));
   for (const ch of channels) {
     // HTTPS para HTTP; e ruan radhën tjetër
     // playlist-i master (ABR) para një niveli të vetëm (/tracks-v1a1/…), pastaj HTTPS para HTTP
