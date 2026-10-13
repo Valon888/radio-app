@@ -20,7 +20,7 @@ const args = Object.fromEntries(process.argv.slice(2).map((a) => {
   const [k, v] = a.replace(/^--/, '').split('=');
   return [k, v === undefined ? true : v];
 }));
-const N = Number(args.n) || 20;
+const N = Number(args.n) || 26;
 const TIMEOUT = Number(args.timeout) || 20000;
 const PORT = Number(args.port) || 3105;
 const PREFERRED = ['xk', 'al', 'mk', 'rs', 'gr', 'me', 'tr', 'uk', 'de', 'it', 'fr', 'us', 'radio'];
@@ -34,6 +34,15 @@ function pickChannels() {
     if (!fs.existsSync(hp) || !fs.existsSync(cp)) continue;
     const results = readJson(hp).results || {};
     const good = readJson(cp).channels.filter((c) => c.sources.some((s) => results[s.url] && results[s.url].s === 'online'));
+    if (code === 'radio') {
+      // një radio të shëndetshme për secilin shtet të rajonit
+      const groups = ['Kosovë', 'Shqipëri', 'Maqedoni e Veriut', 'Mali i Zi', 'Kroaci', 'Slloveni', 'Serbi'];
+      for (const g of groups) {
+        const ch = good.find((c) => c.group === g);
+        if (ch) picks.push({ code, ch });
+      }
+      continue;
+    }
     // dy për shtet (një për radio/shtetet ndërkombëtare); shtetet lokale marrin përparësi
     const take = ['xk', 'al'].includes(code) ? 3 : (['mk', 'rs', 'gr'].includes(code) ? 2 : 1);
     // shpërndarje: mos merr vetëm kanalet e para

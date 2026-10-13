@@ -22,6 +22,7 @@
     "start": "node server.js 3002",
     "build:channels": "node tools/build-channels.js",
     "check:channels": "node tools/check-channels.js",
+    "import:radio": "node tools/import-radio.js",
     "import:iptv-org": "node tools/import-iptv-org.js",
     "test": "node --test tests/*.test.js",
     "test:e2e": "node tests/e2e/play.e2e.js"

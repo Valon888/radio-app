@@ -88,6 +88,22 @@ function loadIptvOrg() {
   return out;
 }
 
+/** Radio të testuara nga radio-browser.info (data/sources/radio, krijohen nga tools/import-radio.js). */
+function loadRadio() {
+  const dir = path.join(ROOT, 'data', 'sources', 'radio');
+  if (!fs.existsSync(dir)) return [];
+  const out = [];
+  for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.m3u')).sort()) {
+    for (const e of parseM3U(fs.readFileSync(path.join(dir, f), 'utf8'))) {
+      const cc = (e.id.split('.')[1] || '').toLowerCase();
+      // emra me stoli ("=KECO= 70s", "..:: Foo ::.."): hiq shenjat e rrethimit
+      const name = e.name.replace(/[.:=*_~|<>]{2,}/g, ' ').replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '').replace(/\s+/g, ' ').trim() || e.name;
+      out.push({ id: e.id, name, url: e.url, type: 'radio', logo: e.logo, group: e.group, countryHint: cc, _src: 'radio/' + f });
+    }
+  }
+  return out;
+}
+
 /* ---------- 3) Normalizim ---------- */
 const strip = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
 function cleanName(name) {
@@ -152,6 +168,7 @@ function build() {
   // iptv-org i fundit: kanalet manuale e ruajnë grupin/emrin, iptv-org shton burime shtesë
   const iptvOrg = loadIptvOrg();
   raw.push(...iptvOrg);
+  raw.push(...loadRadio());
 
   // Bashkim: (1) i njëjti URL = i njëjti kanal; (2) i njëjti emër + lloj (vendi përputhet ose mungon)
   const byName = new Map(); // lloj|emër -> [kanal]
@@ -226,7 +243,7 @@ function build() {
 }
 
 /* ---------- 5) Ndarja sipas shtetit ---------- */
-const COUNTRY_ORDER = { xk: 1, al: 2, mk: 3, me: 3, rs: 3, gr: 3, tr: 4, it: 5, de: 5, ch: 5 };
+const COUNTRY_ORDER = { xk: 1, al: 2, mk: 3, me: 3, rs: 3, hr: 3, si: 3, gr: 3, tr: 4, it: 5, de: 5, ch: 5 };
 // shtetet që ngarkohen në nisje (Kosovë, Shqipëri, fqinjët) + radio
 const INITIAL = ['xk', 'al', 'mk', 'me', 'rs', 'gr', 'radio', 'us', 'cn', 'ps'];
 const SPECIAL_NAMES = { xk: 'Kosovë', radio: 'Radio', other: 'Të tjera (VOD, të ndryshme)', uk: 'Mbretëria e Bashkuar' };

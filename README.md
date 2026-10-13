@@ -265,3 +265,10 @@ Para çdo publikimi, kontrollo në secilin shfletues/pajisje:
 ## Licenca
 
 Shih `LICENSE` nëse ekziston; përndryshe të gjitha të drejtat i përkasin autorit të repo-s.
+
+## Radio rajonale (radio-browser.info)
+
+`node tools/import-radio.js` merr stacionet publike të radiove nga [radio-browser.info](https://www.radio-browser.info/)
+për Kosovë, Shqipëri, Maqedoni e Veriut, Mal të Zi, Kroaci, Slloveni dhe Serbi, i teston me lidhje të vërtetë
+(audio ose playlist HLS) dhe ruan vetëm ato që punojnë te `data/sources/radio/`. Pastaj `npm run build:channels`.
+Aplikacioni përdor Media Session (kontrolle në ekranin e kyçur dhe tastet e kufjeve).

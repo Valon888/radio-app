@@ -1,0 +1,56 @@
+{
+  "source": "https://www.radio-browser.info/ (API publike)",
+  "imported": "2026-10-13",
+  "perCountry": 60,
+  "report": {
+    "XK": {
+      "api": 17,
+      "candidates": 17,
+      "tested": 17,
+      "working": 13,
+      "kept": 13
+    },
+    "AL": {
+      "api": 51,
+      "candidates": 38,
+      "tested": 38,
+      "working": 36,
+      "kept": 36
+    },
+    "MK": {
+      "api": 54,
+      "candidates": 48,
+      "tested": 48,
+      "working": 37,
+      "kept": 37
+    },
+    "ME": {
+      "api": 48,
+      "candidates": 45,
+      "tested": 45,
+      "working": 42,
+      "kept": 42
+    },
+    "HR": {
+      "api": 293,
+      "candidates": 241,
+      "tested": 180,
+      "working": 147,
+      "kept": 60
+    },
+    "SI": {
+      "api": 141,
+      "candidates": 117,
+      "tested": 117,
+      "working": 111,
+      "kept": 60
+    },
+    "RS": {
+      "api": 405,
+      "candidates": 343,
+      "tested": 180,
+      "working": 138,
+      "kept": 60
+    }
+  }
+}

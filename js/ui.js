@@ -322,6 +322,27 @@ export class UI {
     const next = this.view[(idx + 1) % Math.max(1, this.view.length)];
     if (next && next.id !== c.id) this.player.preload(next);
     document.title = `${c.name} · Mini IPTV`;
+    this._mediaSession(c);
+  }
+
+  /** Media Session: titulli/logo në ekranin e kyçur dhe tastet e kufjeve/njoftimeve. */
+  _mediaSession(c) {
+    if (!('mediaSession' in navigator)) return;
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: c.name,
+        artist: [c.group, c.type === 'radio' ? 'Radio' : 'TV'].filter(Boolean).join(' · '),
+        album: 'Mini IPTV',
+        artwork: c.logo ? [{ src: c.logo }] : [],
+      });
+      if (this._msBound) return;
+      this._msBound = true;
+      const set = (a, fn) => { try { navigator.mediaSession.setActionHandler(a, fn); } catch { /* nuk mbështetet */ } };
+      set('play', () => { if (this.player.media && this.player.media.paused) this.player.togglePause(); });
+      set('pause', () => { if (this.player.media && !this.player.media.paused) this.player.togglePause(); });
+      set('previoustrack', () => this.step(-1));
+      set('nexttrack', () => this.step(1));
+    } catch { /* Media Session opsional */ }
   }
 
   _showNow(c) {
