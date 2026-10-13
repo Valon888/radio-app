@@ -5,7 +5,7 @@
 'use strict';
 
 /** Parametra query që tregojnë sekret/token/sesion (skadojnë ose janë kredenciale të ofruesit). */
-const SECRET_PARAM = /(?:^|[?&;])(token|tkn|key|apikey|api_key|access_token|accesstoken|signature|sig|auth|authorization|wmsauthsign|hdnts|hdntl|__token__|password|passwd|pass|pwd|secret|session|sessionid|jwt|acl|exp|expires)=/i;
+const SECRET_PARAM = /(?:^|[?&;])([a-z0-9_]*token|tkn|key|apikey|api_key|access_token|accesstoken|signature|sig|auth|authorization|wmsauthsign|hdnts|hdntl|__token__|password|passwd|pass|pwd|secret|session|sessionid|jwt|acl|exp|expires)=/i;
 /** Token/sekret në rrugë (p.sh. /token=abc/). */
 const SECRET_PATH = /\/(?:token|tkn|auth|authorization|password|secret)=/i;
 const ADULT = /(?:\bxxx\b|\badult(?:s|o)?\b|\bporn(?:o|ography)?\b|\berotic[a-z]*\b|\bsex(?:y|tv|o)?\b|\bplayboy\b|\bpenthouse\b|\bhustler\b|\bbrazzers\b|\bdorcel\b|\bbabestation\b|\bred ?light\b|\bnsfw\b|\b18\s*\+|\+\s*18\b|\bhentai\b|\bfetish\b)/i;

@@ -17,6 +17,7 @@ test('token/çelës/kredenciale refuzohen', () => {
     'https://x.com/a.m3u8?token=abc': 'secret-param',
     'https://x.com/a.m3u8?foo=1&Token=abc': 'secret-param',
     'https://x.com/a.m3u8?key=abc': 'secret-param',
+    'https://x.com/a.m3u8?cdntoken=abc': 'secret-param',
     'https://x.com/a.m3u8?hdnts=exp=123~hmac=abc': 'secret-param',
     'https://x.com/a.m3u8?sig=zzz&e=1': 'secret-param',
     'https://x.com/a.m3u8?password=1': 'secret-param',
