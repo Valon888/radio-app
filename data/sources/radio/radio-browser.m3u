@@ -177,6 +177,8 @@ https://stream.playradio.me:8443/balkan.mp3
 https://stream.radios.rs:9008/;
 #EXTINF:-1 tvg-id="radio.me.reggaeneracija-montenegro" group-title="Mali i Zi",Reggaeneracija Montenegro
 http://5.189.179.77:8000/stream
+#EXTINF:-1 tvg-id="radio.me.drugacija-radio-stanica" group-title="Mali i Zi",Drugačija Radio Stanica
+https://eu2.fastcast4u.com/proxy/mic0?mp=/stream
 #EXTINF:-1 tvg-id="radio.me.54house-fm-club" tvg-logo="https://www.54house.fm/fileadmin/templates/images/logo_54house.png" group-title="Mali i Zi",54HOUSE.FM CLUB
 https://54house.fm:9013/stream
 #EXTINF:-1 tvg-id="radio.me.boka-news" tvg-logo="https://bokanews.me/wp-content/uploads/2014/09/Boka-News-Logo-2014.png" group-title="Mali i Zi",Boka News
@@ -195,10 +197,10 @@ https://malta1491.startdedicated.de:8443/main
 https://stream.radios.rs:9010/;
 #EXTINF:-1 tvg-id="radio.me.radio-kotor" group-title="Mali i Zi",Radio Kotor
 https://stream.iradio.pro/proxy/radiokotor?mp=/stream
-#EXTINF:-1 tvg-id="radio.me.radio-elmag-folk-gold" group-title="Mali i Zi",Radio Elmag Folk Gold
-https://radio.elmag.me/folkgold.mp3
 #EXTINF:-1 tvg-id="radio.me.mag-radio" tvg-logo="https://www.magradio.me/wp-content/uploads/2018/01/favicon-114.png" group-title="Mali i Zi",Mag radio
 http://radio.elmag.me/mag.mp3
+#EXTINF:-1 tvg-id="radio.me.radio-elmag-folk-gold" group-title="Mali i Zi",Radio Elmag Folk Gold
+https://radio.elmag.me/folkgold.mp3
 #EXTINF:-1 tvg-id="radio.me.radio-elmag-caffe" group-title="Mali i Zi",Radio Elmag Caffe
 https://radio.elmag.me/cafe.mp3
 #EXTINF:-1 tvg-id="radio.me.radio-elmag-party" group-title="Mali i Zi",Radio Elmag Party
