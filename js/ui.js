@@ -4,7 +4,7 @@ import { favorites, history, storage } from './storage.js';
 import { filterChannels, offlineLast, groupsOf, sortChannels } from './channels.js';
 
 const $ = (sel) => document.querySelector(sel);
-const STATUS_LABEL = { online: 'Online', slow: 'Ngadalë', offline: 'Offline', blocked: 'I bllokuar', unknown: 'E panjohur' };
+const STATUS_LABEL = { online: 'Online', slow: 'Ngadalë', offline: 'Offline', blocked: 'I bllokuar', unknown: 'E panjohur', soon: 'Së shpejti' };
 
 export class UI {
   /**
@@ -281,6 +281,11 @@ export class UI {
   }
 
   refreshStatuses() {
+    // kanali "së shpejti" filloi të transmetojë: luaje
+    if (this._soonId) {
+      const sc = this.all.find((x) => x.id === this._soonId);
+      if (sc && this.activeId === sc.id && this.health.statusOf(sc) !== 'soon') this.playChannel(sc);
+    }
     // përditëso vetëm pikat e shëndetit pa rindërtuar listën
     for (const li of this.el.list.querySelectorAll('li[data-index]')) {
       const c = this.view[Number(li.dataset.index)];
@@ -317,6 +322,21 @@ export class UI {
       if (li) li.classList.add('active');
     }
     this._rememberCountry(c);
+    if (c.soon && this.health.statusOf(c) === 'soon') {
+      // ende pa transmetim: mos e provo; testo në sfond dhe luaj automatikisht kur të nisë
+      this._soonId = c.id;
+      this.player.stop(true);
+      this.el.overlay.hidden = false;
+      this.el.spinner.hidden = true;
+      this.el.oActions.hidden = true;
+      this.el.oTitle.textContent = 'Së shpejti';
+      this.el.oText.textContent = `Transmetimi i ${c.name} do të nisë së shpejti.`;
+      this.el.statusText.className = 'status-text warn';
+      this.el.statusText.textContent = 'Së shpejti';
+      this.health.enqueue([c], { force: true });
+      return;
+    }
+    this._soonId = null;
     this.player.play(c, { sourceIndex });
     // preload i kanalit pasardhës
     const next = this.view[(idx + 1) % Math.max(1, this.view.length)];

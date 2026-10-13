@@ -226,6 +226,10 @@ function build() {
   }
 
   const channels = list;
+  // data/coming-soon.json: ["<id>"] kanale pa transmetim aktualisht; aplikacioni tregon "Së shpejti" dhe luan vetë kur të nisë
+  const soonFile = path.join(ROOT, 'data', 'coming-soon.json');
+  const SOON = new Set(fs.existsSync(soonFile) ? JSON.parse(fs.readFileSync(soonFile, 'utf8')) : []);
+  for (const ch of channels) if (SOON.has(ch.id)) ch.soon = true;
   // data/name-overrides.json: {"<id>": "Emri i ri"}
   const namesFile = path.join(ROOT, 'data', 'name-overrides.json');
   const NAME_OVERRIDES = fs.existsSync(namesFile) ? JSON.parse(fs.readFileSync(namesFile, 'utf8')) : {};

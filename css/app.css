@@ -203,6 +203,7 @@ button, select, input { font: inherit; color: inherit; }
 .dot.online { background: var(--ok); } .dot.slow { background: var(--warn); }
 .dot.offline { background: var(--bad); } .dot.blocked { background: #b388ff; }
 .dot.unknown { background: #5b6694; }
+.dot.soon { background: #ffb74d; box-shadow: 0 0 0 2px rgba(255, 183, 77, .25); }
 .channel-list li.offline .name { opacity: .55; }
 .empty { padding: 24px; text-align: center; color: var(--muted); }
 

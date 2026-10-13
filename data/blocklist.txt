@@ -8,8 +8,6 @@ d2xeo83q8fcni6.cloudfront.net/
 livehd.vedge.infomaniak.com/livecast/livehd/
 # Mbështjellës i palicencuar i një shërbimi me pagesë (DirecTV) në Vercel
 directv-iptv-player.vercel.app/
-# T7 (Kosovë) dhe TV Arbëria 3/4/Retro: URL kthen 404, nuk gjendet burim i ri publik
-gjirafa-video-live.gjirafa.net/gjvideo-livestream-specific/1z8-byc-4ee-lc9/
 ssh101.bozztv.com/ssh101/rtvarberia
 # Maqedoni: burime të vdekura (404/ENOTFOUND/403/500) ose relé e bllokuar gjeografikisht (vip.hr, ECONNREFUSED)
 stream.nasatv.com.mk/jazztv/
@@ -29,3 +27,5 @@ op-group1-swiftservehd-1.dens.tv/
 op-group1-swiftservesd-1.dens.tv/
 secured.albportal.net:2083/
 5d00db0e0fcd5.streamlock.net/
+
+# TV Arbëria 3/4/Retro (rtvarberia): URL kthen 404

@@ -72,6 +72,8 @@ export class HealthMonitor extends EventTarget {
       tested++;
       if (best === null || (RANK[v.s] ?? RANK.unknown) < (RANK[best] ?? RANK.unknown)) best = v.s;
     }
+    // kanal i shënuar "së shpejti" që ende nuk transmeton
+    if (channel.soon && (best === null || !['online', 'slow'].includes(best))) return 'soon';
     if (best === null) return 'unknown';
     // disa burime ende të patestuara: mos e shpall offline pa i provuar të gjitha
     if (best === 'offline' && tested < channel.sources.length) return 'unknown';
