@@ -237,10 +237,12 @@ button, select, input { font: inherit; color: inherit; }
 .link { background: none; border: 0; color: var(--accent, #4da3ff); cursor: pointer; text-decoration: underline; font: inherit; padding: 4px 0; }
 #countrySelect { max-width: 14rem; }
 
-/* maskë mbi logon e burimit (tvmak.com) në qoshen e sipërme djathtas */
+/* maskë mbi logon e burimit (tvmak.com): qoshja e sipërme djathtas, ~25% e gjerësisë */
 .logo-mask {
-  position: absolute; top: 2.5%; right: 2%; z-index: 2; display: flex; align-items: center; gap: 6px;
-  padding: 6px 12px 6px 8px; border-radius: 10px; background: #0b1020; color: #fff;
-  font-weight: 700; font-size: 14px; pointer-events: none; box-shadow: 0 0 0 4px #0b1020;
+  position: absolute; top: 3%; right: 1.2%; width: 26%; height: 11%; z-index: 2;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  border-radius: 10px; background: #0b1020; color: #fff; font-weight: 800;
+  font-size: clamp(14px, 2.2vw, 30px); pointer-events: none; box-shadow: 0 0 0 4px #0b1020;
 }
+.logo-mask img { height: 70%; width: auto; }
 .logo-mask[hidden] { display: none; }
