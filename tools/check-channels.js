@@ -116,7 +116,7 @@ async function checkHls(url) {
       // disa URL pa .m3u8 japin drejtpërdrejt MPEG-TS
       if (isTsSync(buf)) {
         const ms = Date.now() - t0;
-        return { s: ms > SLOW_MS ? 'slow' : 'online', ms };
+        return { s: ms > SLOW_MS ? 'slow' : 'online', ms, k: 'ts' };
       }
       return { s: 'offline', reason: 'jo playlist HLS' };
     }

@@ -108,7 +108,21 @@ function qualityOf(c) {
 }
 const QUALITY_RANK = { '2160p': 4, '1080p': 3, '720p': 2, '480p': 1 };
 
+// URL-të që health-check i ka njohur si MPEG-TS i papërpunuar (pa .ts në adresë)
+const TS_URLS = new Set();
+function loadHealthKinds() {
+  const dir = path.join(ROOT, 'data', 'health');
+  if (!fs.existsSync(dir)) return;
+  for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.json') && !x.startsWith('.'))) {
+    try {
+      const r = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')).results || {};
+      for (const [u, v] of Object.entries(r)) if (v && v.k === 'ts') TS_URLS.add(u);
+    } catch { /* skedar i dëmtuar: injoroje */ }
+  }
+}
+
 function kindOf(url, type) {
+  if (TS_URLS.has(url)) return 'ts';
   const u = url.split('?')[0].toLowerCase();
   if (/\.m3u8?$/.test(u) || /m3u8/.test(url.toLowerCase())) return 'hls';
   if (/\.ts$/.test(u)) return 'ts';
@@ -143,6 +157,7 @@ function build() {
   const byName = new Map(); // lloj|emër -> [kanal]
   const byUrl = new Map(); // lloj|url -> kanal
   const blockFile = path.join(ROOT, 'data', 'blocklist.txt');
+  loadHealthKinds();
   const BLOCKED = fs.existsSync(blockFile)
     ? fs.readFileSync(blockFile, 'utf8').split(String.fromCharCode(10)).map((l) => l.trim()).filter((l) => l && !l.startsWith('#'))
     : [];
@@ -157,6 +172,8 @@ function build() {
     const chk = inspectUrl(unwrapped);
     if (chk.error) { drop(chk.error); continue; }
     if (BLOCKED.some((b) => unwrapped.includes(b))) { drop('blocklist'); continue; }
+    // DASH (.mpd) nuk mbështetet nga luajtësi
+    if (unwrapped.split('?')[0].toLowerCase().endsWith('.mpd')) { drop('dash'); continue; }
     if (isAdult({ name: c.name || c.title, id: c.id, group: c.group })) { drop('adult'); continue; }
     const url = chk.url;
     const type = c.type === 'radio' ? 'radio' : (c.type === 'tv' || !c.type ? 'tv' : null);
