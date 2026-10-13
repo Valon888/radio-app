@@ -8,6 +8,7 @@ test('URL të pranueshme kalojnë', () => {
     'https://example.com/live/index.m3u8',
     'http://1.2.3.4:8080/live/ch1/playlist.m3u8',
     'https://cdn.example.com/a.m3u8?quality=hd&lang=sq',
+    'https://shd.example.net/live/bitmovin-mbc-1/15cf99af5de54063fdabfefe66adc075/index.m3u8',
   ]) assert.equal(inspectUrl(u).error, undefined, u);
 });
 
@@ -21,6 +22,7 @@ test('token/çelës/kredenciale refuzohen', () => {
     'https://x.com/a.m3u8?password=1': 'secret-param',
     'https://x.com/token=abc/a.m3u8': 'secret-param',
     'https://user:pw@x.com/a.m3u8': 'credentials',
+    'http://t.com:2095/play/lhpjmkfVyhON1JAiZCx7vgvje3t-Jiqa5d94ZBmKAqQgIFxl-Ch6B37eGpkVDb28': 'secret-path',
   };
   for (const [u, why] of Object.entries(bad)) assert.equal(inspectUrl(u).error, why, u);
 });

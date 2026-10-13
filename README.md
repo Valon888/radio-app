@@ -44,18 +44,24 @@ js/
   config.js           parametrat (proxy, timeout-e, TTL)
   storage.js          localStorage i sigurt, të preferuarat, historiku
   network.js          zbulimi i proxy-t dhe rendi i rrugëve (direkt/proxy)
-  channels.js         ngarkimi dhe filtrimi i kanaleve
+  channels.js         ngarkimi lazy sipas shtetit dhe filtrimi i kanaleve
   health.js           health-check në shfletues me paralelizëm të kufizuar
   player.js           hls.js / mpegts.js / audio, rilidhje, fallback burimesh
   epg.js              EPG bazik nga data/epg.json
   ui.js               lista, kontrollet, shkurtoret
 data/
-  channels.json       lista e kanaleve (e gjeneruar, shih më poshtë)
-  health.json         rezultati i fundit i tools/check-channels.js
+  index.json          shtetet (emri, numri i kanaleve) dhe cilët ngarkohen në nisje
+  countries/<kodi>.json  kanalet e një shteti (xk, al, mk, ..., radio, other); ngarkohen sipas nevojës
+  health/<kodi>.json  rezultati i fundit i tools/check-channels.js, një skedar për shtet
+  sources/iptv-org/   kopja e filtruar e https://github.com/iptv-org/iptv/tree/master/streams
   custom.m3u          (opsionale) kanalet e tua
 tools/
-  build-channels.js   ndërton data/channels.json nga listat JS dhe M3U
-  check-channels.js   teston URL-të dhe krijon channels-report.md
+  import-iptv-org.js  importon dhe filtron streams/*.m3u të iptv-org
+  build-channels.js   ndërton data/index.json dhe data/countries/*.json
+  check-channels.js   teston URL-të dhe krijon data/health/*.json + channels-report.md
+  lib/iptv-filters.js parser M3U + filtrat (token, adult, protokolle)
+tests/                teste njësie (node --test) dhe e2e me Playwright
+.github/workflows/health.yml  health-check javor automatik
   xmltv-to-json.js    XMLTV → data/epg.json
 proxy/                shembuj për Cloudflare Worker dhe Netlify Function
 sw.js, manifest.webmanifest, icons/   PWA
@@ -73,7 +79,7 @@ i përdor si hyrje.
    #EXTINF:-1 tvg-id="EmriIm.al" tvg-logo="https://…/logo.png" group-title="Shqipëri",Emri i Kanalit
    https://shembull.com/live/stream.m3u8
    ```
-2. Rindërto listën: `node tools/build-channels.js`
+2. Rindërto listën: `node tools/build-channels.js` (shkruan `data/index.json` dhe `data/countries/*.json`)
 3. (Opsionale) testo: `node tools/check-channels.js --group=Shqipëri`
 
 **Disa burime për të njëjtin kanal**: shkruaj dy hyrje me të njëjtin emër (ose të njëjtin `tvg-id`); ndërtuesi
@@ -81,6 +87,32 @@ i bashkon në një kanal me `sources[]`. Burimet HTTPS rendisen para HTTP, dhe a
 rendisen para atyre offline.
 
 Radio: përdor URL `.mp3`/`.aac`/Icecast; ndërtuesi e njeh si audio.
+
+## Kanalet nga iptv-org
+
+Burimi: <https://github.com/iptv-org/iptv/tree/master/streams> (commit `ffee614`, importuar më **2026-10-13**).
+Metadatat (kategoria, shteti, logoja) vijnë nga <https://iptv-org.github.io/api/>.
+
+```bash
+git clone --depth 1 https://github.com/iptv-org/iptv D:/iptv-org-tmp          # jashtë repo-s
+# (opsionale, për kategori dhe logo)
+mkdir D:/iptv-org-tmp/api && curl -L -o D:/iptv-org-tmp/api/channels.json https://iptv-org.github.io/api/channels.json
+curl -L -o D:/iptv-org-tmp/api/logos.json https://iptv-org.github.io/api/logos.json
+node tools/import-iptv-org.js D:/iptv-org-tmp   # filtron -> data/sources/iptv-org/
+node tools/build-channels.js                    # bashkon + ndan sipas shtetit
+```
+
+Importi hedh: përmbajtje për të rritur, YouTube/Twitch/Facebook, URL me `token`/`key`/`signature`/`auth`/`password`,
+URL me kredenciale (`user:pass@`), segmente rruge që duken si çelës i fshehtë (p.sh. `/play/<64 shenja>`), protokolle jo-HTTP(S) (rtmp, rtsp, srt, mmsh), host-e private dhe kanale të mbyllura.
+Nga 17968 hyrje u mbajtën 17499 (të refuzuara: secret-param 247, closed 88, adult 7, secret-path 108, video-site 6, protocol 13).
+Pas bashkimit me kanalet manuale dhe heqjes së dublikatave: **12542 kanale TV** dhe **141 radio** në 183 shtete/grupe.
+
+**Ngarkimi i shpejtë:** në nisje ngarkohen vetëm Kosovë, Shqipëri, Maqedoni e Veriut, Mal i Zi, Serbi, Greqi dhe radiot
+(~90 KB); shtetet e tjera ngarkohen kur i zgjedh nga menyja "Shteti" (ose me "Kërko në të gjitha shtetet").
+Kanalet e preferuara/historiku/i fundit ngarkojnë shtetin e tyre automatikisht.
+
+**Referrer:** disa burime kërkojnë `Referer` të caktuar (`#EXTVLCOPT:http-referrer`). Shfletuesi nuk mund ta vendosë,
+ndaj proxy-t (`server.js`, Worker, Netlify) e pranojnë parametrin `ref=` dhe e dërgojnë te burimi.
 
 ## Health-check
 
@@ -96,8 +128,14 @@ node tools/check-channels.js --type=tv --group=Kosov # me filtër
 node tools/check-channels.js --concurrency=30 --timeout=10000
 ```
 
-Krijon `data/health.json` (përdoret nga aplikacioni) dhe `channels-report.md` me kanalet offline, të bllokuara
-(401/403, gjeo) dhe pjesërisht funksionale. Rezultati varet nga rrjeti nga ekzekutohet testi.
+Krijon `data/health/<kodi>.json` (përdoret nga aplikacioni) dhe `channels-report.md` me përmbledhje sipas shtetit dhe
+kanalet offline, të bllokuara (401/403, gjeo) dhe pjesërisht funksionale për Kosovën, Shqipërinë dhe fqinjët.
+Testi ndjek manifestin, pastaj nivelin dhe kërkon segmentin e parë (jo vetëm HEAD); radio/.ts/.flv testohen me
+kërkesë për bajtët e parë. `--country=xk,al` teston vetëm ato shtete.
+
+**Automatik:** `.github/workflows/health.yml` e ekzekuton çdo të hënë (ose me dorë nga Actions) dhe bën commit të
+`data/health/` dhe `channels-report.md`. Rezultati varet nga rrjeti i runner-it GitHub; disa kanale gjeo-bllokohen
+vetëm aty, kështu që aplikacioni i mban rezultatet statike vetëm si sugjerim: rezultatet e shfletuesit (me TTL 6 orë) i mbivendosin.
 
 > Nëse një kanal është i vdekur në burim, asnjë ndryshim klienti nuk e rregullon. Raporti i tregon cilat janë.
 
@@ -128,6 +166,18 @@ për video Cloudflare është zgjedhje më e mirë.
 **Siguri**: mos përdor proxy publikë të panjohur (mund të ndryshojnë ose regjistrojnë trafikun). Proxy-t e këtij
 projekti bllokojnë adresa private/localhost dhe lejojnë vetëm origjinat e konfiguruara; `server.js` dëgjon
 vetëm te localhost si parazgjedhje dhe refuzon kërkesat cross-site.
+
+## Teste
+
+```bash
+npm test            # njësi: filtrat/parseri M3U + kontrollet e të dhënave (pa rrjet)
+npm i -D playwright # një herë
+npm run test:e2e    # hap aplikacionin në Edge/Chrome dhe verifikon që video.currentTime ecën për ~18 kanale
+```
+
+Testi e2e zgjedh kanale që `data/health/*.json` i ka shënuar online, ngarkon shtetet lazy dhe shkruan `e2e-report.md`
+(arsyet e dështimit: timeout, 403, CORS, mixed content). Përdor Edge/Chrome të instaluar sepse Chromium i Playwright
+nuk ka kodekë H.264/AAC.
 
 ## Shkurtoret
 

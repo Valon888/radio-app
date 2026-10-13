@@ -4,11 +4,12 @@
   "commit": "ffee6145526f5a4a42f76fd253009fa234715518",
   "imported": "2026-10-13",
   "total": 17968,
-  "kept": 17606,
+  "kept": 17499,
   "rejected": {
     "secret-param": 247,
-    "closed": 89,
+    "closed": 88,
     "adult": 7,
+    "secret-path": 108,
     "video-site": 6,
     "protocol": 13
   }

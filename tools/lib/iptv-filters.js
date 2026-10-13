@@ -12,6 +12,15 @@ const ADULT = /(?:\bxxx\b|\badult(?:s|o)?\b|\bporn(?:o|ography)?\b|\berotic[a-z]
 const VIDEO_SITE = /(?:^|\.)(youtube\.com|youtu\.be|twitch\.tv|facebook\.com|fb\.watch|dailymotion\.com|vimeo\.com|rumble\.com)$/i;
 const PRIVATE_HOST = /^(?:localhost|.*\.local|127\.|10\.|192\.168\.|169\.254\.|172\.(?:1[6-9]|2\d|3[01])\.|0\.|\[?::1\]?$|\[?f[cd][0-9a-f]{2}:)/i;
 
+/**
+ * Segment rruge që duket si çelës/token i fshehtë: >= 32 shenja base64url me shkronja të mëdha, të vogla
+ * dhe shifra (hex-i i pastër lejohet: është zakonisht ID publike e stream-it). Shërbimet me pagesë i fusin kredencialet në rrugë (/play/<çelës>).
+ */
+function looksSecretSegment(seg) {
+  if (seg.length < 32 || !/^[A-Za-z0-9_-]+$/.test(seg)) return false;
+  return /[a-z]/.test(seg) && /[A-Z]/.test(seg) && /[0-9]/.test(seg);
+}
+
 /** @returns {{url:string,error?:string}} */
 function inspectUrl(raw) {
   const s = String(raw).trim();
@@ -24,6 +33,7 @@ function inspectUrl(raw) {
   if (SECRET_PARAM.test(u.search) || SECRET_PATH.test(decodeURIComponentSafe(u.pathname))) {
     return { url: s, error: 'secret-param' };
   }
+  if (u.pathname.split('/').some(looksSecretSegment)) return { url: s, error: 'secret-path' };
   return { url: s };
 }
 

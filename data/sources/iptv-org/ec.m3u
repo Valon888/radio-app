@@ -82,8 +82,6 @@ https://videoserver.tmcreativos.com:19360/majestadtv/majestadtv.m3u8
 https://makrodigitaltv.makrodigital.com/makrodigitaltelevision/iptv/playlist.m3u8
 #EXTINF:-1 tvg-id="MakroDigitalTelevision.ec@SD",MakroDigital Television (720p)
 http://iptv.makrodigitaltv.makrodigital.com:8081/makrodigitaltelevision/iptv/playlist.m3u8
-#EXTINF:-1 tvg-id="Manavision.ec@SD",Manavisión (480p)
-https://play.once.net.ec/play/Ily2oYdd3E1fi9wK2zORoRovFU9P5xM0g3CNVK2MT0M/.m3u8
 #EXTINF:-1 tvg-id="MarcaTV.ec@SD",Marca TV (1080p)
 http://200.7.219.221:8088/live/livetv/index.m3u8
 #EXTINF:-1 tvg-id="MarioPintoTV.ec@SD",Mario Pinto TV (720p) [Not 24/7]

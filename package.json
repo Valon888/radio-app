@@ -12,7 +12,8 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.4",
     "@types/morgan": "^1.9.10",
-    "@types/node": "^24.9.1"
+    "@types/node": "^24.9.1",
+    "playwright": "^1.49.1"
   },
   "name": "mini-iptv",
   "private": true,
@@ -20,7 +21,10 @@
   "scripts": {
     "start": "node server.js 3002",
     "build:channels": "node tools/build-channels.js",
-    "check:channels": "node tools/check-channels.js"
+    "check:channels": "node tools/check-channels.js",
+    "import:iptv-org": "node tools/import-iptv-org.js",
+    "test": "node --test tests/*.test.js",
+    "test:e2e": "node tests/e2e/play.e2e.js"
   },
   "engines": {
     "node": ">=18"

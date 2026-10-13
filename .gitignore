@@ -5,3 +5,4 @@ iptv.err
 iptv Api/
 .vscode/
 *.log
+data/health/.partial.json
