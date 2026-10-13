@@ -1,0 +1,45 @@
+#EXTM3U
+#EXTINF:-1 tvg-id="tvmak.albswiss",Alb Swiss
+https://t1.tvmak.com/tv/ALBSWISS.m3u8
+#EXTINF:-1 tvg-id="tvmak.albuk1",Alb UK
+https://t1.tvmak.com/tv/ALBUK1.m3u8
+#EXTINF:-1 tvg-id="tvmak.albtvchicago",Albania tv chicago
+https://t1.tvmak.com/tv/ALBTVCHICAGO.m3u8
+#EXTINF:-1 tvg-id="tvmak.albfilmtv1",AlbFilm 1
+https://t1.tvmak.com/tv/ALBFILMTV1.m3u8
+#EXTINF:-1 tvg-id="tvmak.albfilmtv2",AlbFilm 2
+https://t1.tvmak.com/tv/ALBFILMTV2.m3u8
+#EXTINF:-1 tvg-id="tvmak.dasmatv",DTV Kosove
+https://t1.tvmak.com/tv/DASMATV.m3u8
+#EXTINF:-1 tvg-id="tvmak.mekatv",MEKA LIVE
+https://t1.tvmak.com/tv/MEKATV.m3u8
+#EXTINF:-1 tvg-id="tvmak.ntvdurres",NTV Durres
+https://t1.tvmak.com/tv/ntvdurres.m3u8
+#EXTINF:-1 tvg-id="tvmak.elkalem",Rtv Elkalem
+https://t3.tvmak.com/tv/elkalem.m3u8
+#EXTINF:-1 tvg-id="tvmak.rtviliria",RTV ILIRIA
+https://t1.tvmak.com/tv/rtviliria.m3u8
+#EXTINF:-1 tvg-id="tvmak.rtviliridahumor",rtv Ilirida Humor
+https://t1.tvmak.com/tv/rtviliridaHumor.m3u8
+#EXTINF:-1 tvg-id="tvmak.rtvpendimi",RTV PENDIMI
+https://t1.tvmak.com/tv/RTVPENDIMI.m3u8
+#EXTINF:-1 tvg-id="tvmak.topestradatv",TopEstrada TV
+https://t1.tvmak.com/tv/TOPESTRADATV.m3u8
+#EXTINF:-1 tvg-id="tvmak.turbochannel",Turbo Channel
+https://t1.tvmak.com/tv/turbochannel.m3u8
+#EXTINF:-1 tvg-id="tvmak.tvapollon",TV Apollon
+https://t1.tvmak.com/tv/TVAPOLLON.m3u8
+#EXTINF:-1 tvg-id="tvmak.tvdielli",TV Dielli
+https://t1.tvmak.com/tv/TVDIELLI.m3u8
+#EXTINF:-1 tvg-id="tvmak.tvkoha",TV KOHA
+https://t1.tvmak.com/tv/TVKOHA.m3u8
+#EXTINF:-1 tvg-id="tvmak.tvopoja",TV Opoja
+https://t1.tvmak.com/tv/TVOPOJA.m3u8
+#EXTINF:-1 tvg-id="tvmak.uskanatetove",Tv Pollogu - Tetovë
+https://t1.tvmak.com/tv/USKANATETOVE.m3u8
+#EXTINF:-1 tvg-id="tvmak.uskanakercove",Tv Uskana - Kerçovë
+https://t1.tvmak.com/tv/USKANAKERCOVE.m3u8
+#EXTINF:-1 tvg-id="tvmak.tv2gv",TV2
+https://t1.tvmak.com/tv/TV2GV.m3u8
+#EXTINF:-1 tvg-id="tvmak.ulqinitv",Ulqini TV
+https://t1.tvmak.com/tv/ULQINITV.m3u8
