@@ -30,7 +30,7 @@ function inspectUrl(raw) {
   if (u.username || u.password) return { url: s, error: 'credentials' };
   if (VIDEO_SITE.test(u.hostname)) return { url: s, error: 'video-site' };
   if (PRIVATE_HOST.test(u.hostname)) return { url: s, error: 'private-host' };
-  if (/eyJ[A-Za-z0-9_-]{10,}.[A-Za-z0-9_-]{10,}./.test(s)) return { url: s, error: 'secret-param' };
+  if (/eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\./.test(s)) return { url: s, error: 'secret-param' };
   if (SECRET_PARAM.test(u.search) || SECRET_PATH.test(decodeURIComponentSafe(u.pathname))) {
     return { url: s, error: 'secret-param' };
   }
