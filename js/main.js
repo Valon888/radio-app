@@ -5,7 +5,7 @@ import { HealthMonitor } from './health.js';
 import { Player } from './player.js';
 import { UI } from './ui.js';
 import { Epg } from './epg.js';
-import { detectProxy } from './network.js';
+import { detectProxy, proxyState } from './network.js';
 import { CONFIG } from './config.js';
 
 async function boot() {
@@ -51,6 +51,11 @@ async function boot() {
 
   ui.init();
   ui.refreshStatuses();
+
+  // faqja shërbehet nga një server statik (p.sh. Live Server) pa /proxy: shumë burime do të bllokohen nga CORS
+  if (!proxyState().mode && /^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+    setTimeout(() => ui.toast('Nuk u gjet proxy: hape me `npm start` (http://localhost:3002) që të luajnë më shumë kanale.', 9000), 2500);
+  }
 
   // test në sfond: Kosovë/Shqipëri, të preferuarat, historiku (burime të pa-testuara ose të vjetra)
   if (CONFIG.HEALTH_AUTO_PRIORITY) {
