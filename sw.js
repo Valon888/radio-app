@@ -2,7 +2,7 @@
  * Service worker: cache VETËM për asset-et statike të aplikacionit.
  * Streamet (m3u8/ts/mp3/...), /proxy dhe çdo kërkesë cross-origin NUK preken kurrë.
  */
-const VERSION = 'miniiptv-v1';
+const VERSION = 'miniiptv-v2';
 const SHELL = [
   './',
   'index.html',
@@ -12,7 +12,6 @@ const SHELL = [
   'icons/icon.svg',
   'manifest.webmanifest',
 ];
-const DATA = ['data/channels.json', 'data/health.json', 'data/epg.json'];
 const STREAM_RE = /\.(m3u8?|ts|aac|mp3|ogg|opus|flv|mp4|m4s)(\?|$)/i;
 
 self.addEventListener('install', (e) => {
@@ -34,7 +33,7 @@ self.addEventListener('fetch', (e) => {
   if (url.origin !== self.location.origin) return; // CDN, stream-e të jashtme
   if (url.pathname.startsWith('/proxy') || STREAM_RE.test(url.pathname)) return;
 
-  const isData = DATA.some((d) => url.pathname.endsWith(d));
+  const isData = /\/data\/(?:[^/]+\.json|countries\/|health\/)/.test(url.pathname);
   if (isData) {
     // rrjeti fillimisht (të dhëna të reja), cache si rezervë offline
     e.respondWith(

@@ -14,8 +14,9 @@ const DEFAULTS = {
   MPEGTS_JS_URL: 'https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.js',
 
   // Të dhënat
-  CHANNELS_URL: 'data/channels.json',
-  HEALTH_URL: 'data/health.json',
+  INDEX_URL: 'data/index.json', // shtetet + cilët ngarkohen në nisje
+  COUNTRY_DIR: 'data/countries', // <kodi>.json: kanalet e një shteti (lazy-load)
+  HEALTH_DIR: 'data/health', // <kodi>.json: rezultatet e health-check
   EPG_URL: 'data/epg.json',
 
   // Rilidhja automatike

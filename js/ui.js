@@ -1,7 +1,7 @@
 /** Ndërfaqja: lista e kanaleve, kontrollet, mbivendosjet dhe shkurtoret e tastierës. */
 import { CONFIG } from './config.js';
 import { favorites, history, storage } from './storage.js';
-import { filterChannels, offlineLast, groupsOf } from './channels.js';
+import { filterChannels, offlineLast, groupsOf, sortChannels } from './channels.js';
 
 const $ = (sel) => document.querySelector(sel);
 const STATUS_LABEL = { online: 'Online', slow: 'Ngadalë', offline: 'Offline', blocked: 'I bllokuar', unknown: 'E panjohur' };
@@ -10,8 +10,11 @@ export class UI {
   /**
    * @param {{channels:any[], player:any, health:any, epg:any}} deps
    */
-  constructor({ channels, player, health, epg }) {
+  constructor({ channels, player, health, epg, catalog }) {
     this.all = channels;
+    this.catalog = catalog || { index: { countries: [] }, loaded: new Set(), load: async () => [] };
+    this.country = storage.get('country', '');
+    if (this.country && this.country !== '*' && !this.catalog.loaded.has(this.country)) this.country = '';
     this.player = player;
     this.health = health;
     this.epg = epg;
@@ -28,7 +31,7 @@ export class UI {
     this.toastTimer = null;
 
     this.el = {
-      list: $('#channelList'), search: $('#search'), tabs: $('#tabs'), group: $('#groupSelect'),
+      list: $('#channelList'), search: $('#search'), tabs: $('#tabs'), group: $('#groupSelect'), countrySel: $('#countrySelect'),
       hide: $('#hideOffline'), testBtn: $('#testBtn'), installBtn: $('#installBtn'),
       video: $('#video'), audio: $('#audio'), screen: $('#screen'),
       overlay: $('#overlay'), spinner: $('#spinner'), oTitle: $('#overlayTitle'), oText: $('#overlayText'),
@@ -45,6 +48,7 @@ export class UI {
   }
 
   init() {
+    this._buildCountries();
     this._buildGroups();
     this._restorePrefs();
     this._bindEvents();
@@ -61,7 +65,8 @@ export class UI {
   _buildGroups() {
     const g = this.el.group;
     g.innerHTML = '<option value="">Të gjitha grupet</option>';
-    for (const [name, n] of groupsOf(this.all).slice(0, 80)) {
+    const scope = this.country && this.country !== '*' ? this.all.filter((c) => c._cc === this.country) : this.all;
+    for (const [name, n] of groupsOf(scope).slice(0, 80)) {
       const o = document.createElement('option');
       o.value = name;
       o.textContent = `${name} (${n})`;
@@ -94,6 +99,71 @@ export class UI {
     window.addEventListener('appinstalled', () => { this.el.installBtn.hidden = true; });
   }
 
+  /* ---------------- shtetet (lazy-load) ---------------- */
+
+  _buildCountries() {
+    const sel = this.el.countrySel;
+    const { countries } = this.catalog.index;
+    const loaded = this.catalog.loaded;
+    const opt = (value, text) => {
+      const o = document.createElement('option');
+      o.value = value;
+      o.textContent = text;
+      return o;
+    };
+    sel.innerHTML = '';
+    sel.appendChild(opt('', 'Të ngarkuarat'));
+    for (const c of countries) {
+      sel.appendChild(opt(c.code, `${loaded.has(c.code) ? '' : '⬇ '}${c.name} (${c.tv + c.radio})`));
+    }
+    sel.appendChild(opt('*', '⬇ Të gjitha shtetet (ngarko gjithçka)'));
+    sel.value = this.country;
+    if (sel.value !== this.country) { this.country = ''; sel.value = ''; }
+  }
+
+  async setCountry(code) {
+    const { index, loaded } = this.catalog;
+    const targets = code === '*' ? index.countries.map((c) => c.code) : (code ? [code] : []);
+    const missing = targets.filter((c) => !loaded.has(c));
+    if (missing.length) {
+      this.toast(missing.length > 1 ? `Po ngarkoj ${missing.length} shtete…` : 'Po ngarkoj kanalet…', 4000);
+      this.el.countrySel.disabled = true;
+      try {
+        const lists = await Promise.all(missing.map(async (c) => {
+          const [list] = await Promise.all([this.catalog.load(c), this.health.loadCountry(c, { emit: false })]);
+          loaded.add(c);
+          return list;
+        }));
+        this.all = sortChannels([...this.all, ...lists.flat()]);
+      } catch (e) {
+        this.toast(`Nuk u ngarkua: ${e.message}`, 4000);
+        this.country = '';
+        this.el.countrySel.value = '';
+        this.el.countrySel.disabled = false;
+        return;
+      }
+      this.el.countrySel.disabled = false;
+      this.health.refresh();
+    }
+    this.country = code;
+    storage.set('country', code);
+    this.group = '';
+    this._buildCountries();
+    this._buildGroups();
+    this.applyFilters();
+    this.refreshStatuses();
+  }
+
+  _rememberCountry(c) {
+    if (!c._cc) return;
+    const map = storage.get('chanCountry', {});
+    if (map[c.id] === c._cc) return;
+    map[c.id] = c._cc;
+    const keys = Object.keys(map);
+    if (keys.length > 500) for (const k of keys.slice(0, keys.length - 500)) delete map[k];
+    storage.set('chanCountry', map);
+  }
+
   /* ---------------- filtrimi + lista ---------------- */
 
   applyFilters() {
@@ -102,6 +172,7 @@ export class UI {
     let list = filterChannels(this.all, {
       tab: this.tab,
       group: this.group,
+      country: this.country === '*' ? '' : this.country,
       query: this.el.search.value,
       favs: favorites.all(),
       hist: history.all(),
@@ -119,7 +190,7 @@ export class UI {
     if (!list.length) {
       this.el.list.innerHTML = `<li class="empty">${this.tab === 'favorites'
         ? 'S\'ke asnjë të preferuar. Prek ☆ pranë një kanali.'
-        : 'Nuk u gjet asnjë kanal.'}</li>`;
+        : 'Nuk u gjet asnjë kanal.'}${this._unloadedCount() ? `<br><button class="link" data-load-all="1">Kërko në të gjitha shtetet (${this._unloadedCount()} të pangarkuar)</button>` : ''}</li>`;
     }
     this._scrollToFocus();
   }
@@ -226,6 +297,10 @@ export class UI {
     this.el.testBtn.disabled = active;
   }
 
+  _unloadedCount() {
+    return this.catalog.index.countries.filter((c) => !this.catalog.loaded.has(c.code)).length;
+  }
+
   /* ---------------- luajtja ---------------- */
 
   playChannel(c, { sourceIndex = 0 } = {}) {
@@ -241,6 +316,7 @@ export class UI {
       const li = this.el.list.querySelector(`li[data-index="${idx}"]`);
       if (li) li.classList.add('active');
     }
+    this._rememberCountry(c);
     this.player.play(c, { sourceIndex });
     // preload i kanalit pasardhës
     const next = this.view[(idx + 1) % Math.max(1, this.view.length)];
@@ -400,6 +476,7 @@ export class UI {
   toggleFavorite(c) {
     if (!c) return;
     const on = favorites.toggle(c.id);
+    if (on) this._rememberCountry(c);
     this.toast(on ? `★ ${c.name} u shtua te të preferuarat` : `${c.name} u hoq nga të preferuarat`);
     this._renderStar();
     if (this.tab === 'favorites') this.applyFilters();
@@ -474,6 +551,7 @@ export class UI {
       for (const t of e.tabs.querySelectorAll('.tab')) t.classList.toggle('active', t === b);
       this.applyFilters();
     });
+    e.countrySel.addEventListener('change', () => this.setCountry(e.countrySel.value));
     e.group.addEventListener('change', () => { this.group = e.group.value; this.applyFilters(); });
     e.hide.addEventListener('change', () => {
       this.hideOffline = e.hide.checked;
@@ -494,6 +572,7 @@ export class UI {
 
     // lista
     e.list.addEventListener('click', (ev) => {
+      if (ev.target.closest('[data-load-all]')) { this.setCountry('*'); return; }
       const li = ev.target.closest('li[data-index]');
       if (!li) return;
       const c = this.view[Number(li.dataset.index)];

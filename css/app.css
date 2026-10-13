@@ -50,7 +50,7 @@ button, select, input { font: inherit; color: inherit; }
 }
 .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 18px; letter-spacing: .3px; }
 .search-wrap { flex: 1 1 200px; min-width: 150px; }
-#search, #groupSelect, #qualitySelect {
+#search, #countrySelect, #groupSelect, #qualitySelect {
   width: 100%;
   background: var(--bg-3);
   border: 1px solid var(--line);
@@ -231,3 +231,7 @@ button, select, input { font: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
+
+/* butoni-lidhje brenda mesazheve të listës */
+.link { background: none; border: 0; color: var(--accent, #4da3ff); cursor: pointer; text-decoration: underline; font: inherit; padding: 4px 0; }
+#countrySelect { max-width: 14rem; }

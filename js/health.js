@@ -28,15 +28,11 @@ export class HealthMonitor extends EventTarget {
     this._token = 0;
   }
 
-  async init() {
-    // 1) skedari statik nga mjeti i terminalit
-    try {
-      const r = await fetch(CONFIG.HEALTH_URL, { cache: 'no-cache' });
-      if (r.ok) {
-        const data = await r.json();
-        for (const [url, v] of Object.entries(data.results || {})) this.results.set(url, v);
-      }
-    } catch { /* nuk është e detyrueshme */ }
+  /** @param {string[]} codes shtetet për të cilët ngarkohet data/health/<kodi>.json */
+  async init(codes = []) {
+    // 1) skedarët statikë nga mjeti i terminalit (një për shtet)
+    this._loadedCodes = this._loadedCodes || new Set();
+    await Promise.all(codes.map((c) => this.loadCountry(c, { emit: false })));
     // 2) cache lokal (mbivendos statik sepse është më i ri)
     const cached = storage.get('health', {});
     for (const [url, v] of Object.entries(cached)) {
@@ -45,6 +41,26 @@ export class HealthMonitor extends EventTarget {
     }
     this._emit();
   }
+
+  /** Ngarkon rezultatet statike të një shteti (pa mbivendosur rezultatet më të reja të shfletuesit). */
+  async loadCountry(code, { emit = true } = {}) {
+    this._loadedCodes = this._loadedCodes || new Set();
+    if (this._loadedCodes.has(code)) return;
+    this._loadedCodes.add(code);
+    try {
+      const r = await fetch(`${CONFIG.HEALTH_DIR}/${encodeURIComponent(code)}.json`, { cache: 'no-cache' });
+      if (!r.ok) return;
+      const data = await r.json();
+      for (const [url, v] of Object.entries(data.results || {})) {
+        const cur = this.results.get(url);
+        if (!cur || (v.t || 0) > (cur.t || 0)) this.results.set(url, v);
+      }
+      if (emit) this._emit();
+    } catch { /* nuk është e detyrueshme */ }
+  }
+
+  /** Njofton UI-n pas ngarkimit të rezultateve të një shteti. */
+  refresh() { this._emit(); }
 
   /** Gjendja e kombinuar e një kanali (burimi më i mirë). */
   statusOf(channel) {
@@ -89,7 +105,7 @@ export class HealthMonitor extends EventTarget {
         const v = this.results.get(s.url);
         if (!force && v && now - v.t < CONFIG.HEALTH_TTL_MS && v.s !== 'unknown') continue;
         if (this.queue.some((q) => q.url === s.url)) continue;
-        this.queue.push({ url: s.url, kind: s.kind });
+        this.queue.push({ url: s.url, kind: s.kind, ref: s.ref });
         added++;
       }
     }
@@ -127,8 +143,8 @@ export class HealthMonitor extends EventTarget {
     }
   }
 
-  async _test({ url, kind }) {
-    const cands = candidatesFor(url, kind);
+  async _test({ url, kind, ref }) {
+    const cands = candidatesFor(url, kind, ref);
     if (!cands.length) return { s: 'unknown', reason: 'http në faqe https pa proxy' };
     const cand = cands[0];
     const ctl = new AbortController();

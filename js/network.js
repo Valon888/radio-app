@@ -40,9 +40,9 @@ export function detectProxy() {
 export const proxyState = () => state;
 
 /** URL-ja e kalon përmes proxy-t, ose null nëse nuk ka proxy. */
-export function viaProxy(url) {
+export function viaProxy(url, ref = '') {
   if (!state.base) return null;
-  return `${state.base}?url=${encodeURIComponent(url)}`;
+  return `${state.base}?url=${encodeURIComponent(url)}${ref ? `&ref=${encodeURIComponent(ref)}` : ''}`;
 }
 
 export const isHttp = (u) => /^http:\/\//i.test(u);
@@ -55,8 +55,8 @@ export const pageIsHttps = () => location.protocol === 'https:';
  *  - proxy i largët: direkt fillimisht (kursen kuotën), pastaj proxy
  *  - pa proxy: vetëm direkt
  */
-export function candidatesFor(url, kind) {
-  const proxied = viaProxy(url);
+export function candidatesFor(url, kind, ref = '') {
+  const proxied = viaProxy(url, ref);
   const mixed = pageIsHttps() && isHttp(url);
   if (mixed) return proxied ? [{ url: proxied, via: 'proxy' }] : [];
   if (!proxied) return [{ url, via: 'direct' }];

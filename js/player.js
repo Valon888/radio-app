@@ -105,7 +105,7 @@ export class Player extends EventTarget {
     const sources = this.health ? this.health.orderedSources(channel) : channel.sources;
     const attempts = [];
     sources.forEach((src, si) => {
-      candidatesFor(src.url, src.kind).forEach((c) => attempts.push({
+      candidatesFor(src.url, src.kind, src.ref).forEach((c) => attempts.push({
         url: c.url, via: c.via, kind: src.kind, original: src.url, sourceIndex: si, sourceCount: sources.length,
       }));
     });

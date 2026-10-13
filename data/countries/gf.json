@@ -1,0 +1,1 @@
+{"code":"gf","channels":[{"id":"TelePeyi.gf@SD","name":"Télé Péyi","type":"tv","group":"General","country":"gf","logo":"https://i.imgur.com/LJ9sXaB.png","quality":"720p","order":100,"sources":[{"url":"https://edge20.vedge.infomaniak.com/livecast/ik:33dm06/manifest.m3u8","kind":"hls"}]}]}

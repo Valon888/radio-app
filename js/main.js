@@ -1,5 +1,6 @@
 /** Pika e hyrjes: lidh modulet (kanalet, shëndeti, lojtari, UI). */
-import { loadChannels } from './channels.js';
+import { loadIndex, loadCountry, sortChannels } from './channels.js';
+import { favorites, history, storage } from './storage.js';
 import { HealthMonitor } from './health.js';
 import { Player } from './player.js';
 import { UI } from './ui.js';
@@ -11,9 +12,20 @@ async function boot() {
   const listEl = document.getElementById('channelList');
   listEl.innerHTML = '<li class="empty">Duke ngarkuar kanalet…</li>';
 
-  let channels;
+  let index;
+  let channels = [];
+  const loaded = new Set();
   try {
-    channels = await loadChannels();
+    index = await loadIndex();
+    // fillimisht: Kosovë, Shqipëri, fqinjët + radio, plus shtetet e kanaleve të preferuara/historikut/të fundit
+    const want = new Set(index.initial);
+    const known = new Set(index.countries.map((c) => c.code));
+    const chanCountry = storage.get('chanCountry', {});
+    for (const id of [...favorites.all(), ...history.all(), storage.get('lastChannel', null)]) {
+      if (id && known.has(chanCountry[id])) want.add(chanCountry[id]);
+    }
+    const lists = await Promise.all([...want].map((code) => loadCountry(code).then((l) => { loaded.add(code); return l; })));
+    channels = sortChannels(lists.flat());
   } catch (e) {
     listEl.innerHTML = `<li class="empty">Nuk u ngarkuan kanalet: ${e.message}.<br>
       Nise: <code>node tools/build-channels.js</code></li>`;
@@ -22,7 +34,7 @@ async function boot() {
 
   const health = new HealthMonitor();
   const epg = new Epg();
-  const [, , epgOk] = await Promise.all([health.init(), detectProxy(), epg.load()]);
+  const [, , epgOk] = await Promise.all([health.init([...loaded]), detectProxy(), epg.load()]);
   void epgOk;
 
   const player = new Player({
@@ -30,7 +42,8 @@ async function boot() {
     audio: document.getElementById('audio'),
     health,
   });
-  const ui = new UI({ channels, player, health, epg });
+  const catalog = { index, loaded, load: loadCountry };
+  const ui = new UI({ channels, player, health, epg, catalog });
 
   player.addEventListener('state', (e) => ui.onPlayerState(e.detail));
   player.addEventListener('levels', (e) => ui.onLevels(e.detail));
