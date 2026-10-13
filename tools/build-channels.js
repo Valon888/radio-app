@@ -142,6 +142,10 @@ function build() {
   // Bashkim: (1) i njëjti URL = i njëjti kanal; (2) i njëjti emër + lloj (vendi përputhet ose mungon)
   const byName = new Map(); // lloj|emër -> [kanal]
   const byUrl = new Map(); // lloj|url -> kanal
+  const blockFile = path.join(ROOT, 'data', 'blocklist.txt');
+  const BLOCKED = fs.existsSync(blockFile)
+    ? fs.readFileSync(blockFile, 'utf8').split(String.fromCharCode(10)).map((l) => l.trim()).filter((l) => l && !l.startsWith('#'))
+    : [];
   const list = [];
   const drops = {};
   const drop = (why) => { drops[why] = (drops[why] || 0) + 1; };
@@ -152,6 +156,7 @@ function build() {
     // asnjë token/çelës/kredencial, asnjë protokoll jo-http(s), asnjë YouTube/Twitch/host privat
     const chk = inspectUrl(unwrapped);
     if (chk.error) { drop(chk.error); continue; }
+    if (BLOCKED.some((b) => unwrapped.includes(b))) { drop('blocklist'); continue; }
     if (isAdult({ name: c.name || c.title, id: c.id, group: c.group })) { drop('adult'); continue; }
     const url = chk.url;
     const type = c.type === 'radio' ? 'radio' : (c.type === 'tv' || !c.type ? 'tv' : null);

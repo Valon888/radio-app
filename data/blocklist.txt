@@ -1,0 +1,3 @@
+# URL-të (ose pjesë të tyre) që nuk futen kurrë në katalog. Një për rresht; # = koment.
+# Alsat M: i vetmi burim është rele e bllokuar gjeografikisht (ECONNREFUSED), hequr me kërkesë.
+vipottbpkstream.vip.hr/Content/onevip-hls/Live/Channel(Alsat_M)
