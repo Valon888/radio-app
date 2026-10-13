@@ -149,7 +149,8 @@ vetëm aty, kështu që aplikacioni i mban rezultatet statike vetëm si sugjerim
 
 ### Cloudflare Worker (rekomandohet)
 
-1. Cloudflare → Workers & Pages → Create → Worker, ngjit `proxy/cloudflare-worker.js`.
+1. Nga terminali: `cd proxy && npx wrangler login && npx wrangler deploy` (përdor `proxy/wrangler.toml`, ku `ALLOWED_ORIGINS` është tashmë i vendosur),
+   ose Cloudflare → Workers & Pages → Create → Worker, ngjit `proxy/cloudflare-worker.js`.
 2. Variabla `ALLOWED_ORIGINS` = origjina e faqes sate, p.sh. `https://valon888.github.io` (ndaje me presje për disa).
    **Mos e lër bosh**: pa të, Worker-i refuzon çdo kërkesë nga shfletuesit.
 3. Te `index.html`, para `js/main.js`:

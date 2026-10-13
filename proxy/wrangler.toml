@@ -1,0 +1,8 @@
+# Deploy: cd proxy && npx wrangler login && npx wrangler deploy
+name = "mini-iptv-proxy"
+main = "cloudflare-worker.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+# origjinat që lejohen (presje për shumë); mos e lër bosh
+ALLOWED_ORIGINS = "https://valon888.github.io,http://localhost:3002"

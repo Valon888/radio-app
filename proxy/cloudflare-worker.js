@@ -3,7 +3,8 @@
  *
  * Instalim:
  *   1. Cloudflare Dashboard → Workers & Pages → Create → Worker → ngjit këtë skedar.
- *   2. Settings → Variables: ALLOWED_ORIGINS = https://valon888.github.io  (ndaje me presje për shumë)
+ *      (ose nga terminali: cd proxy && npx wrangler deploy — shih wrangler.toml)
+ *   2. ALLOWED_ORIGINS = https://valon888.github.io  (te wrangler.toml ose Settings → Variables; presje për shumë)
  *      MOS e lër bosh; përndryshe proxy-ja jote bëhet publike për kë të dojë.
  *   3. Vendos URL-në e Worker-it te config:  window.MINI_IPTV_CONFIG = { PROXY_URL: 'https://emri.workers.dev' }
  *
@@ -64,14 +65,24 @@ export default {
     const refRaw = reqUrl.searchParams.get('ref') || '';
     const ref = /^https?:\/\//i.test(refRaw) ? refRaw : '';
 
-    const upstream = await fetch(t.toString(), {
+    // niveli 0: me Referer (i dhënë ose origjina e burimit); niveli 1: pa Referer, pasi disa host-e
+    // kthejnë 401/403 kur e shohin (njësoj si server.js)
+    const range = request.headers.get('Range');
+    const grab = (withReferer) => fetch(t.toString(), {
       headers: {
         'User-Agent': 'Mozilla/5.0 (compatible; MiniIPTV-Proxy)',
-        Referer: ref || `${t.origin}/`,
-        ...(request.headers.get('Range') ? { Range: request.headers.get('Range') } : {}),
+        ...(withReferer ? { Referer: ref || `${t.origin}/` } : {}),
+        ...(range ? { Range: range } : {}),
       },
       redirect: 'follow',
     });
+    let upstream;
+    try {
+      upstream = await grab(true);
+      if ((upstream.status === 401 || upstream.status === 403) && !ref) upstream = await grab(false);
+    } catch {
+      return new Response('Upstream unreachable', { status: 502, headers: cors });
+    }
 
     const ctype = upstream.headers.get('content-type') || '';
     const isPlaylist = /mpegurl/i.test(ctype) || /\.m3u8?($|\?)/i.test(t.pathname);
