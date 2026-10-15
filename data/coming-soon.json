@@ -317,5 +317,17 @@
     "name": "TV Era",
     "group": "Kosovë",
     "country": "xk"
+  },
+  {
+    "id": "soon.xk.plus-television",
+    "name": "Plus Television",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv1-channel",
+    "name": "TV1 Channel",
+    "group": "Kosovë",
+    "country": "xk"
   }
 ]
