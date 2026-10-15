@@ -11,7 +11,7 @@
  * Ngjarje ('result'): detail = { url, ok, reason }                (për health-in)
  */
 import { CONFIG } from './config.js';
-import { candidatesFor, detectProxy } from './network.js';
+import { candidatesFor, detectProxy, proxyState } from './network.js';
 
 const scriptPromises = new Map();
 function loadScript(url) {
@@ -31,7 +31,8 @@ function loadScript(url) {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /** Konfigurimi i hls.js për stabilitet (live, rrjete të paqëndrueshme). */
-function hlsConfig() {
+/** quick = përpjekje direkte ndërsa ekziston proxy: dështo shpejt (CORS/bllokim është i përhershëm), proxy është rezerva. */
+function hlsConfig(quick = false) {
   const policy = (maxRetries, base, max, timeoutMs) => ({
     default: {
       maxTimeToFirstByteMs: timeoutMs,
@@ -53,8 +54,8 @@ function hlsConfig() {
     liveMaxLatencyDurationCount: 10,
     startFragPrefetch: true,
     nudgeMaxRetry: 5,
-    manifestLoadPolicy: policy(3, 1000, 8000, 10000),
-    playlistLoadPolicy: policy(4, 1000, 8000, 10000),
+    manifestLoadPolicy: policy(quick ? 0 : 3, 1000, 8000, quick ? 6000 : 10000),
+    playlistLoadPolicy: policy(quick ? 1 : 4, 1000, 8000, quick ? 6000 : 10000),
     fragLoadPolicy: policy(5, 1000, 16000, 15000),
   };
 }
@@ -142,7 +143,7 @@ export class Player extends EventTarget {
         this._emitState('error', `Sinjali nuk është i disponueshëm (${outcome.reason || 'dështim'}).`, meta);
         return;
       }
-      this._emitState('reconnecting', 'Duke provuar burim/rrugë tjetër…', attempts[ai]);
+      this._emitState('reconnecting', `Duke provuar burim/rrugë tjetër (${ai + 1}/${attempts.length})${outcome.reason ? ' · ' + outcome.reason : ''}…`, attempts[ai]);
     }
   }
 
@@ -298,6 +299,9 @@ export class Player extends EventTarget {
       let lastTime = -1;
       let lastProgressAt = Date.now();
       const startedAt = Date.now();
+      // përpjekja direkte me proxy në dispozicion: mos prit 15s (telefonat në rrjet celular humbasin kohë)
+      const quick = attempt.via === 'direct' && Boolean(proxyState().base);
+      const startupMs = quick ? Math.min(CONFIG.STARTUP_TIMEOUT_MS, 7000) : CONFIG.STARTUP_TIMEOUT_MS;
       const listeners = [];
       const on = (el, ev, fn) => { el.addEventListener(ev, fn); listeners.push(() => el.removeEventListener(ev, fn)); };
 
@@ -327,7 +331,7 @@ export class Player extends EventTarget {
         if (session !== this.session) { finish('seancë e re'); return; }
         const now = Date.now();
         if (!wasPlaying) {
-          if (now - startedAt > CONFIG.STARTUP_TIMEOUT_MS) finish('timeout në nisje');
+          if (now - startedAt > startupMs) finish('timeout në nisje');
           return;
         }
         if (m.paused || m.ended) { lastProgressAt = now; return; }
@@ -381,7 +385,7 @@ export class Player extends EventTarget {
           if (session !== this.session || finished) return;
           if (window.Hls && window.Hls.isSupported()) {
             const Hls = window.Hls;
-            const hls = new Hls(hlsConfig());
+            const hls = new Hls(hlsConfig(quick));
             this.hls = hls;
             hls.on(Hls.Events.MANIFEST_PARSED, (_e, data) => {
               this.levels = data.levels.map((l, i) => ({ index: i, height: l.height || 0, bitrate: l.bitrate || 0 }));
