@@ -11,7 +11,7 @@
  */
 import { CONFIG } from './config.js';
 import { storage } from './storage.js';
-import { candidatesFor } from './network.js';
+import { candidatesFor, proxyState } from './network.js';
 
 const RANK = { online: 0, slow: 1, unknown: 2, blocked: 3, offline: 4 };
 
@@ -148,7 +148,9 @@ export class HealthMonitor extends EventTarget {
   async _test({ url, kind, ref }) {
     const cands = candidatesFor(url, kind, ref);
     if (!cands.length) return { s: 'unknown', reason: 'http në faqe https pa proxy' };
-    const cand = cands[0];
+    // audio: candidatesFor vë direktin në fillim (<audio> lutet pa CORS), por fetch() i health-it do të bllokohej;
+    // me proxy lokal e testojmë përmes proxy-t që të mos mbushet konsola me gabime CORS
+    const cand = (kind === 'audio' && proxyState().mode === 'local' && cands.find((c) => c.via === 'proxy')) || cands[0];
     const ctl = new AbortController();
     const timer = setTimeout(() => ctl.abort(), CONFIG.HEALTH_TIMEOUT_MS);
     const t0 = performance.now();
