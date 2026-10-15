@@ -257,5 +257,29 @@
     "name": "RTV Ilirida Humor",
     "group": "Kosovë",
     "country": "xk"
+  },
+  {
+    "id": "soon.xk.albdreams-tv",
+    "name": "Albdreams TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.al.rtv-flaka-hd",
+    "name": "RTV Flaka HD",
+    "group": "Shqipëri",
+    "country": "al"
+  },
+  {
+    "id": "soon.xk.tv-globi",
+    "name": "TV Globi",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv-albse",
+    "name": "RTV AlbSE",
+    "group": "Kosovë",
+    "country": "xk"
   }
 ]
