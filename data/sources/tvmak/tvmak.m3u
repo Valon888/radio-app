@@ -1,8 +1,8 @@
 #EXTM3U
+#EXTINF:-1 tvg-id="tvmak.aanewyork",AA NEWYORK TV
+https://t1.tvmak.com/tv/AANEWYORK.m3u8
 #EXTINF:-1 tvg-id="tvmak.albuk1",Alb UK
 https://t1.tvmak.com/tv/ALBUK1.m3u8
-#EXTINF:-1 tvg-id="tvmak.albtvchicago",Albania tv chicago
-https://t1.tvmak.com/tv/ALBTVCHICAGO.m3u8
 #EXTINF:-1 tvg-id="tvmak.albfilmtv1",AlbFilm 1
 https://t1.tvmak.com/tv/ALBFILMTV1.m3u8
 #EXTINF:-1 tvg-id="tvmak.albkanalmusictv",Albkanal Music TV
@@ -19,8 +19,6 @@ https://t1.tvmak.com/tv/elkalem.m3u8
 https://t1.tvmak.com/tv/rtviliria.m3u8
 #EXTINF:-1 tvg-id="tvmak.rtvpendimi",RTV PENDIMI
 https://t1.tvmak.com/tv/RTVPENDIMI.m3u8
-#EXTINF:-1 tvg-id="tvmak.topestradatv",TopEstrada TV
-https://t1.tvmak.com/tv/TOPESTRADATV.m3u8
 #EXTINF:-1 tvg-id="tvmak.turbochannel",Turbo Channel
 https://t1.tvmak.com/tv/turbochannel.m3u8
 #EXTINF:-1 tvg-id="tvmak.tvapollon",TV Apollon

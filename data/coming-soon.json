@@ -281,5 +281,29 @@
     "name": "RTV AlbSE",
     "group": "Kosovë",
     "country": "xk"
+  },
+  {
+    "id": "soon.mk.mrt-2",
+    "name": "MRT 2",
+    "group": "Maqedoni e Veriut",
+    "country": "mk"
+  },
+  {
+    "id": "soon.xk.rtv21-plus",
+    "name": "RTV 21 Plus",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv21-popullore",
+    "name": "RTV 21 Popullore",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv21-junior",
+    "name": "RTV 21 Junior",
+    "group": "Kosovë",
+    "country": "xk"
   }
 ]

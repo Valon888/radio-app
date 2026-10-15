@@ -1,13 +1,14 @@
 {
   "source": "https://tvmak.com/ (faqe publike)",
-  "imported": "2026-10-13",
+  "imported": "2026-10-15",
   "pages": 110,
-  "uniqueUrls": 81,
-  "live": 23,
+  "uniqueUrls": 80,
+  "live": 19,
   "rejected": {
     "pa videoSrc": 1,
-    "HTTP 404": 5,
-    "klip/VOD (ENDLIST), jo live": 52,
+    "HTTP 404": 4,
+    "playlist i ngrirë (Last-Modified > 24h)": 28,
+    "klip/VOD (ENDLIST), jo live": 28,
     "jo playlist HLS": 1
   }
 }
