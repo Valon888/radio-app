@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini IPTV Channel List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      color: #0078d7;
+      text-align: center;
+    }
+    .channel-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .channel {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .channel:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    .channel h3 {
+      margin-top: 0;
+      color: #333;
+    }
+    .channel-info {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #666;
+    }
+    .channel-logo {
+      max-width: 100px;
+      max-height: 60px;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .tv-channel {
+      border-left: 4px solid #0078d7;
+    }
+    .radio-channel {
+      border-left: 4px solid #2ecc71;
+    }
+    .search-bar {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    input[type="search"] {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .stats {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #666;
+    }
+    .visually-hidden {
+      position: absolute;
+      left: -9999px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mini IPTV Channel List</h1>
+  
+  <div class="stats" id="channelStats">
+    Loading channel statistics...
+  </div>
+  
+  <div class="search-bar">
+    <input type="search" id="searchInput" placeholder="Search channels...">
+    <select id="filterType" title="Filter by type">
+    <label for="filterGroup" class="visually-hidden">Filter by group</label>
+      <option value="tv">TV</option>
+      <option value="radio">Radio</option>
+    </select>
+    <label for="filterGroup" class="visually-hidden">Filter by group</label>
+    <select id="filterGroup" title="Filter by group">
+      <option value="">All Groups</option>
+    </select>
+  </div>
+  
+  <div class="channel-list" id="channelList">
+    <p>Loading channels...</p>
+  </div>
+
+  <script>
+    // Load all available channel data
+    const channels = [];
+    const groups = new Set();
+    let tvCount = 0;
+    let radioCount = 0;
+    
+    // Function to load and display channel data
+    function loadChannels() {
+      // Display a sample of channels directly
+      const sampleChannels = [
+        { name: "Top Channel", type: "tv", group: "Albania", logo: "https://i.imgur.com/rCTlEvC.png", url: "https://example.com/stream1" },
+        { name: "Radio Tirana", type: "radio", group: "Radio", logo: "https://i.imgur.com/radio.png", url: "https://example.com/radio1" }
+      ];
+      
+      // Add sample channels to our list
+      channels.push(...sampleChannels);
+      
+      // Try loading JS files directly
+      loadScript('turkish-channels.js')
+        .then(() => loadScript('german-channels.js'))
+        .then(() => loadScript('items.js'))
+        .then(() => {
+          if (window.albanianChannels) {
+            console.log('Loaded Albanian channels:', window.albanianChannels.length);
+            channels.push(...window.albanianChannels);
+          }
+          if (window.kosovoChannels) {
+            console.log('Loaded Kosovo channels:', window.kosovoChannels.length);
+            channels.push(...window.kosovoChannels);
+          }
+          if (window.turkishChannels) {
+            console.log('Loaded Turkish channels:', window.turkishChannels.length);
+            channels.push(...window.turkishChannels);
+          }
+          if (window.germanChannels) {
+            console.log('Loaded German channels:', window.germanChannels.length);
+            channels.push(...window.germanChannels);
+          }
+        })
+        .catch(err => console.error('Error loading channel files:', err));
+        
+      loadScript('imported-channels.js')
+        .then(() => {
+          if (window.importedChannels) {
+            console.log('Loaded imported channels:', window.importedChannels.length);
+            channels.push(...window.importedChannels);
+          }
+        })
+        .catch(err => console.error('Error loading imported-channels.js:', err));
+        
+      loadScript('radio-channels.js')
+        .then(() => {
+          if (window.radioChannels) {
+            console.log('Loaded radio channels:', window.radioChannels.length);
+            channels.push(...window.radioChannels);
+          }
+        })
+        .catch(err => console.error('Error loading radio-channels.js:', err))
+        .finally(() => {
+          // Render all channels after attempting to load from all sources
+          setTimeout(renderChannels, 500);
+        });
+    }
+    
+    // Helper function to load a script
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+    
+    // Function to render the channel list
+    function renderChannels() {
+      const channelListEl = document.getElementById('channelList');
+      const searchInput = document.getElementById('searchInput').value.toLowerCase();
+      const typeFilter = document.getElementById('filterType').value;
+      const groupFilter = document.getElementById('filterGroup').value;
+      
+      // Clear and update group filter options
+      updateGroupFilter();
+      
+      // Filter channels
+      const filteredChannels = channels.filter(channel => {
+        const matchesSearch = channel.name.toLowerCase().includes(searchInput) || 
+                            (channel.group && channel.group.toLowerCase().includes(searchInput));
+        const matchesType = !typeFilter || channel.type === typeFilter;
+        const matchesGroup = !groupFilter || channel.group === groupFilter;
+        
+        return matchesSearch && matchesType && matchesGroup;
+      });
+      
+      // Count TV and radio channels
+      tvCount = channels.filter(channel => channel.type === 'tv').length;
+      radioCount = channels.filter(channel => channel.type === 'radio').length;
+      
+      // Update stats
+      document.getElementById('channelStats').textContent = 
+        `Total: ${channels.length} channels (${tvCount} TV, ${radioCount} Radio)`;
+      
+      // Clear channel list
+      channelListEl.innerHTML = '';
+      
+      // Show results count if filtering
+      if (searchInput || typeFilter || groupFilter) {
+        const resultCount = document.createElement('div');
+        resultCount.className = 'stats';
+        resultCount.textContent = `Found ${filteredChannels.length} channels matching your filters`;
+        channelListEl.appendChild(resultCount);
+      }
+      
+      // Add each channel
+      if (filteredChannels.length === 0) {
+        channelListEl.innerHTML = '<p>No channels found matching your criteria</p>';
+      } else {
+        filteredChannels.forEach(channel => {
+          const channelEl = document.createElement('div');
+          channelEl.className = `channel ${channel.type === 'tv' ? 'tv-channel' : 'radio-channel'}`;
+          
+          let html = '';
+          
+          // Add logo if available
+          if (channel.logo) {
+            html += `<img src="${channel.logo}" alt="${channel.name} logo" class="channel-logo">`;
+          }
+          
+          // Add channel info
+          html += `<h3>${channel.name}</h3>`;
+          html += `<div class="channel-info">`;
+          html += `<div>Type: ${channel.type === 'tv' ? '📺 TV' : '📻 Radio'}</div>`;
+          if (channel.group) html += `<div>Group: ${channel.group}</div>`;
+          if (channel.quality) html += `<div>Quality: ${channel.quality}</div>`;
+          html += `</div>`;
+          
+          channelEl.innerHTML = html;
+          channelListEl.appendChild(channelEl);
+        });
+      }
+    }
+    
+    // Update group filter options
+    function updateGroupFilter() {
+      const groupSelect = document.getElementById('filterGroup');
+      const currentValue = groupSelect.value;
+      
+      // Clear existing options except the first one
+      while (groupSelect.options.length > 1) {
+        groupSelect.remove(1);
+      }
+      
+      // Add each group
+      channels.forEach(channel => {
+        if (channel.group && !groups.has(channel.group)) {
+          groups.add(channel.group);
+          const option = document.createElement('option');
+          option.value = channel.group;
+          option.textContent = channel.group;
+          groupSelect.appendChild(option);
+        }
+      });
+      
+      // Restore selected value if it exists in the new options
+      if (currentValue) {
+        for (let i = 0; i < groupSelect.options.length; i++) {
+          if (groupSelect.options[i].value === currentValue) {
+            groupSelect.selectedIndex = i;
+            break;
+          }
+        }
+      }
+    }
+    
+    // Set up event listeners
+    document.getElementById('searchInput').addEventListener('input', renderChannels);
+    document.getElementById('filterType').addEventListener('change', renderChannels);
+    document.getElementById('filterGroup').addEventListener('change', renderChannels);
+    
+    // Load channels when the page loads
+    window.addEventListener('DOMContentLoaded', loadChannels);
+  </script>
+</body>
+</html>

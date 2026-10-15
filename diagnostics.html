@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mini IPTV Diagnostics</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+  }
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  h1 {
+    color: #0078d7;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+  }
+  h2 {
+    color: #0078d7;
+    margin-top: 25px;
+  }
+  .status-box {
+    background: #f5f5f5;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  .status-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+    border-left: 5px solid #3c763d;
+  }
+  .status-warning {
+    background-color: #fcf8e3;
+    color: #8a6d3b;
+    border-left: 5px solid #8a6d3b;
+  }
+  .status-error {
+    background-color: #f2dede;
+    color: #a94442;
+    border-left: 5px solid #a94442;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #f5f5f5;
+  }
+  pre {
+    background: #f5f5f5;
+    padding: 10px;
+    overflow: auto;
+    border-radius: 3px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 7px;
+    border-radius: 3px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .badge-success {
+    background-color: #5cb85c;
+  }
+  .badge-warning {
+    background-color: #f0ad4e;
+  }
+  .badge-error {
+    background-color: #d9534f;
+  }
+  button {
+    background-color: #0078d7;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+  }
+  button:hover {
+    background-color: #005fa3;
+  }
+  .actions {
+    margin: 20px 0;
+  }
+  .progress-bar {
+    height: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .progress-bar-inner {
+    height: 100%;
+    background-color: #0078d7;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  #channel-count {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0078d7;
+  }
+  .channel-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  .channel-item {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+  }
+  .channel-item:last-child {
+    border-bottom: none;
+  }
+  .nav {
+    display: flex;
+    background-color: #f5f5f5;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+  .nav a {
+    padding: 8px 15px;
+    text-decoration: none;
+    color: #333;
+    margin-right: 5px;
+    border-radius: 3px;
+  }
+  .nav a:hover {
+    background-color: #ddd;
+  }
+  .nav a.active {
+    background-color: #0078d7;
+    color: white;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Mini IPTV Diagnostic Tool</h1>
+  
+  <div class="nav">
+    <a href="/" class="active">Home</a>
+    <a href="/kosovo-info">Kosovo Channels</a>
+    <a href="/turkish-info">Turkish Channels</a>
+    <a href="/fixed_index.html">Main App</a>
+  </div>
+
+  <div class="status-box" id="system-status">
+    <h2>System Status</h2>
+    <div id="loading">Checking system status...</div>
+  </div>
+
+  <div class="actions">
+    <button id="check-channels">Check All Channels</button>
+    <button id="check-xk-channels">Check Kosovo Channels</button>
+    <button id="clear-cache">Clear Cache</button>
+    <button id="restart-app">Restart Application</button>
+  </div>
+
+  <h2>Channel Statistics</h2>
+  <div class="status-box">
+    <p>Total Channels: <span id="channel-count">Loading...</span></p>
+    <div id="channel-groups"></div>
+  </div>
+
+  <div id="kosovo-section">
+    <h2>Kosovo Channels</h2>
+    <div class="status-box" id="kosovo-status">Loading Kosovo channel status...</div>
+    <div class="channel-list" id="kosovo-channels"></div>
+  </div>
+
+  <h2>File Access Test</h2>
+  <div class="status-box" id="file-test-status">
+    <p>Testing file access...</p>
+    <div id="file-test-results"></div>
+  </div>
+
+  <h2>Technical Information</h2>
+  <pre id="technical-info">Loading system information...</pre>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Set up initial system status check
+  checkSystemStatus();
+  
+  // Set up button event listeners
+  document.getElementById('check-channels').addEventListener('click', checkAllChannels);
+  document.getElementById('check-xk-channels').addEventListener('click', checkKosovoChannels);
+  document.getElementById('clear-cache').addEventListener('click', clearCache);
+  document.getElementById('restart-app').addEventListener('click', restartApp);
+  
+  // Run file access tests
+  testFileAccess();
+  
+  // Update technical info
+  updateTechnicalInfo();
+});
+
+function checkSystemStatus() {
+  const statusElement = document.getElementById('system-status');
+  statusElement.innerHTML = '<h2>System Status</h2>';
+  
+  // Check if we can load key files
+  const filesToCheck = [
+    { name: 'fixed_index.html', display: 'Main Application' },
+    { name: 'playlist-loader.js', display: 'Playlist Loader' },
+    { name: 'xk.m3u', display: 'Kosovo Channels' },
+    { name: '404.html', display: '404 Page' }
+  ];
+  
+  const statusList = document.createElement('ul');
+  
+  Promise.all(filesToCheck.map(file => 
+    fetch(file.name, { method: 'HEAD' })
+      .then(response => ({ 
+        file: file.display, 
+        status: response.status, 
+        ok: response.ok 
+      }))
+      .catch(error => ({ 
+        file: file.display, 
+        status: 0, 
+        ok: false, 
+        error: error.message 
+      }))
+  )).then(results => {
+    let allOk = true;
+    
+    results.forEach(result => {
+      const listItem = document.createElement('li');
+      
+      if (result.ok) {
+        listItem.innerHTML = `${result.file}: <span class="badge badge-success">OK</span>`;
+      } else {
+        allOk = false;
+        listItem.innerHTML = `${result.file}: <span class="badge badge-error">Error ${result.status}</span> ${result.error || ''}`;
+      }
+      
+      statusList.appendChild(listItem);
+    });
+    
+    statusElement.classList.add(allOk ? 'status-success' : 'status-error');
+    statusElement.appendChild(statusList);
+    
+    // Add overall status
+    const overallStatus = document.createElement('p');
+    overallStatus.style.fontWeight = 'bold';
+    overallStatus.textContent = allOk ? 
+      '✅ All systems operational!' : 
+      '❌ System issues detected. Check the details above.';
+    statusElement.appendChild(overallStatus);
+  });
+  
+  // Also check for channel counts
+  fetchChannelStats();
+}
+
+function fetchChannelStats() {
+  const channelCountEl = document.getElementById('channel-count');
+  const channelGroupsEl = document.getElementById('channel-groups');
+  
+  // Try to fetch the main page and extract channel info from JS variables
+  fetch('/fixed_index.html')
+    .then(response => response.text())
+    .then(html => {
+      // For now just show placeholder data
+      channelCountEl.textContent = 'Unable to determine (requires running app)';
+      
+      // Create Kosovo channels section
+      checkKosovoChannels();
+    })
+    .catch(error => {
+      channelCountEl.textContent = `Error: ${error.message}`;
+    });
+}
+
+function checkKosovoChannels() {
+  const kosovoStatusEl = document.getElementById('kosovo-status');
+  const kosovoChannelsEl = document.getElementById('kosovo-channels');
+  
+  kosovoStatusEl.innerHTML = 'Loading Kosovo channels...';
+  
+  // First check the regular m3u file
+  fetch('/xk.m3u')
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+      return response.text();
+    })
+    .then(content => {
+      // Parse the M3U file to count channels
+      const lines = content.split('\n');
+      const channels = [];
+      let currentChannel = null;
+      
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        
+        if (line.startsWith('#EXTINF')) {
+          // Parse channel info
+          const nameMatch = line.match(/,(.+)$/);
+          const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+          const groupMatch = line.match(/group-title="([^"]+)"/);
+          
+          currentChannel = {
+            name: nameMatch ? nameMatch[1] : 'Unknown Channel',
+            logo: logoMatch ? logoMatch[1] : '',
+            group: groupMatch ? groupMatch[1] : 'Undefined'
+          };
+        } else if (line && !line.startsWith('#') && currentChannel) {
+          // This is a URL line
+          currentChannel.url = line;
+          channels.push(currentChannel);
+          currentChannel = null;
+        }
+      }
+      
+      // Now check the kosovo-info endpoint to compare
+      fetch('/kosovo-info')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Kosovo info endpoint error: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          const apiChannels = data.channels || [];
+          const matchingChannels = apiChannels.filter(channel => 
+            channels.some(ch => ch.name === channel.name)
+          );
+          
+          // Update status
+          kosovoStatusEl.className = 'status-box status-success';
+          kosovoStatusEl.innerHTML = `
+            <p>✅ Kosovo channels file loaded successfully!</p>
+            <p>Found <strong>${channels.length}</strong> channels in the Kosovo M3U file.</p>
+            <p>API endpoint returned <strong>${apiChannels.length}</strong> channels.</p>
+            <p>Matching channels: <strong>${matchingChannels.length}</strong></p>
+            <p>Server status: <strong>${data.status || 'Unknown'}</strong></p>
+          `;
+          
+          // Display channels
+          if (channels.length > 0) {
+            kosovoChannelsEl.innerHTML = '';
+            
+            channels.forEach(channel => {
+              const channelEl = document.createElement('div');
+              channelEl.className = 'channel-item';
+              
+              const apiMatch = apiChannels.find(ch => ch.name === channel.name);
+              const matchStatus = apiMatch ? 
+                '<span class="badge badge-success">✓ API Match</span>' : 
+                '<span class="badge badge-warning">✗ No API Match</span>';
+              
+              let logoHtml = '';
+              if (channel.logo) {
+                logoHtml = `<img src="${channel.logo}" alt="Logo" style="width: 24px; height: 24px; margin-right: 8px; vertical-align: middle;">`;
+              }
+              
+              channelEl.innerHTML = `
+                ${logoHtml}
+                <strong>${channel.name}</strong> 
+                <span class="badge" style="background-color: #777;">${channel.group}</span>
+                ${matchStatus}
+              `;
+              
+              kosovoChannelsEl.appendChild(channelEl);
+            });
+          } else {
+            kosovoChannelsEl.innerHTML = '<p>No channels found in the Kosovo M3U file.</p>';
+          }
+        })
+        .catch(error => {
+          // Still show file-based channels but with API error
+          kosovoStatusEl.className = 'status-box status-warning';
+          kosovoStatusEl.innerHTML = `
+            <p>⚠️ Kosovo channels file loaded but API check failed: ${error.message}</p>
+            <p>Found <strong>${channels.length}</strong> channels in the Kosovo M3U file.</p>
+            <p>API endpoint error: ${error.message}</p>
+            <p>This may indicate a server-side issue with the /kosovo-info endpoint.</p>
+            <div class="actions">
+              <button onclick="testKosovoEndpoint()">Test Kosovo API Endpoint</button>
+            </div>
+          `;
+          
+          // Display channels from the file anyway
+          if (channels.length > 0) {
+            kosovoChannelsEl.innerHTML = '';
+            
+            channels.forEach(channel => {
+              const channelEl = document.createElement('div');
+              channelEl.className = 'channel-item';
+              
+              let logoHtml = '';
+              if (channel.logo) {
+                logoHtml = `<img src="${channel.logo}" alt="Logo" style="width: 24px; height: 24px; margin-right: 8px; vertical-align: middle;">`;
+              }
+              
+              channelEl.innerHTML = `
+                ${logoHtml}
+                <strong>${channel.name}</strong> 
+                <span class="badge" style="background-color: #777;">${channel.group}</span>
+                <span class="badge badge-warning">API status unknown</span>
+              `;
+              
+              kosovoChannelsEl.appendChild(channelEl);
+            });
+          }
+        });
+    })
+    .catch(error => {
+      kosovoStatusEl.className = 'status-box status-error';
+      kosovoStatusEl.innerHTML = `
+        <p>❌ Error loading Kosovo channels: ${error.message}</p>
+        <p>Please check if the xk.m3u file exists and is accessible.</p>
+        <div class="actions">
+          <button onclick="testKosovoFiles()">Test Kosovo File Access</button>
+        </div>
+      `;
+      kosovoChannelsEl.innerHTML = '';
+    });
+}
+
+function checkAllChannels() {
+  alert('This function will check all channels. Not implemented in this demo.');
+}
+
+function clearCache() {
+  if (confirm('Are you sure you want to clear the channel cache? This will reload all channels from source files.')) {
+    alert('Cache cleared! (Note: In production, this would actually clear the cache)');
+    checkSystemStatus();
+  }
+}
+
+function restartApp() {
+  if (confirm('Are you sure you want to restart the application? This will refresh the page.')) {
+    window.location.reload();
+  }
+}
+
+function testFileAccess() {
+  const statusElement = document.getElementById('file-test-status');
+  const resultsElement = document.getElementById('file-test-results');
+  
+  const filesToTest = ['xk.m3u', 'playlist-loader.js', 'fixed_index.html', 'non-existent-file.xyz'];
+  
+  const table = document.createElement('table');
+  const thead = document.createElement('thead');
+  const tbody = document.createElement('tbody');
+  
+  thead.innerHTML = `
+    <tr>
+      <th>File</th>
+      <th>Status</th>
+      <th>Response Type</th>
+      <th>Time</th>
+    </tr>
+  `;
+  table.appendChild(thead);
+  table.appendChild(tbody);
+  
+  let testsCompleted = 0;
+  
+  filesToTest.forEach(file => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${file}</td>
+      <td colspan="3">Testing...</td>
+    `;
+    tbody.appendChild(row);
+    
+    const startTime = performance.now();
+    
+    fetch(file)
+      .then(response => {
+        const endTime = performance.now();
+        const duration = Math.round(endTime - startTime);
+        
+        let statusCell, typeCell, timeCell;
+        
+        if (response.ok) {
+          row.innerHTML = `
+            <td>${file}</td>
+            <td><span class="badge badge-success">OK (${response.status})</span></td>
+            <td>${response.headers.get('content-type') || 'Unknown'}</td>
+            <td>${duration}ms</td>
+          `;
+        } else {
+          row.innerHTML = `
+            <td>${file}</td>
+            <td><span class="badge badge-error">Error (${response.status})</span></td>
+            <td>${response.headers.get('content-type') || 'Unknown'}</td>
+            <td>${duration}ms</td>
+          `;
+        }
+      })
+      .catch(error => {
+        const endTime = performance.now();
+        const duration = Math.round(endTime - startTime);
+        
+        row.innerHTML = `
+          <td>${file}</td>
+          <td><span class="badge badge-error">Failed</span></td>
+          <td colspan="1">${error.message}</td>
+          <td>${duration}ms</td>
+        `;
+      })
+      .finally(() => {
+        testsCompleted++;
+        if (testsCompleted === filesToTest.length) {
+          statusElement.innerHTML = '<p>File access tests completed.</p>';
+          statusElement.appendChild(table);
+        }
+      });
+  });
+}
+
+function updateTechnicalInfo() {
+  const infoElement = document.getElementById('technical-info');
+  
+  const info = {
+    browser: navigator.userAgent,
+    url: window.location.href,
+    timestamp: new Date().toISOString(),
+    protocol: window.location.protocol,
+    host: window.location.host
+  };
+  
+  infoElement.textContent = JSON.stringify(info, null, 2);
+}
+
+function testKosovoEndpoint() {
+  const kosovoStatusEl = document.getElementById('kosovo-status');
+  
+  kosovoStatusEl.innerHTML = '<p>Testing Kosovo API endpoint...</p>';
+  kosovoStatusEl.className = 'status-box';
+  
+  fetch('/kosovo-info')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      kosovoStatusEl.className = 'status-box status-success';
+      kosovoStatusEl.innerHTML = `
+        <h3>Kosovo API Endpoint Test</h3>
+        <p>✅ API endpoint is working correctly!</p>
+        <p>Status: ${data.status || 'Unknown'}</p>
+        <p>Channels found: ${(data.channels || []).length}</p>
+        <pre>${JSON.stringify(data, null, 2).substring(0, 500)}${data && JSON.stringify(data).length > 500 ? '...' : ''}</pre>
+      `;
+      
+      // After confirming API works, re-run the full check
+      setTimeout(() => {
+        checkKosovoChannels();
+      }, 2000);
+    })
+    .catch(error => {
+      kosovoStatusEl.className = 'status-box status-error';
+      kosovoStatusEl.innerHTML = `
+        <h3>Kosovo API Endpoint Test</h3>
+        <p>❌ API endpoint test failed: ${error.message}</p>
+        <p>Please check server logs for more details.</p>
+        <div class="actions">
+          <button onclick="testKosovoFiles()">Test Kosovo File Access Instead</button>
+        </div>
+      `;
+    });
+}
+
+function testKosovoFiles() {
+  const kosovoStatusEl = document.getElementById('kosovo-status');
+  
+  kosovoStatusEl.innerHTML = '<p>Testing Kosovo file access...</p>';
+  kosovoStatusEl.className = 'status-box';
+  
+  // Try different possible paths and encodings for the xk.m3u file
+  const possiblePaths = [
+    '/xk.m3u',
+    '/xk%2Em3u',
+    '/XK.M3U',
+    '/xk.M3U',
+    '/Kosovo.m3u',
+  ];
+  
+  const results = document.createElement('div');
+  results.innerHTML = '<h3>Kosovo File Access Tests</h3><table><tr><th>Path</th><th>Status</th><th>Size</th></tr>';
+  
+  let successCount = 0;
+  let testsCompleted = 0;
+  
+  possiblePaths.forEach(path => {
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${path}</td><td colspan="2">Testing...</td>`;
+    results.querySelector('table').appendChild(row);
+    
+    fetch(path)
+      .then(response => {
+        if (!response.ok) {
+          row.innerHTML = `<td>${path}</td><td>❌ Error ${response.status}</td><td>N/A</td>`;
+          return;
+        }
+        
+        return response.text().then(content => {
+          const size = content.length;
+          const channelCount = (content.match(/#EXTINF/g) || []).length;
+          row.innerHTML = `
+            <td>${path}</td>
+            <td>✅ OK</td>
+            <td>${size} bytes (${channelCount} channels)</td>
+          `;
+          successCount++;
+        });
+      })
+      .catch(error => {
+        row.innerHTML = `<td>${path}</td><td>❌ Failed</td><td>${error.message}</td>`;
+      })
+      .finally(() => {
+        testsCompleted++;
+        
+        if (testsCompleted === possiblePaths.length) {
+          // Add summary
+          const summary = document.createElement('p');
+          
+          if (successCount > 0) {
+            summary.innerHTML = `✅ Successfully accessed Kosovo file through ${successCount} of ${possiblePaths.length} paths.`;
+            kosovoStatusEl.className = 'status-box status-success';
+          } else {
+            summary.innerHTML = '❌ Could not access Kosovo file through any tested paths.';
+            kosovoStatusEl.className = 'status-box status-error';
+          }
+          
+          results.prepend(summary);
+          kosovoStatusEl.innerHTML = '';
+          kosovoStatusEl.appendChild(results);
+          
+          // Add retry button
+          const actions = document.createElement('div');
+          actions.className = 'actions';
+          actions.innerHTML = `
+            <button onclick="checkKosovoChannels()">Retry Full Kosovo Check</button>
+          `;
+          kosovoStatusEl.appendChild(actions);
+        }
+      });
+  });
+}
+</script>
+</body>
+</html>

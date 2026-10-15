@@ -248,3 +248,72 @@ button, select, input { font: inherit; color: inherit; }
 }
 .logo-mask img { height: 70%; width: auto; }
 .logo-mask[hidden] { display: none; }
+
+/* ---------- Filtrat: desktop (të pandryshuar) ---------- */
+.filters { display: contents; }
+.filters-btn { display: none; }
+
+/* ---------- Shirit gabimi ---------- */
+#errorBar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 200;
+  display: flex; gap: 10px; align-items: center; justify-content: space-between;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  background: #5a1020; color: #fff; font-size: 14px;
+}
+#errorBar button { background: #fff; color: #5a1020; border: 0; border-radius: 8px; padding: 8px 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+
+/* ---------- Telefon/tablet: "app shell" (lista ka scroll-in e vet) ---------- */
+@media (max-width: 1000px) {
+  body { height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; }
+  .topbar {
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px;
+    padding: calc(6px + env(safe-area-inset-top)) 10px 6px; position: relative; flex: none;
+  }
+  .brand span { display: none; }
+  .search-wrap { min-width: 0; flex: none; }
+  #search { font-size: 16px; min-height: 44px; }
+  .filters-btn { display: inline-flex; align-items: center; min-height: 44px; }
+  .tabs { grid-column: 1 / -1; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex: none; white-space: nowrap; min-height: 40px; }
+  .filters {
+    display: none; position: absolute; left: 8px; right: 8px; top: 100%; z-index: 40;
+    flex-direction: column; align-items: stretch; gap: 10px; padding: 12px;
+    background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: 0 12px 30px rgba(0,0,0,.5);
+  }
+  .filters.open { display: flex; }
+  .filters select, .filters .btn { font-size: 16px; min-height: 44px; width: 100%; max-width: none; }
+  .filters .toggle { font-size: 15px; min-height: 40px; }
+
+  .layout {
+    flex: 1 1 0; min-height: 0; overflow: hidden; padding: 8px; gap: 8px;
+    grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr);
+  }
+  .stage { gap: 6px; }
+  .screen { width: min(100%, calc(40dvh * 16 / 9)); max-height: 40dvh; margin-inline: auto; }
+  .controls { flex-wrap: nowrap; gap: 2px; padding: 4px; }
+  .icon-btn { width: 38px; height: 38px; font-size: 17px; flex: none; }
+  .select-label { font-size: 0; gap: 0; }
+  #qualitySelect { font-size: 13px; max-width: 84px; }
+  #volume { display: none; }
+  .now { padding: 6px 10px; gap: 4px; }
+  .now-title img { width: 32px; height: 32px; }
+  .now h1 { font-size: 16px; }
+  .now-sub { font-size: 12px; }
+  .now-stats { font-size: 12px; gap: 8px; }
+  .help { display: none; }
+
+  .channels { height: auto; min-height: 0; max-height: none; position: static; }
+  .channel-list { overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; min-height: 0; }
+  .channel-list li { min-height: 52px; padding: 6px 8px; }
+  .channel-list .star { font-size: 20px; padding: 8px; }
+}
+
+/* Telefon horizontal: skena majtas, lista djathtas */
+@media (max-width: 1000px) and (orientation: landscape) and (max-height: 520px) {
+  .layout { grid-template-columns: minmax(0, 1fr) minmax(220px, 40%); grid-template-rows: minmax(0, 1fr); }
+  .stage { overflow-y: auto; min-height: 0; }
+  .screen { width: min(100%, calc(55dvh * 16 / 9)); max-height: 55dvh; }
+  .topbar { padding-block: 4px; }
+}

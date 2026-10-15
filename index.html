@@ -10,6 +10,7 @@
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/icon.svg">
 <link rel="stylesheet" href="css/app.css">
+<script src="js/diagnostics.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#channelList">Kalo te lista e kanaleve</a>
@@ -24,6 +25,8 @@
     <input id="search" type="search" placeholder="Kërko kanal…  ( / )" aria-label="Kërko kanal" autocomplete="off">
   </div>
 
+  <button id="filtersBtn" class="btn filters-btn" type="button" aria-expanded="false" aria-controls="filters">Filtra</button>
+
   <nav class="tabs" id="tabs" aria-label="Kategoritë">
     <button class="tab active" data-tab="all">Të gjitha</button>
     <button class="tab" data-tab="tv">TV</button>
@@ -32,16 +35,18 @@
     <button class="tab" data-tab="history">Historiku</button>
   </nav>
 
-  <select id="countrySelect" aria-label="Shteti"></select>
-  <select id="groupSelect" aria-label="Grupi"></select>
+  <div class="filters" id="filters">
+    <select id="countrySelect" aria-label="Shteti"></select>
+    <select id="groupSelect" aria-label="Grupi"></select>
 
-  <label class="toggle" title="Fshih kanalet që dështuan në test">
-    <input type="checkbox" id="hideOffline">
-    <span>Fshih offline</span>
-  </label>
+    <label class="toggle" title="Fshih kanalet që dështuan në test">
+      <input type="checkbox" id="hideOffline">
+      <span>Fshih offline</span>
+    </label>
 
-  <button id="testBtn" class="btn" title="Testo kanalet e listës aktuale">Testo kanalet</button>
-  <button id="installBtn" class="btn" hidden>Instalo</button>
+    <button id="testBtn" class="btn" title="Testo kanalet e listës aktuale">Testo kanalet</button>
+    <button id="installBtn" class="btn" hidden>Instalo</button>
+  </div>
 </header>
 
 <div class="layout">
@@ -133,6 +138,7 @@
 
 <noscript>Ky aplikacion kërkon JavaScript.</noscript>
 <script>window.MINI_IPTV_CONFIG = { PROXY_URL: 'https://mini-iptv-proxy.valonsadiku2024.workers.dev' };</script>
+<script type="module" src="js/mobile.js"></script>
 <script type="module" src="js/main.js"></script>
 </body>
 </html>
