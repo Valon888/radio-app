@@ -239,5 +239,23 @@
     "name": "SPIN TV",
     "group": "Kosovë",
     "country": "xk"
+  },
+  {
+    "id": "soon.xk.alb-swiss",
+    "name": "Alb Swiss",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.al.alb-film-tv-2",
+    "name": "Alb Film TV 2",
+    "group": "Shqipëri",
+    "country": "al"
+  },
+  {
+    "id": "soon.xk.rtv-ilirida-humor",
+    "name": "RTV Ilirida Humor",
+    "group": "Kosovë",
+    "country": "xk"
   }
 ]

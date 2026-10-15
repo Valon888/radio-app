@@ -46,13 +46,17 @@ async function probeLive(url, referer) {
     const lines = body.split(/\r?\n/);
     let list = body;
     let base = res.url || url;
+    let lastMod = res.headers.get('last-modified');
     const variant = lines.find((l) => l && !l.startsWith('#') && /\.m3u8/i.test(l));
     if (/#EXT-X-STREAM-INF/.test(body) && variant) {
       base = new URL(variant, base).toString();
       const v = await get(base, { referer });
       if (v.res.status !== 200) return { ok: false, why: `variant HTTP ${v.res.status}` };
       list = v.body;
+      lastMod = v.res.headers.get('last-modified');
     }
+    // playlist i ngrirë (pa ENDLIST por i pandryshuar prej muajsh) = klip statik, jo live
+    if (lastMod && Date.now() - Date.parse(lastMod) > 24 * 3600e3) return { ok: false, why: 'playlist i ngrirë (Last-Modified > 24h)' };
     if (/#EXT-X-ENDLIST/.test(list)) return { ok: false, why: 'klip/VOD (ENDLIST), jo live' };
     const seg = list.split(/\r?\n/).find((l) => l && !l.startsWith('#'));
     if (!seg) return { ok: false, why: 'pa segmente' };
