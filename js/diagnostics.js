@@ -37,6 +37,8 @@
       show('nuk u ngarkua ' + (t.src || t.href));
       return;
     }
+    // gabim ngarkimi i <img>/<video>/<audio> (logo, stream offline) është normal; nuk është gabim i aplikacionit
+    if (t && t !== window && t.nodeType === 1) return;
     if (e.message && /ResizeObserver/.test(e.message)) return;
     show(e.message || 'gabim i panjohur');
   }, true);
