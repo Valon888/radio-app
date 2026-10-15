@@ -311,5 +311,11 @@
     "name": "TopEstrada TV",
     "group": "Maqedoni e Veriut",
     "country": "mk"
+  },
+  {
+    "id": "soon.xk.tv-era",
+    "name": "TV Era",
+    "group": "Kosovë",
+    "country": "xk"
   }
 ]
