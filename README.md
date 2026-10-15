@@ -276,6 +276,7 @@ Aplikacioni përdor Media Session (kontrolle në ekranin e kyçur dhe tastet e k
 
 ## Kanale nga tvmak.com
 
-`node tools/import-tvmak.js` lexon faqet publike të kanaleve te [tvmak.com](https://tvmak.com), heq query-n
+`node tools/import-tvmak.js` lexon faqen kryesore dhe listën zyrtare të embed-eve te [tvmak.com/web.aspx](https://tvmak.com/web.aspx)
+(faqe kanali + `embed.aspx?id=…`, që shpesh përdor host tjetër), heq query-n
 (cache-buster), testo me lidhje të vërtetë dhe pranon vetëm transmetime **live** (playlist pa `#EXT-X-ENDLIST`).
 Rezultati ruhet te `data/sources/tvmak/`; shteti caktohet te `data/country-overrides.json`.

@@ -46,14 +46,34 @@ async function probeLive(url, referer) {
     const lines = body.split(/\r?\n/);
     let list = body;
     let base = res.url || url;
+    let lastMod = res.headers.get('last-modified');
     const variant = lines.find((l) => l && !l.startsWith('#') && /\.m3u8/i.test(l));
     if (/#EXT-X-STREAM-INF/.test(body) && variant) {
       base = new URL(variant, base).toString();
       const v = await get(base, { referer });
       if (v.res.status !== 200) return { ok: false, why: `variant HTTP ${v.res.status}` };
       list = v.body;
+      lastMod = v.res.headers.get('last-modified');
     }
+    // playlist i ngrirë (pa ENDLIST por i pandryshuar prej muajsh) = klip statik, jo live
+    if (lastMod && Date.now() - Date.parse(lastMod) > 24 * 3600e3) return { ok: false, why: 'playlist i ngrirë (Last-Modified > 24h)' };
     if (/#EXT-X-ENDLIST/.test(list)) return { ok: false, why: 'klip/VOD (ENDLIST), jo live' };
+    // encoder-at e tvmak nisin sipas kërkesës: playlist-i fillon nga sekuenca 0 dhe rritet. Një pamje e vetme mund
+    // të jetë klip që do mbyllet me ENDLIST, ndaj te fillimi rilexohet pas pak: duhet të rritet dhe të mos mbyllet.
+    const seqOf = (t) => Number((/#EXT-X-MEDIA-SEQUENCE:(\d+)/.exec(t) || [])[1] || 0);
+    const segCount = (t) => t.split(/\r?\n/).filter((l) => l && !l.startsWith('#')).length;
+    // klipet e tvmak rriten deri në ~5 segmente e mbyllen me ENDLIST; live i vërtetë e lëviz dritaren (sekuenca rritet)
+    if (seqOf(list) < 30) {
+      let verdict = null;
+      for (let i = 0; i < 8 && !verdict; i++) {
+        await new Promise((r) => setTimeout(r, 10000));
+        const again = (await get(base, { referer })).body;
+        if (/#EXT-X-ENDLIST/.test(again)) verdict = { ok: false, why: 'klip/VOD (ENDLIST pas pak), jo live' };
+        else if (seqOf(again) > 0 && seqOf(again) !== seqOf(list)) { list = again; verdict = { ok: true }; }
+      }
+      if (!verdict) return { ok: false, why: 'playlist pa ecuri (dritarja nuk lëviz)' };
+      if (!verdict.ok) return verdict;
+    }
     const seg = list.split(/\r?\n/).find((l) => l && !l.startsWith('#'));
     if (!seg) return { ok: false, why: 'pa segmente' };
     const s = await get(new URL(seg, base).toString(), { text: false, range: true, referer });
@@ -74,42 +94,80 @@ async function pool(items, n, fn) {
 (async () => {
   const home = (await get(BASE + '/')).body;
   const slugs = new Map(); // lowercase -> slug i parë
+  const optNames = new Map(); // lowercase slug -> emri nga lista zyrtare
   for (const m of home.matchAll(/href="https?:\/\/(?:www\.)?tvmak\.com\/([A-Za-z0-9_-]+)"/g)) {
     const s = m[1];
     if (/^(img|kontakt|web|assets|index)$/i.test(s)) continue;
     if (!slugs.has(s.toLowerCase())) slugs.set(s.toLowerCase(), s);
   }
+  // web.aspx ("Për web programuesit") liston ID-të zyrtare të embed-it; disa s'janë te faqja kryesore
+  try {
+    const web = (await get(BASE + '/web.aspx')).body;
+    for (const m of web.matchAll(/<option value='([A-Za-z0-9_-]+)'>([^<]*)<\/option>/g)) {
+      if (!slugs.has(m[1].toLowerCase())) slugs.set(m[1].toLowerCase(), m[1]);
+      optNames.set(m[1].toLowerCase(), decode(m[2]));
+    }
+  } catch (e) { console.warn('web.aspx nuk u lexua:', e.message); }
   console.log(`Faqe kanalesh: ${slugs.size}`);
 
-  const found = [];
+  const cleanUrl = (src) => { const u = new URL(src, BASE); u.search = ''; return u.toString(); };
+  const videoSrcOf = (body) => (/var videoSrc = '([^']+)'/.exec(body) || [])[1];
+  const found = []; // një rresht për kandidat (slug mund të ketë faqe + embed)
   const rejected = {};
   await pool([...slugs.values()], CONCURRENCY, async (slug) => {
+    const cands = [];
+    let title = optNames.get(slug.toLowerCase()) || slug;
     try {
       const { res, body } = await get(`${BASE}/${slug}`);
-      if (res.status !== 200) { rejected[slug] = `faqe HTTP ${res.status}`; return; }
-      const src = (/var videoSrc = '([^']+)'/.exec(body) || [])[1];
-      const title = decode(((/<b>([^<]+)<\/b>\s*<\/div>/.exec(body) || [])[1]) || ((/<title>([^<]*?)\s*-\s*TvMAK/i.exec(body) || [])[1]) || slug);
-      if (!src) { rejected[slug] = 'pa videoSrc'; return; }
+      if (res.status === 200) {
+        const src = videoSrcOf(body);
+        const t = (/<b>([^<]+)<\/b>\s*<\/div>/.exec(body) || [])[1] || (/<title>([^<]*?)\s*-\s*TvMAK/i.exec(body) || [])[1];
+        if (t) title = decode(t);
+        if (src) cands.push(src);
+      }
+    } catch { /* provo embed */ }
+    try {
+      // embed-i kërkon Referer (ndryshe: "Nuk mund ta hapni linkun direkt") dhe shpesh përdor host tjetër (t2/t3)
+      const { res, body } = await get(`${BASE}/embed.aspx?id=${encodeURIComponent(slug)}`, { referer: BASE + '/web.aspx' });
+      if (res.status === 200) {
+        const src = videoSrcOf(body);
+        if (src) cands.push(src);
+      }
+    } catch { /* ignore */ }
+    if (!cands.length) { rejected[slug] = 'pa videoSrc'; return; }
+    if (isAdult({ name: title })) { rejected[slug] = 'adult'; return; }
+    const seen = new Set();
+    for (const src of cands) {
       let url;
-      try { const u = new URL(src, BASE); u.search = ''; url = u.toString(); } catch { rejected[slug] = 'URL e pavlefshme'; return; }
+      try { url = cleanUrl(src); } catch { continue; }
+      if (seen.has(url)) continue;
+      seen.add(url);
       const chk = inspectUrl(url);
-      if (chk.error) { rejected[slug] = chk.error; return; }
-      if (isAdult({ name: title })) { rejected[slug] = 'adult'; return; }
+      if (chk.error) { rejected[slug] = chk.error; continue; }
       found.push({ slug, name: title, url: chk.url });
-    } catch (e) { rejected[slug] = e.name === 'AbortError' ? 'timeout faqe' : String(e.message).slice(0, 40); }
+    }
   });
 
-  // dedupe sipas URL (disa slug-e e kanë të njëjtin stream)
-  const byUrl = new Map();
-  for (const f of found) if (!byUrl.has(f.url)) byUrl.set(f.url, f);
-  const uniq = [...byUrl.values()];
+  // testo çdo URL një herë; një slug pranohet me kandidatin e parë live, pa dublikuar stream-e (alias)
+  const uniq = [...new Map(found.map((f) => [f.url, f])).values()];
   console.log(`URL unike: ${uniq.length}; po testoj...`);
-
+  const probed = new Map();
+  await pool(uniq, CONCURRENCY * 2, async (f) => { probed.set(f.url, await probeLive(f.url)); });
   const good = [];
-  await pool(uniq, CONCURRENCY * 2, async (f) => {
-    const r = await probeLive(f.url);
-    if (r.ok) good.push(f); else rejected[f.slug] = r.why;
-  });
+  const usedUrls = new Set();
+  const slugsDone = new Set();
+  // rezultat i qëndrueshëm; kur dy slug-e japin të njëjtin stream, fiton ai që përputhet me emrin e skedarit
+  const own = (f) => (new URL(f.url).pathname.split('/').pop().replace(/.m3u8$/i, '').toLowerCase() === f.slug.toLowerCase() ? 0 : 1);
+  found.sort((x, y) => own(x) - own(y) || x.slug.toLowerCase().localeCompare(y.slug.toLowerCase()));
+  for (const f of found) {
+    const r = probed.get(f.url);
+    if (r && r.ok) {
+      const key = new URL(f.url).pathname.toLowerCase(); // i njëjti kanal në host-e të ndryshme (t1/t2/t3)
+      if (slugsDone.has(f.slug) || usedUrls.has(key)) continue;
+      slugsDone.add(f.slug); usedUrls.add(key); good.push(f);
+    } else if (!slugsDone.has(f.slug)) rejected[f.slug] = (r && r.why) || 'dështoi';
+  }
+  for (const g of good) delete rejected[g.slug];
   good.sort((a, b) => a.name.localeCompare(b.name));
 
   fs.mkdirSync(OUT_DIR, { recursive: true });

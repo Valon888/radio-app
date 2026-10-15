@@ -71,3 +71,9 @@ https://gjirafa-video-live.gjirafa.net/gjvideo-live/mps-vgx-u9p-qv1/index.m3u8
 # T7 (Kosovë): faqja e Gjirafa Video e liston stream-in por është pa transmetim (404); shënuar "së shpejti" te data/coming-soon.json
 #EXTINF:-1 tvg-id="T7.xk@SD" tvg-logo="https://g0eylj1rzj.gjirafa.net/storage/images/channel/desktop/t7.jpg" group-title="Kosovë",T7
 https://gjirafa-video-live.gjirafa.net/gjvideo-livestream-specific/1z8-byc-4ee-lc9/index.m3u8
+#EXTINF:-1 tvg-id="RTK1.xk@SD" group-title="Kosovë",RTK 1
+https://gjvideo-live-xk.gjirafa.net/gjvideo-livestream/98r-d35-487-v6m/index.m3u8
+#EXTINF:-1 tvg-id="RTK4.xk@SD" group-title="Kosovë",RTK 4
+https://gjvideo-live-xk.gjirafa.net/gjvideo-livestream/rtk4/index.m3u8
+#EXTINF:-1 tvg-id="ATV.xk" group-title="Kosovë",ATV
+https://gjvideo-live-xk.gjirafa.net/gjvideo-live/0nj-g63-92x-few/index.m3u8

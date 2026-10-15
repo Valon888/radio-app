@@ -2,7 +2,7 @@
  * Service worker: cache VETËM për asset-et statike të aplikacionit.
  * Streamet (m3u8/ts/mp3/...), /proxy dhe çdo kërkesë cross-origin NUK preken kurrë.
  */
-const VERSION = 'miniiptv-v13';
+const VERSION = 'miniiptv-v14';
 const SHELL = [
   './',
   'index.html',

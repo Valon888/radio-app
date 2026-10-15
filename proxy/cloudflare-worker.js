@@ -61,6 +61,11 @@ export default {
       return new Response('Target not allowed', { status: 400, headers: cors });
     }
 
+    // Workers refuzojnë IP të zhveshura (error 1003); sslip.io zgjidhet te e njëjta IP
+    if (t.protocol === 'http:' && /^\d{1,3}(\.\d{1,3}){3}$/.test(t.hostname)) {
+      t.hostname = `${t.hostname.replace(/\./g, '-')}.sslip.io`;
+    }
+
     // Referer opsional (nga #EXTVLCOPT:http-referrer), vetëm http(s)
     const refRaw = reqUrl.searchParams.get('ref') || '';
     const ref = /^https?:\/\//i.test(refRaw) ? refRaw : '';

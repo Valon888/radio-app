@@ -1,14 +1,10 @@
 #EXTM3U
-#EXTINF:-1 tvg-id="tvmak.albswiss",Alb Swiss
-https://t1.tvmak.com/tv/ALBSWISS.m3u8
+#EXTINF:-1 tvg-id="tvmak.aanewyork",AA NEWYORK TV
+https://t1.tvmak.com/tv/AANEWYORK.m3u8
 #EXTINF:-1 tvg-id="tvmak.albuk1",Alb UK
 https://t1.tvmak.com/tv/ALBUK1.m3u8
-#EXTINF:-1 tvg-id="tvmak.albtvchicago",Albania tv chicago
-https://t1.tvmak.com/tv/ALBTVCHICAGO.m3u8
 #EXTINF:-1 tvg-id="tvmak.albfilmtv1",AlbFilm 1
 https://t1.tvmak.com/tv/ALBFILMTV1.m3u8
-#EXTINF:-1 tvg-id="tvmak.albfilmtv2",AlbFilm 2
-https://t1.tvmak.com/tv/ALBFILMTV2.m3u8
 #EXTINF:-1 tvg-id="tvmak.albkanalmusictv",Albkanal Music TV
 https://t1.tvmak.com/tv/albkanalMusicTV.m3u8
 #EXTINF:-1 tvg-id="tvmak.dasmatv",DTV Kosove
@@ -21,12 +17,8 @@ https://t1.tvmak.com/tv/ntvdurres.m3u8
 https://t1.tvmak.com/tv/elkalem.m3u8
 #EXTINF:-1 tvg-id="tvmak.rtviliria",RTV ILIRIA
 https://t1.tvmak.com/tv/rtviliria.m3u8
-#EXTINF:-1 tvg-id="tvmak.rtviliridahumor",rtv Ilirida Humor
-https://t1.tvmak.com/tv/rtviliridaHumor.m3u8
 #EXTINF:-1 tvg-id="tvmak.rtvpendimi",RTV PENDIMI
 https://t1.tvmak.com/tv/RTVPENDIMI.m3u8
-#EXTINF:-1 tvg-id="tvmak.topestradatv",TopEstrada TV
-https://t1.tvmak.com/tv/TOPESTRADATV.m3u8
 #EXTINF:-1 tvg-id="tvmak.turbochannel",Turbo Channel
 https://t1.tvmak.com/tv/turbochannel.m3u8
 #EXTINF:-1 tvg-id="tvmak.tvapollon",TV Apollon

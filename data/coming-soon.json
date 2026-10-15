@@ -211,12 +211,6 @@
     "country": "xk"
   },
   {
-    "id": "soon.xk.aa-new-york",
-    "name": "AA New York TV",
-    "group": "Kosovë",
-    "country": "xk"
-  },
-  {
     "id": "soon.xk.hi-music",
     "name": "Hi Music",
     "group": "Kosovë",
@@ -237,6 +231,222 @@
   {
     "id": "soon.xk.spin-tv",
     "name": "SPIN TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.alb-swiss",
+    "name": "Alb Swiss",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.al.alb-film-tv-2",
+    "name": "Alb Film TV 2",
+    "group": "Shqipëri",
+    "country": "al"
+  },
+  {
+    "id": "soon.xk.rtv-ilirida-humor",
+    "name": "RTV Ilirida Humor",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.albdreams-tv",
+    "name": "Albdreams TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.al.rtv-flaka-hd",
+    "name": "RTV Flaka HD",
+    "group": "Shqipëri",
+    "country": "al"
+  },
+  {
+    "id": "soon.xk.tv-globi",
+    "name": "TV Globi",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv-albse",
+    "name": "RTV AlbSE",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.mk.mrt-2",
+    "name": "MRT 2",
+    "group": "Maqedoni e Veriut",
+    "country": "mk"
+  },
+  {
+    "id": "soon.xk.rtv21-plus",
+    "name": "RTV 21 Plus",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv21-popullore",
+    "name": "RTV 21 Popullore",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv21-junior",
+    "name": "RTV 21 Junior",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.albania-tv-chicago",
+    "name": "Albania TV Chicago",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.mk.topestrada-tv",
+    "name": "TopEstrada TV",
+    "group": "Maqedoni e Veriut",
+    "country": "mk"
+  },
+  {
+    "id": "soon.xk.tv-era",
+    "name": "TV Era",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.plus-television",
+    "name": "Plus Television",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv1-channel",
+    "name": "TV1 Channel",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv-red",
+    "name": "RTV RED",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-arberia-3-femije",
+    "name": "TV Arberia 3 - Fëmijë",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-arberia-4-muzik",
+    "name": "TV Arberia 4 - Muzik",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.syri-vision",
+    "name": "Syri Vision",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-korca",
+    "name": "TV KORCA",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.alpo-media",
+    "name": "Alpo Media",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-mitrovica",
+    "name": "TV Mitrovica",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-rozafa",
+    "name": "TV Rozafa",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.scan-tv",
+    "name": "SCAN TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-kopliku",
+    "name": "TV Kopliku",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.drita-tv",
+    "name": "Drita TV",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv-islam",
+    "name": "RTV Islam",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv-presheva",
+    "name": "RTV Presheva",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-diaspora",
+    "name": "TV Diaspora",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-festa",
+    "name": "TV Festa",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-liria",
+    "name": "TV Liria",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv-adrianet",
+    "name": "RTV Adrianet",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.alb-uk-music",
+    "name": "Alb UK Music",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.rtv-deshira",
+    "name": "RTV Deshira",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.xk.tv-shqiponja",
+    "name": "TV Shqiponja",
     "group": "Kosovë",
     "country": "xk"
   }
