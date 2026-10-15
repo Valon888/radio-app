@@ -21,6 +21,10 @@ const args = Object.fromEntries(process.argv.slice(2).map((a) => {
   const [k, v] = a.replace(/^--/, '').split('=');
   return [k, v === undefined ? true : v];
 }));
+// --proxy=<worker> --only-http: testo burimet http:// përmes worker-it (rruga e vetme e tyre në faqe https)
+const PROXY = args.proxy ? String(args.proxy).replace(/\/+$/, '') : '';
+const ONLY_HTTP = Boolean(args['only-http']);
+const ALLOW_ORIGIN = String(args.origin || 'https://valon888.github.io');
 const CONCURRENCY = Number(args.concurrency) || 30;
 const TIMEOUT = Number(args.timeout) || 10000;
 const SLOW_MS = 4000;
@@ -59,7 +63,7 @@ for (const c of channels) {
     bucketOfUrl.get(s.url).add(c._bucket);
   }
 }
-const urls = [...kindByUrl.keys()];
+const urls = [...kindByUrl.keys()].filter((u) => !ONLY_HTTP || /^http:\/\//i.test(u));
 
 async function http(url, opts = {}) {
   const ctl = new AbortController();
@@ -67,6 +71,12 @@ async function http(url, opts = {}) {
   try {
     const origin = new URL(url).origin;
     const ref = refByUrl.get(url);
+    if (PROXY && (url.startsWith(PROXY) || /^http:\/\//i.test(url))) {
+      // worker-i rishkruan playlist-at, ndaj segmentet vijnë si URL të tij; Origin duhet të jetë i lejuari
+      const target = url.startsWith(PROXY) ? url : `${PROXY}/?url=${encodeURIComponent(url)}${ref ? `&ref=${encodeURIComponent(ref)}` : ''}`;
+      const res = await fetch(target, { signal: ctl.signal, redirect: 'follow', headers: { 'User-Agent': UA, Origin: ALLOW_ORIGIN, ...(opts.headers || {}) } });
+      return { res, timer, ctl };
+    }
     const go = (headers) => fetch(url, { signal: ctl.signal, redirect: 'follow', headers: { 'User-Agent': UA, ...headers, ...(opts.headers || {}) } });
     let res = await go({ Referer: ref || `${origin}/`, Origin: origin });
     // disa burime refuzojnë Referer/Origin ose kombinime kokash: provo pa ta (si proxy-ja)
@@ -232,13 +242,23 @@ const readJsonSafe = (p) => { try { return JSON.parse(fs.readFileSync(p, 'utf8')
   for (const [url, codes] of bucketOfUrl) {
     for (const code of codes) {
       if (!byCode.has(code)) byCode.set(code, {});
-      byCode.get(code)[url] = results[url];
+      if (results[url]) byCode.get(code)[url] = results[url];
     }
   }
   for (const [code, res] of byCode) {
-    writeSafe(path.join(HEALTH_DIR, `${code}.json`), JSON.stringify({ generated, results: res }));
+    const file = path.join(HEALTH_DIR, `${code}.json`);
+    // test pjesor (--only-http): ruaj rezultatet ekzistuese të URL-ve që nuk u testuan tani
+    const prev = ONLY_HTTP ? (readJsonSafe(file) || {}).results || {} : {};
+    writeSafe(file, JSON.stringify({ generated, results: { ...prev, ...res } }));
   }
   try { fs.unlinkSync(partialPath); } catch { /* nuk ekziston */ }
+  if (ONLY_HTTP) {
+    const c = { online: 0, slow: 0, blocked: 0, offline: 0 };
+    for (const u of urls) c[results[u].s] = (c[results[u].s] || 0) + 1;
+    console.log(`\nhttp:// përmes worker-it: ${urls.length} URL`, c);
+    console.log('U shkruan data/health/*.json (channels-report.md nuk preket)');
+    return;
+  }
 
   /* ---- raporti ---- */
   const stat = (s) => (s === 'online' || s === 'slow' ? 'ok' : s);
