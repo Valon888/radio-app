@@ -75,3 +75,5 @@ https://gjirafa-video-live.gjirafa.net/gjvideo-livestream-specific/1z8-byc-4ee-l
 https://gjvideo-live-xk.gjirafa.net/gjvideo-livestream/98r-d35-487-v6m/index.m3u8
 #EXTINF:-1 tvg-id="RTK4.xk@SD" group-title="Kosovë",RTK 4
 https://gjvideo-live-xk.gjirafa.net/gjvideo-livestream/rtk4/index.m3u8
+#EXTINF:-1 tvg-id="ATV.xk" group-title="Kosovë",ATV
+https://gjvideo-live-xk.gjirafa.net/gjvideo-live/0nj-g63-92x-few/index.m3u8
