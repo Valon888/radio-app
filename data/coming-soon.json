@@ -211,12 +211,6 @@
     "country": "xk"
   },
   {
-    "id": "soon.xk.aa-new-york",
-    "name": "AA New York TV",
-    "group": "Kosovë",
-    "country": "xk"
-  },
-  {
     "id": "soon.xk.hi-music",
     "name": "Hi Music",
     "group": "Kosovë",
@@ -305,5 +299,17 @@
     "name": "RTV 21 Junior",
     "group": "Kosovë",
     "country": "xk"
+  },
+  {
+    "id": "soon.xk.albania-tv-chicago",
+    "name": "Albania TV Chicago",
+    "group": "Kosovë",
+    "country": "xk"
+  },
+  {
+    "id": "soon.mk.topestrada-tv",
+    "name": "TopEstrada TV",
+    "group": "Maqedoni e Veriut",
+    "country": "mk"
   }
 ]
