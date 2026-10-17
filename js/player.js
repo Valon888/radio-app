@@ -112,7 +112,7 @@ export class Player extends EventTarget {
       }));
     });
     if (!attempts.length) {
-      this._emitState('error', 'Ky burim është HTTP dhe faqja është HTTPS. Konfiguro proxy (shih README).', {});
+      this._emitState('error', 'Ky burim kërkon proxy (HTTP në faqe HTTPS ose burim me zgjidhës). Konfiguro PROXY_URL (shih README).', {});
       return;
     }
     // sourceIndex i kërkuar nga përdoruesi ("Burimi tjetër")

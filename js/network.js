@@ -47,6 +47,12 @@ export function viaProxy(url, ref = '') {
   return `${state.base}?url=${encodeURIComponent(url)}${ref ? `&ref=${encodeURIComponent(ref)}` : ''}`;
 }
 
+/** URL-ja e zgjidhësit të Worker-it për faqen e një kanali me adresë që skadon (kind: 'resolver'). */
+export function viaResolver(pageUrl) {
+  if (state.mode !== 'remote') return null; // zgjidhësi ekziston vetëm te PROXY_URL (Cloudflare Worker)
+  return `${state.base}?resolve=${encodeURIComponent(pageUrl)}`;
+}
+
 export const isHttp = (u) => /^http:\/\//i.test(u);
 export const pageIsHttps = () => location.protocol === 'https:';
 
@@ -56,8 +62,13 @@ export const pageIsHttps = () => location.protocol === 'https:';
  *  - proxy lokal: proxy fillimisht (kalon CORS dhe certifikata), pastaj direkt
  *  - proxy i largët: direkt fillimisht (kursen kuotën), pastaj proxy
  *  - pa proxy: vetëm direkt
+ *  - 'resolver': vetëm përmes Worker-it (nxjerr adresën e freskët nga faqja e kanalit)
  */
 export function candidatesFor(url, kind, ref = '') {
+  if (kind === 'resolver') {
+    const r = viaResolver(url);
+    return r ? [{ url: r, via: 'proxy' }] : [];
+  }
   const proxied = viaProxy(url, ref);
   const mixed = pageIsHttps() && isHttp(url);
   if (mixed) return proxied ? [{ url: proxied, via: 'proxy' }] : [];

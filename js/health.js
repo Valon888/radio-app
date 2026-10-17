@@ -147,7 +147,7 @@ export class HealthMonitor extends EventTarget {
 
   async _test({ url, kind, ref }) {
     const cands = candidatesFor(url, kind, ref);
-    if (!cands.length) return { s: 'unknown', reason: 'http në faqe https pa proxy' };
+    if (!cands.length) return { s: 'unknown', reason: 'kërkon proxy (http në faqe https ose zgjidhës)' };
     // audio: candidatesFor vë direktin në fillim (<audio> lutet pa CORS), por fetch() i health-it do të bllokohej;
     // me proxy lokal e testojmë përmes proxy-t që të mos mbushet konsola me gabime CORS
     const cand = (kind === 'audio' && proxyState().mode === 'local' && cands.find((c) => c.via === 'proxy')) || cands[0];

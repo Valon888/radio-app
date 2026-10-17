@@ -158,6 +158,14 @@ vetëm aty, kështu që aplikacioni i mban rezultatet statike vetëm si sugjerim
    <script>window.MINI_IPTV_CONFIG = { PROXY_URL: 'https://emri.workers.dev' };</script>
    ```
 
+**Burime me adresë që skadon (`kind: "resolver"`).** Disa kanale (p.sh. MRT 2) japin adresë HLS me nënshkrim
+30-minutësh, ndaj nuk ruhet statikisht. Burimi ruan adresën e *faqes* së kanalit
+(`{"url":"https://play.mrt.com.mk/live/mrt2","kind":"resolver"}`) dhe Worker-i e zgjidh në çdo luajtje
+(`/?resolve=<faqja>`): hap faqen, nxjerr adresën e freskët dhe e shërben si playlist të rishkruar.
+Punon vetëm me `PROXY_URL` të Worker-it (jo me proxy-n lokal) dhe vetëm për host-et te `RESOLVERS` në
+`proxy/cloudflare-worker.js`. **Pas çdo ndryshimi te Worker-i duhet ripublikuar** (`cd proxy && npx wrangler deploy`),
+përndryshe MRT 2 nuk luan. Për ta testuar: `node tools/check-channels.js --country=mk --proxy=https://emri.workers.dev`.
+
 ### Netlify Function
 
 Ruaje `proxy/netlify-function.js` si `netlify/functions/proxy.js`, vendos `ALLOWED_ORIGINS` dhe
