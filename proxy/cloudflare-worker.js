@@ -9,11 +9,39 @@
  *   3. Vendos URL-në e Worker-it te config:  window.MINI_IPTV_CONFIG = { PROXY_URL: 'https://emri.workers.dev' }
  *
  * Përdorimi: GET https://emri.workers.dev/?url=<URL e koduar>     |   GET /?ping=1
+ *            GET /?resolve=<URL e faqes së kanalit>   (vetëm host-et te RESOLVERS më poshtë; adresa e freskët nxirret nga faqja)
  *
  * Kufizime: Worker-i falas ka kuotë ditore kërkesash; aplikacioni e përdor proxy-n vetëm kur
  * lidhja direkte nuk është e mundur (CORS / mixed content).
  */
 const BLOCKED_HOST = /^(localhost|127\.|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.|0\.|\[?::1\]?$|\[?f[cd])/i;
+
+/**
+ * Zgjidhës: disa kanale (p.sh. MRT) japin adresë HLS me nënshkrim që skadon (wmsAuthSign, 30 min),
+ * ndaj nuk mund të ruhet statikisht. Worker-i hap faqen e kanalit, nxjerr adresën e freskët dhe e
+ * shërben si çdo playlist tjetër (rishkruar përmes proxy-t). Lejohen vetëm host-et e listuara këtu.
+ */
+const RESOLVERS = {
+  'play.mrt.com.mk': {
+    pathRe: /^\/live\/[a-z0-9-]+\/?$/i,
+    streamRe: /https:\/\/[a-z0-9.-]+(?::\d+)?\/[^"'\s\\<>]*?\.m3u8\?[^"'\s\\<>]*wmsAuthSign=[A-Za-z0-9+/=%_-]+/i,
+  },
+};
+
+async function resolveStream(pageRaw) {
+  let p;
+  try { p = new URL(pageRaw); } catch { return { error: 'Invalid page url' }; }
+  const rule = p.protocol === 'https:' && RESOLVERS[p.hostname];
+  if (!rule || !rule.pathRe.test(p.pathname)) return { error: 'Resolver not allowed' };
+  let res;
+  try {
+    res = await fetch(p.toString(), { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MiniIPTV-Proxy)' }, redirect: 'follow' });
+  } catch { return { error: 'Page unreachable' }; }
+  if (!res.ok) return { error: `Page HTTP ${res.status}` };
+  const html = await res.text();
+  const m = html.replace(/\\\//g, '/').match(rule.streamRe);
+  return m ? { url: m[0] } : { error: 'Stream not found on page' };
+}
 
 function corsHeaders(origin) {
   return {
@@ -54,7 +82,13 @@ export default {
       return new Response('mini-iptv-proxy', { headers: { ...cors, 'Content-Type': 'text/plain' } });
     }
 
-    const target = reqUrl.searchParams.get('url');
+    let target = reqUrl.searchParams.get('url');
+    const resolveRaw = reqUrl.searchParams.get('resolve');
+    if (resolveRaw) {
+      const r = await resolveStream(resolveRaw);
+      if (r.error) return new Response(r.error, { status: r.error === 'Resolver not allowed' ? 400 : 502, headers: cors });
+      target = r.url;
+    }
     let t;
     try { t = new URL(target); } catch { return new Response('Missing or invalid url', { status: 400, headers: cors }); }
     if (!/^https?:$/.test(t.protocol) || BLOCKED_HOST.test(t.hostname)) {

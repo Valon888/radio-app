@@ -63,7 +63,7 @@ for (const c of channels) {
     bucketOfUrl.get(s.url).add(c._bucket);
   }
 }
-const urls = [...kindByUrl.keys()].filter((u) => !ONLY_HTTP || /^http:\/\//i.test(u));
+const urls = [...kindByUrl.keys()].filter((u) => !ONLY_HTTP || /^http:\/\//i.test(u) || (PROXY && kindByUrl.get(u) === 'resolver'));
 
 async function http(url, opts = {}) {
   const ctl = new AbortController();
@@ -71,6 +71,11 @@ async function http(url, opts = {}) {
   try {
     const origin = new URL(url).origin;
     const ref = refByUrl.get(url);
+    if (PROXY && kindByUrl.get(url) === 'resolver') {
+      // faqe kanali me adresë që skadon: Worker-i e zgjidh dhe kthen playlist-in e freskët
+      const res = await fetch(`${PROXY}/?resolve=${encodeURIComponent(url)}`, { signal: ctl.signal, redirect: 'follow', headers: { 'User-Agent': UA, Origin: ALLOW_ORIGIN, ...(opts.headers || {}) } });
+      return { res, timer, ctl };
+    }
     if (PROXY && (url.startsWith(PROXY) || /^http:\/\//i.test(url))) {
       // worker-i rishkruan playlist-at, ndaj segmentet vijnë si URL të tij; Origin duhet të jetë i lejuari
       const target = url.startsWith(PROXY) ? url : `${PROXY}/?url=${encodeURIComponent(url)}${ref ? `&ref=${encodeURIComponent(ref)}` : ''}`;
@@ -190,6 +195,7 @@ async function checkStream(url) {
 
 async function check(url) {
   const kind = kindByUrl.get(url);
+  if (kind === 'resolver' && !PROXY) return { s: 'unknown', reason: 'kërkon --proxy', t: Date.now() };
   try {
     const r = kind === 'audio' || kind === 'ts' || kind === 'flv' ? await checkStream(url) : await checkHls(url);
     return { ...r, t: Date.now() };
