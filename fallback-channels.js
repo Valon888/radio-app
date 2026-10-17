@@ -28,7 +28,7 @@ const importedFallbackChannels = [
 const hardcodedChannels = [
   // Albanian Channels
   { id: "albkanalemusic", name: "AlbKanale Music TV", url: "https://albportal.net/albkanalemusic.m3u8", type: "tv", group: "Music", logo: "https://i.imgur.com/JdKxscs.png", quality: "720p" },
-  { id: "bangbang_triangolo", name: "Bang Bang (TriangoloMedia)", url: "https://triangolomedia.com/portal/kategori/femije/kanali/bangbang.php", type: "tv", group: "Fëmijë Shqip", logo: "https://i.imgur.com/lpS2PpS.png", quality: "auto", description: "Bang Bang nga TriangoloMedia" },
+  { id: "bangbang_triangolo", name: "Bang Bang (TriangoloMedia)", url: "https://streams2.sofast.tv/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/6a98fce2-bf4c-4bfb-91f4-c43851bb3801/manifest.m3u8", type: "tv", group: "Fëmijë Shqip", logo: "https://i.imgur.com/lpS2PpS.png", quality: "auto", description: "Bang Bang nga TriangoloMedia" },
   { id: "cna", name: "CNA", url: "https://live1.mediadesk.al/cnatvlive.m3u8", type: "tv", group: "News", logo: "https://codeit.al/wp-content/uploads/2020/08/cna.png", quality: "1080p" },
   
   // Kosovo Channels
