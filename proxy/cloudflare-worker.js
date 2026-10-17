@@ -9,7 +9,8 @@
  *   3. Vendos URL-në e Worker-it te config:  window.MINI_IPTV_CONFIG = { PROXY_URL: 'https://emri.workers.dev' }
  *
  * Përdorimi: GET https://emri.workers.dev/?url=<URL e koduar>     |   GET /?ping=1
- *            GET /?resolve=<URL e faqes së kanalit>   (vetëm host-et te RESOLVERS më poshtë; adresa e freskët nxirret nga faqja)
+ *            GET /?resolve=<URL e faqes së kanalit>   (vetëm host-et te RESOLVERS më poshtë; 302 te adresa e freskët nga faqja;
+ *                                                       &proxy=1 e shërben playlist-in përmes Worker-it)
  *
  * Kufizime: Worker-i falas ka kuotë ditore kërkesash; aplikacioni e përdor proxy-n vetëm kur
  * lidhja direkte nuk është e mundur (CORS / mixed content).
@@ -87,6 +88,11 @@ export default {
     if (resolveRaw) {
       const r = await resolveStream(resolveRaw);
       if (r.error) return new Response(r.error, { status: r.error === 'Resolver not allowed' ? 400 : 502, headers: cors });
+      // si parazgjedhje: ridrejtim 302 te adresa e freskët; shfletuesi e merr transmetimin direkt (host-i i MRT
+      // bllokon IP-të e Cloudflare për playlist-in, por jo përdoruesin). &proxy=1 e kalon përmes Worker-it.
+      if (reqUrl.searchParams.get('proxy') !== '1') {
+        return new Response(null, { status: 302, headers: { ...cors, Location: r.url, 'Cache-Control': 'no-store' } });
+      }
       target = r.url;
     }
     let t;

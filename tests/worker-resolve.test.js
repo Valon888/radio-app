@@ -14,7 +14,24 @@ async function load() {
 }
 const call = (w, qs) => w.fetch(new Request(`https://p.workers.dev/?${qs}`, { headers: { Origin: 'http://localhost:3002' } }), ENV);
 
-test('resolve: nxjerr adresën nga faqja dhe rishkruan playlist-in përmes proxy-t', async () => {
+test('resolve: nxjerr adresën nga faqja dhe ridrejton (302) te adresa e freskët', async () => {
+  const w = await load();
+  const real = globalThis.fetch;
+  const seen = [];
+  globalThis.fetch = async (u) => {
+    seen.push(String(u));
+    return new Response(`<script>var x=[[{"src":"${STREAM}"}]]</script>`, { status: 200 });
+  };
+  try {
+    const r = await call(w, `resolve=${encodeURIComponent(PAGE)}`);
+    assert.equal(r.status, 302);
+    assert.equal(r.headers.get('location'), STREAM);
+    assert.equal(r.headers.get('access-control-allow-origin'), 'http://localhost:3002');
+    assert.deepEqual(seen, [PAGE]); // Worker-i nuk e prek playlist-in (host-i e bllokon Cloudflare-in)
+  } finally { globalThis.fetch = real; }
+});
+
+test('resolve&proxy=1: shërben playlist-in e rishkruar përmes proxy-t', async () => {
   const w = await load();
   const real = globalThis.fetch;
   const seen = [];
@@ -24,12 +41,9 @@ test('resolve: nxjerr adresën nga faqja dhe rishkruan playlist-in përmes proxy
     return new Response('#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=1\nlevel/chunks.m3u8?s=1\n', { status: 200, headers: { 'content-type': 'application/vnd.apple.mpegurl' } });
   };
   try {
-    const r = await call(w, `resolve=${encodeURIComponent(PAGE)}`);
+    const r = await call(w, `resolve=${encodeURIComponent(PAGE)}&proxy=1`);
     assert.equal(r.status, 200);
-    const body = await r.text();
-    assert.match(body, /^#EXTM3U/);
-    assert.match(body, /https:\/\/p\.workers\.dev\/\?url=https%3A%2F%2Fvod-c57\.interspace\.com/);
-    assert.equal(seen[0], PAGE);
+    assert.match(await r.text(), /https:\/\/p\.workers\.dev\/\?url=https%3A%2F%2Fvod-c57\.interspace\.com/);
     assert.equal(seen[1], STREAM.replace(':443', '')); // URL() heq portin e paracaktuar
   } finally { globalThis.fetch = real; }
 });
