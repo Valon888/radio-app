@@ -1,1 +1,1 @@
-{"generated":"2026-10-26T08:47:20.857Z","results":{"https://stream.solmediaeg.com/soltv/soltv.m3u8":{"s":"offline","reason":"timeout","t":1793003566959},"http://rtmp.ott.mx1.com/tvge1/tvge1/playlist.m3u8":{"s":"offline","reason":"timeout","t":1793003566979}}}
+{"generated":"2026-11-02T10:47:26.338Z","results":{"https://stream.solmediaeg.com/soltv/soltv.m3u8":{"s":"online","ms":1523,"t":1793615638182},"http://rtmp.ott.mx1.com/tvge1/tvge1/playlist.m3u8":{"s":"offline","reason":"timeout","t":1793615646694}}}
