@@ -1,131 +1,131 @@
 # Raporti i kanaleve
 
-Gjeneruar: 2026-11-02T10:47:26.338Z  
+Gjeneruar: 2026-11-09T11:13:10.664Z  
 Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 
 - Kanale të testuara: **12826** (URL: 18543)
-- Punojnë plotësisht: **8101**
-- Punojnë pjesërisht (një burim i vdekur, tjetri jo): **969**
-- Të bllokuara (401/403, gjeo ose autorizim): **742**
-- Offline (të gjitha burimet): **3014**
+- Punojnë plotësisht: **7790**
+- Punojnë pjesërisht (një burim i vdekur, tjetri jo): **1022**
+- Të bllokuara (401/403, gjeo ose autorizim): **725**
+- Offline (të gjitha burimet): **3289**
 
 ## Sipas shtetit
 
 | Shteti | Kanale | Punojnë | Pjesërisht | Bllokuar | Offline |
 |---|---|---|---|---|---|
-| SHBA (us) | 2122 | 1654 | 148 | 105 | 215 |
-| Të tjera (VOD, të ndryshme) (other) | 1257 | 966 | 44 | 49 | 198 |
-| Indi (in) | 759 | 464 | 138 | 74 | 83 |
-| Gjermani (de) | 492 | 440 | 19 | 25 | 8 |
-| Radio (radio) | 432 | 312 | 2 | 5 | 113 |
-| Rusi (ru) | 406 | 247 | 75 | 5 | 79 |
-| Itali (it) | 294 | 172 | 20 | 17 | 85 |
-| Spanjë (es) | 289 | 158 | 8 | 37 | 86 |
-| Brazil (br) | 279 | 115 | 52 | 16 | 96 |
-| Mbretëria e Bashkuar (uk) | 257 | 107 | 27 | 43 | 80 |
-| Republika Dominikane (do) | 252 | 181 | 5 | 1 | 65 |
-| Francë (fr) | 233 | 109 | 18 | 30 | 76 |
-| Kili (cl) | 228 | 162 | 10 | 13 | 43 |
-| Suedi (se) | 202 | 192 | 0 | 4 | 6 |
-| Argjentinë (ar) | 197 | 121 | 15 | 16 | 45 |
-| Holandë (nl) | 192 | 109 | 2 | 7 | 74 |
-| Meksikë (mx) | 176 | 92 | 19 | 16 | 49 |
-| Poloni (pl) | 175 | 85 | 11 | 6 | 73 |
-| Ukrainë (ua) | 172 | 117 | 17 | 2 | 36 |
-| Peru (pe) | 171 | 106 | 29 | 4 | 32 |
-| Kanada (ca) | 167 | 101 | 5 | 31 | 30 |
-| Indonezi (id) | 166 | 105 | 8 | 0 | 53 |
-| Rumani (ro) | 159 | 109 | 5 | 10 | 35 |
-| Turqi (tr) | 155 | 97 | 38 | 6 | 14 |
-| Hungari (hu) | 142 | 30 | 2 | 6 | 104 |
-| Kolumbi (co) | 122 | 83 | 19 | 2 | 18 |
-| Iran (ir) | 121 | 41 | 1 | 1 | 78 |
-| Pakistan (pk) | 103 | 41 | 9 | 4 | 49 |
-| Kinë (cn) | 91 | 34 | 18 | 4 | 35 |
+| SHBA (us) | 2122 | 1547 | 154 | 101 | 320 |
+| Të tjera (VOD, të ndryshme) (other) | 1257 | 975 | 41 | 50 | 191 |
+| Indi (in) | 759 | 461 | 138 | 70 | 90 |
+| Gjermani (de) | 492 | 428 | 18 | 26 | 20 |
+| Radio (radio) | 432 | 290 | 2 | 3 | 137 |
+| Rusi (ru) | 406 | 231 | 86 | 4 | 85 |
+| Itali (it) | 294 | 169 | 23 | 11 | 91 |
+| Spanjë (es) | 289 | 150 | 9 | 44 | 86 |
+| Brazil (br) | 279 | 111 | 54 | 17 | 97 |
+| Mbretëria e Bashkuar (uk) | 257 | 103 | 27 | 42 | 85 |
+| Republika Dominikane (do) | 252 | 175 | 5 | 1 | 71 |
+| Francë (fr) | 233 | 125 | 20 | 31 | 57 |
+| Kili (cl) | 228 | 154 | 11 | 15 | 48 |
+| Suedi (se) | 202 | 188 | 0 | 8 | 6 |
+| Argjentinë (ar) | 197 | 113 | 16 | 15 | 53 |
+| Holandë (nl) | 192 | 106 | 3 | 8 | 75 |
+| Meksikë (mx) | 176 | 90 | 17 | 16 | 53 |
+| Poloni (pl) | 175 | 79 | 11 | 6 | 79 |
+| Ukrainë (ua) | 172 | 113 | 17 | 2 | 40 |
+| Peru (pe) | 171 | 98 | 31 | 4 | 38 |
+| Kanada (ca) | 167 | 98 | 6 | 31 | 32 |
+| Indonezi (id) | 166 | 104 | 8 | 0 | 54 |
+| Rumani (ro) | 159 | 92 | 9 | 16 | 42 |
+| Turqi (tr) | 155 | 96 | 40 | 4 | 15 |
+| Hungari (hu) | 142 | 18 | 2 | 2 | 120 |
+| Kolumbi (co) | 122 | 75 | 19 | 2 | 26 |
+| Iran (ir) | 121 | 38 | 1 | 1 | 81 |
+| Pakistan (pk) | 103 | 38 | 10 | 4 | 51 |
+| Kinë (cn) | 91 | 27 | 24 | 5 | 35 |
 | Çeki (cz) | 85 | 31 | 3 | 0 | 51 |
-| Ekuador (ec) | 82 | 48 | 7 | 3 | 24 |
-| Vietnam (vn) | 82 | 10 | 0 | 0 | 72 |
-| Honduras (hn) | 80 | 35 | 4 | 0 | 41 |
-| Tajlandë (th) | 77 | 44 | 10 | 8 | 15 |
-| Venezuelë (ve) | 76 | 42 | 5 | 0 | 29 |
-| Greqi (gr) | 74 | 60 | 1 | 3 | 10 |
-| Bolivi (bo) | 74 | 37 | 14 | 1 | 22 |
-| Kore e Jugut (kr) | 73 | 22 | 2 | 0 | 49 |
-| Kosta-Rikë (cr) | 69 | 37 | 6 | 1 | 25 |
-| Guatemalë (gt) | 66 | 28 | 7 | 0 | 31 |
-| Bullgari (bg) | 65 | 45 | 15 | 3 | 2 |
-| Paraguai (py) | 64 | 46 | 2 | 1 | 15 |
-| Arabi Saudite (sa) | 62 | 26 | 15 | 8 | 13 |
-| Irak (iq) | 62 | 44 | 3 | 1 | 14 |
+| Ekuador (ec) | 82 | 43 | 7 | 3 | 29 |
+| Vietnam (vn) | 82 | 39 | 14 | 2 | 27 |
+| Honduras (hn) | 80 | 3 | 1 | 0 | 76 |
+| Tajlandë (th) | 77 | 46 | 10 | 8 | 13 |
+| Venezuelë (ve) | 76 | 41 | 5 | 0 | 30 |
+| Greqi (gr) | 74 | 59 | 1 | 4 | 10 |
+| Bolivi (bo) | 74 | 32 | 13 | 1 | 28 |
+| Kore e Jugut (kr) | 73 | 21 | 2 | 0 | 50 |
+| Kosta-Rikë (cr) | 69 | 40 | 7 | 1 | 21 |
+| Guatemalë (gt) | 66 | 22 | 8 | 0 | 36 |
+| Bullgari (bg) | 65 | 44 | 15 | 3 | 3 |
+| Paraguai (py) | 64 | 47 | 3 | 1 | 13 |
+| Arabi Saudite (sa) | 62 | 29 | 14 | 8 | 11 |
+| Irak (iq) | 62 | 47 | 3 | 1 | 11 |
 | Portugali (pt) | 59 | 38 | 1 | 3 | 17 |
-| Sllovaki (sk) | 59 | 33 | 5 | 1 | 20 |
-| Nigeri (ng) | 55 | 26 | 3 | 9 | 17 |
+| Sllovaki (sk) | 59 | 33 | 5 | 0 | 21 |
+| Nigeri (ng) | 55 | 15 | 1 | 8 | 31 |
 | Australi (au) | 54 | 32 | 1 | 3 | 18 |
-| Emiratet e Bashkuara Arabe (ae) | 54 | 30 | 4 | 3 | 17 |
+| Emiratet e Bashkuara Arabe (ae) | 54 | 27 | 4 | 2 | 21 |
 | Belgjikë (be) | 44 | 15 | 6 | 8 | 15 |
-| Serbi (rs) | 42 | 14 | 1 | 0 | 27 |
-| Salvador (sv) | 39 | 13 | 2 | 0 | 24 |
-| Austri (at) | 38 | 27 | 1 | 1 | 9 |
-| Kazakistan (kz) | 38 | 18 | 2 | 13 | 5 |
-| Kenia (ke) | 38 | 6 | 0 | 0 | 32 |
-| Izrael (il) | 37 | 30 | 3 | 0 | 4 |
+| Serbi (rs) | 42 | 16 | 0 | 0 | 26 |
+| Salvador (sv) | 39 | 14 | 2 | 0 | 23 |
+| Austri (at) | 38 | 26 | 1 | 1 | 10 |
+| Kazakistan (kz) | 38 | 15 | 2 | 13 | 8 |
+| Kenia (ke) | 38 | 6 | 1 | 0 | 31 |
+| Izrael (il) | 37 | 27 | 2 | 3 | 5 |
 | Mongoli (mn) | 35 | 34 | 1 | 0 | 0 |
-| Liban (lb) | 34 | 24 | 1 | 3 | 6 |
-| Porto-Riko (pr) | 34 | 26 | 1 | 0 | 7 |
-| Uzbekistan (uz) | 33 | 30 | 2 | 1 | 0 |
+| Liban (lb) | 34 | 25 | 1 | 3 | 5 |
+| Porto-Riko (pr) | 34 | 25 | 2 | 0 | 7 |
+| Uzbekistan (uz) | 33 | 27 | 2 | 1 | 3 |
 | Katar (qa) | 30 | 14 | 4 | 0 | 12 |
-| Zvicër (ch) | 27 | 17 | 3 | 3 | 4 |
+| Zvicër (ch) | 27 | 19 | 2 | 4 | 2 |
 | Bjellorusi (by) | 26 | 21 | 0 | 0 | 5 |
-| Kamboxhia (kh) | 26 | 12 | 1 | 0 | 13 |
-| Ugandë (ug) | 26 | 12 | 0 | 0 | 14 |
-| Kosovë (xk) | 25 | 20 | 2 | 2 | 1 |
-| Finlandë (fi) | 25 | 2 | 3 | 0 | 20 |
-| Gjeorgji (ge) | 25 | 9 | 3 | 7 | 6 |
+| Kamboxhia (kh) | 26 | 10 | 1 | 0 | 15 |
+| Ugandë (ug) | 26 | 13 | 0 | 0 | 13 |
+| Kosovë (xk) | 25 | 19 | 2 | 2 | 2 |
+| Finlandë (fi) | 25 | 9 | 3 | 1 | 12 |
+| Gjeorgji (ge) | 25 | 8 | 3 | 0 | 14 |
 | Tajvan (tw) | 25 | 7 | 2 | 3 | 13 |
-| Afrika e Jugut (za) | 24 | 13 | 2 | 2 | 7 |
-| Kroaci (hr) | 23 | 10 | 0 | 7 | 6 |
+| Afrika e Jugut (za) | 24 | 6 | 1 | 0 | 17 |
+| Kroaci (hr) | 23 | 9 | 0 | 7 | 7 |
 | Panama (pa) | 23 | 15 | 0 | 0 | 8 |
-| Egjipt (eg) | 22 | 14 | 0 | 3 | 5 |
-| Jordani (jo) | 22 | 17 | 0 | 1 | 4 |
-| Moldavi (md) | 22 | 10 | 4 | 0 | 8 |
+| Egjipt (eg) | 22 | 12 | 0 | 3 | 7 |
+| Jordani (jo) | 22 | 16 | 0 | 1 | 5 |
+| Moldavi (md) | 22 | 14 | 3 | 0 | 5 |
 | Singapor (sg) | 22 | 15 | 0 | 1 | 6 |
-| Bangladesh (bd) | 21 | 12 | 2 | 1 | 6 |
+| Bangladesh (bd) | 21 | 9 | 4 | 1 | 7 |
 | Slloveni (si) | 21 | 2 | 2 | 0 | 17 |
 | Territoret Palestineze (ps) | 20 | 16 | 0 | 1 | 3 |
-| Estoni (ee) | 19 | 7 | 1 | 0 | 11 |
-| Nikaragua (ni) | 19 | 4 | 1 | 4 | 10 |
-| Senegal (sn) | 19 | 7 | 0 | 5 | 7 |
-| Shqipëri (al) | 18 | 14 | 2 | 0 | 2 |
-| Algjeri (dz) | 18 | 3 | 0 | 1 | 14 |
-| Azerbajxhan (az) | 18 | 9 | 1 | 5 | 3 |
-| Côte d’Ivoire (ci) | 18 | 8 | 0 | 0 | 10 |
+| Estoni (ee) | 19 | 10 | 1 | 0 | 8 |
+| Nikaragua (ni) | 19 | 2 | 1 | 4 | 12 |
+| Senegal (sn) | 19 | 6 | 0 | 1 | 12 |
+| Shqipëri (al) | 18 | 13 | 1 | 0 | 4 |
+| Algjeri (dz) | 18 | 2 | 0 | 0 | 16 |
+| Azerbajxhan (az) | 18 | 9 | 1 | 4 | 4 |
+| Côte d’Ivoire (ci) | 18 | 7 | 0 | 0 | 11 |
 | Mianmar (Burmë) (mm) | 18 | 6 | 0 | 0 | 12 |
-| Norvegji (no) | 18 | 3 | 0 | 14 | 1 |
+| Norvegji (no) | 18 | 2 | 0 | 14 | 2 |
 | Maqedonia e Veriut (mk) | 16 | 14 | 1 | 0 | 1 |
-| Kamerun (cm) | 16 | 9 | 1 | 2 | 4 |
+| Kamerun (cm) | 16 | 7 | 3 | 0 | 6 |
 | Kongo-Kinshasa (cd) | 16 | 3 | 0 | 0 | 13 |
-| Lituani (lt) | 16 | 10 | 2 | 1 | 3 |
+| Lituani (lt) | 16 | 11 | 2 | 1 | 2 |
 | Malajzi (my) | 16 | 1 | 0 | 7 | 8 |
 | Qipro (cy) | 16 | 10 | 1 | 0 | 5 |
 | Japoni (jp) | 15 | 6 | 2 | 7 | 0 |
 | Marok (ma) | 15 | 6 | 6 | 3 | 0 |
-| RPA i Hong-Kongut (hk) | 15 | 7 | 0 | 5 | 3 |
+| RPA i Hong-Kongut (hk) | 15 | 6 | 0 | 5 | 4 |
 | Sri-Lankë (lk) | 15 | 3 | 3 | 1 | 8 |
-| Afganistan (af) | 14 | 10 | 0 | 0 | 4 |
-| Bosnjë-Hercegovinë (ba) | 14 | 6 | 0 | 1 | 7 |
+| Afganistan (af) | 14 | 7 | 0 | 0 | 7 |
+| Bosnjë-Hercegovinë (ba) | 14 | 3 | 0 | 2 | 9 |
 | Taxhikistan (tj) | 14 | 0 | 3 | 0 | 11 |
-| Haiti (ht) | 13 | 7 | 0 | 1 | 5 |
+| Haiti (ht) | 13 | 5 | 1 | 0 | 7 |
 | Nepal (np) | 13 | 7 | 1 | 2 | 3 |
-| Filipine (ph) | 12 | 7 | 0 | 0 | 5 |
-| Ganë (gh) | 12 | 5 | 1 | 2 | 4 |
-| Kuvajt (kw) | 12 | 11 | 1 | 0 | 0 |
+| Filipine (ph) | 12 | 9 | 0 | 0 | 3 |
+| Ganë (gh) | 12 | 2 | 2 | 0 | 8 |
+| Kuvajt (kw) | 12 | 8 | 1 | 0 | 3 |
 | Letoni (lv) | 12 | 4 | 2 | 1 | 5 |
 | Togo (tg) | 12 | 3 | 0 | 4 | 5 |
-| Zelandë e Re (nz) | 12 | 4 | 1 | 1 | 6 |
-| Armeni (am) | 11 | 9 | 1 | 1 | 0 |
+| Zelandë e Re (nz) | 12 | 5 | 1 | 2 | 4 |
+| Armeni (am) | 11 | 7 | 1 | 0 | 3 |
 | Luksemburg (lu) | 11 | 9 | 0 | 0 | 2 |
 | Arubë (aw) | 10 | 4 | 5 | 0 | 1 |
-| Benin (bj) | 10 | 4 | 0 | 0 | 6 |
+| Benin (bj) | 10 | 3 | 0 | 0 | 7 |
 | Danimarkë (dk) | 10 | 5 | 0 | 3 | 2 |
 | Irlandë (ie) | 10 | 3 | 0 | 7 | 0 |
 | Maldive (mv) | 10 | 1 | 2 | 1 | 6 |
@@ -133,41 +133,41 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Laos (la) | 9 | 8 | 0 | 0 | 1 |
 | RPA i Makaos (mo) | 8 | 0 | 0 | 1 | 7 |
 | Turkmenistan (tm) | 8 | 8 | 0 | 0 | 0 |
-| Mal i Zi (me) | 7 | 2 | 0 | 2 | 3 |
+| Mal i Zi (me) | 7 | 3 | 0 | 3 | 1 |
 | Kirgizi (kg) | 7 | 0 | 0 | 1 | 6 |
-| Ruandë (rw) | 7 | 7 | 0 | 0 | 0 |
+| Ruandë (rw) | 7 | 6 | 0 | 0 | 1 |
 | Somali (so) | 7 | 0 | 1 | 0 | 6 |
-| Tanzani (tz) | 7 | 2 | 1 | 0 | 4 |
-| Xhamajkë (jm) | 7 | 0 | 0 | 0 | 7 |
+| Tanzani (tz) | 7 | 4 | 1 | 0 | 2 |
+| Xhamajkë (jm) | 7 | 4 | 1 | 0 | 2 |
 | Burkina-Faso (bf) | 6 | 3 | 0 | 1 | 2 |
 | Islandë (is) | 6 | 4 | 0 | 0 | 2 |
 | Karaibet holandeze (bq) | 6 | 4 | 0 | 0 | 2 |
 | Maltë (mt) | 6 | 0 | 1 | 4 | 1 |
-| Martinikë (mq) | 6 | 5 | 0 | 0 | 1 |
-| Mozambik (mz) | 6 | 2 | 1 | 0 | 3 |
+| Martinikë (mq) | 6 | 4 | 0 | 0 | 2 |
+| Mozambik (mz) | 6 | 1 | 2 | 0 | 3 |
 | Sint-Marten (sx) | 6 | 5 | 0 | 0 | 1 |
 | Bahrejn (bh) | 5 | 5 | 0 | 0 | 0 |
 | Guadelupë (gp) | 5 | 5 | 0 | 0 | 0 |
 | Kongo-Brazavilë (cg) | 5 | 1 | 1 | 1 | 2 |
-| Oman (om) | 5 | 4 | 1 | 0 | 0 |
+| Oman (om) | 5 | 2 | 1 | 0 | 2 |
 | Trinidad e Tobago (tt) | 5 | 4 | 1 | 0 | 0 |
-| Bahama (bs) | 4 | 2 | 0 | 0 | 2 |
-| Guajanë (gy) | 4 | 0 | 0 | 1 | 3 |
+| Bahama (bs) | 4 | 3 | 0 | 0 | 1 |
+| Guajanë (gy) | 4 | 1 | 0 | 1 | 2 |
 | Guine (gn) | 4 | 2 | 0 | 0 | 2 |
 | Jemen (ye) | 4 | 4 | 0 | 0 | 0 |
 | Kore e Veriut (kp) | 4 | 0 | 0 | 0 | 4 |
-| Kubë (cu) | 4 | 1 | 0 | 3 | 0 |
-| Kurasao (cw) | 4 | 2 | 0 | 0 | 2 |
+| Kubë (cu) | 4 | 1 | 0 | 2 | 1 |
+| Kurasao (cw) | 4 | 3 | 0 | 0 | 1 |
 | Libi (ly) | 4 | 3 | 1 | 0 | 0 |
-| Mali (ml) | 4 | 1 | 0 | 0 | 3 |
-| Niger (ne) | 4 | 2 | 0 | 2 | 0 |
+| Mali (ml) | 4 | 0 | 0 | 0 | 4 |
+| Niger (ne) | 4 | 2 | 0 | 0 | 2 |
 | Tunizi (tn) | 4 | 2 | 1 | 0 | 1 |
 | Angolë (ao) | 3 | 3 | 0 | 0 | 0 |
 | Etiopi (et) | 3 | 1 | 0 | 0 | 2 |
 | Monako (mc) | 3 | 3 | 0 | 0 | 0 |
 | Sudan (sd) | 3 | 2 | 0 | 0 | 1 |
 | Shën-Kits dhe Nevis (kn) | 3 | 3 | 0 | 0 | 0 |
-| Uruguai (uy) | 3 | 1 | 0 | 1 | 1 |
+| Uruguai (uy) | 3 | 1 | 0 | 0 | 2 |
 | Belizë (bz) | 2 | 1 | 0 | 0 | 1 |
 | Brunei (bn) | 2 | 0 | 0 | 2 | 0 |
 | Guineja Ekuatoriale (gq) | 2 | 1 | 0 | 0 | 1 |
@@ -180,9 +180,9 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Andorrë (ad) | 1 | 1 | 0 | 0 | 0 |
 | Antigua e Barbuda (ag) | 1 | 1 | 0 | 0 | 0 |
 | Barbados (bb) | 1 | 1 | 0 | 0 | 0 |
-| Çad (td) | 1 | 1 | 0 | 0 | 0 |
+| Çad (td) | 1 | 0 | 1 | 0 | 0 |
 | Eritre (er) | 1 | 1 | 0 | 0 | 0 |
-| Gambi (gm) | 1 | 0 | 0 | 0 | 1 |
+| Gambi (gm) | 1 | 1 | 0 | 0 | 0 |
 | Guajana Franceze (gf) | 1 | 1 | 0 | 0 | 0 |
 | Guam (gu) | 1 | 1 | 0 | 0 | 0 |
 | Guineja e Re-Papua (pg) | 1 | 1 | 0 | 0 | 0 |
@@ -195,26 +195,28 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Samoa (ws) | 1 | 0 | 0 | 0 | 1 |
 | Sierra-Leone (sl) | 1 | 1 | 0 | 0 | 0 |
 | Shën-Vincent dhe Grenadine (vc) | 1 | 0 | 0 | 0 | 1 |
-| Zimbabve (zw) | 1 | 1 | 0 | 0 | 0 |
+| Zimbabve (zw) | 1 | 0 | 0 | 0 | 1 |
 
 ## Kosovë: që nuk punojnë plotësisht
 
 | Kanali | Grupi | Lloji | Gjendja | URL kryesore |
 |---|---|---|---|---|
-| ATV | Kosovë | tv | online<br>blocked (HTTP 403) | https://gjirafa-video-live.gjirafa.net/gjvideo-live/0nj-g63-92x-few/index.m3u8 |
+| ATV | Kosovë | tv | offline (HTTP 404)<br>blocked (HTTP 403) | https://gjirafa-video-live.gjirafa.net/gjvideo-live/0nj-g63-92x-few/index.m3u8 |
 | RTK 1 | Kosovë | tv | online<br>blocked (HTTP 403) | https://gjirafa-video-live.gjirafa.net/gjvideo-livestream/rtk-sat/index.m3u8 |
 | RTK 2 | Kosovë | tv | blocked (HTTP 403) | https://gjirafa-video-live.gjirafa.net/gjvideo-livestream/rtk2/index.m3u8 |
 | RTK 4 | Kosovë | tv | blocked (HTTP 403)<br>blocked (HTTP 403) | https://gjirafa-video-live.gjirafa.net/gjvideo-livestream/rtk4/index.m3u8 |
-| T7 | Kosovë | tv | offline (HTTP 404) | https://gjirafa-video-live.gjirafa.net/gjvideo-livestream-specific/1z8-byc-4ee-lc9/inde... |
+| TV Opoja | Kosovë | tv | online<br>offline (HTTP 404) | https://t1.tvmak.com/tv/TVOPOJA.m3u8 |
+| TV Syri | Kosovë | tv | offline (segment HTTP 404) | https://gjirafa-video-live.gjirafa.net/gjvideo-live/xej-xnb-ba0-kup/index.m3u8 |
 
 ## Shqipëri: që nuk punojnë plotësisht
 
 | Kanali | Grupi | Lloji | Gjendja | URL kryesore |
 |---|---|---|---|---|
+| AlbKanale Music TV | Shqipëri-Muzikë | tv | offline (ENOTFOUND) | https://albportal.net/albkanalemusic.m3u8 |
 | Bang Bang (TriangoloMedia) | Fëmijë Shqip | tv | online<br>offline (timeout) | https://streams2.sofast.tv/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/6a98fce2-... |
 | Panorama TV | Shqipëri | tv | offline (timeout)<br>offline (ENOTFOUND) | https://159.69.221.56/panorama/livestream/playlist.m3u8 |
-| Syri TV (Shqipëri) | Shqipëri | tv | offline (timeout) | https://stream.syritv.al/live/syritv/playlist.m3u8 |
-| TV 7 Albania | Shqipëri | tv | online<br>offline (timeout) | https://rpn3.bozztv.com/albaniatv/Med7-TV7Tirana/index.m3u8 |
+| TV 7 Albania | Shqipëri | tv | offline (ENOTFOUND)<br>blocked (HTTP 403) | https://rpn3.bozztv.com/albaniatv/Med7-TV7Tirana/index.m3u8 |
+| TV Apollon | General | tv | offline (segment HTTP 404) | https://t1.tvmak.com/tv/TVAPOLLON.m3u8 |
 
 ## Maqedonia e Veriut: që nuk punojnë plotësisht
 
@@ -227,9 +229,8 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 
 | Kanali | Grupi | Lloji | Gjendja | URL kryesore |
 |---|---|---|---|---|
-| Radio televizija Rožaje | General | tv | offline (HTTP 404) | https://glb.bozztv.com/glb/ssh101/tvrozaje/index.m3u8 |
-| TV Niksic | General | tv | offline (segment HTTP 404) | https://tv.rtv-niksic.me/hls/stream.m3u8 |
-| TVCG 1 | General | tv | offline (timeout) | https://rtcg-live-open-geo.morescreens.com/RTCG_1_001/playlist.m3u8 |
+| Radio televizija Rožaje | General | tv | offline (ENOTFOUND) | https://glb.bozztv.com/glb/ssh101/tvrozaje/index.m3u8 |
+| TVCG 1 | General | tv | blocked (HTTP 403) | https://rtcg-live-open-geo.morescreens.com/RTCG_1_001/playlist.m3u8 |
 | TVCG 2 | General | tv | blocked (HTTP 403) | https://rtcg-live-open-geo.morescreens.com/RTCG_1_002/playlist.m3u8 |
 | TVCG 3 | Parlament | tv | blocked (HTTP 403) | https://rtcg-live-open-geo.morescreens.com/RTCG_1_003/playlist.m3u8 |
 
@@ -238,11 +239,10 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Kanali | Grupi | Lloji | Gjendja | URL kryesore |
 |---|---|---|---|---|
 | EDU TV | Arsim | tv | offline (timeout) | https://5aa64ca8b95b8.streamlock.net:4443/edutv/edutelevizija/playlist.m3u8 |
-| IDJTV | General | tv | offline (timeout) | https://best-str.umn.cdn.united.cloud/stream?channel=idjhd&p=In$trum300na765ta&player=m... |
 | Marsh TV | General | tv | offline (timeout) | http://cdn.dovecher.tv:8081/live/marsh/playlist.m3u8 |
-| Narodna TV | General | tv | offline (HTTP 404) | https://edge8.pink.rs/narodnatv/index.m3u8 |
+| Narodna TV | General | tv | offline (ENOTFOUND) | https://edge8.pink.rs/narodnatv/index.m3u8 |
 | Pannon RTV | General | tv | offline (timeout) | https://stream.nmih.hu:4102/live.m3u8 |
-| Pink | General | tv | offline (HTTP 404) | https://edge8.pink.rs/pinktv/index.m3u8 |
+| Pink | General | tv | offline (ENOTFOUND) | https://edge8.pink.rs/pinktv/index.m3u8 |
 | Prva | General | tv | offline (ENOTFOUND) | https://de1.dstv.cx/PrvaTVHD/index.m3u8 |
 | Prva Files | General | tv | offline (ENOTFOUND) | https://de1.dstv.cx/PrvaFiles/index.m3u8 |
 | Prva Kick | General | tv | offline (ENOTFOUND) | https://de1.dstv.cx/PrvaKick/index.m3u8 |
@@ -251,7 +251,7 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Prva Plus | General | tv | offline (ENOTFOUND) | https://de1.dstv.cx/PrvaPlus/index.m3u8 |
 | Prva World | General | tv | offline (ENOTFOUND) | https://de1.dstv.cx/PrvaWorld/index.m3u8 |
 | RTS 1 | General | tv | blocked (variant HTTP 403)<br>offline (ENOTFOUND) | https://webtvstream.bhtelecom.ba/rts1.m3u8 |
-| RTS 2 | General | tv | offline (ENOTFOUND)<br>slow | https://de1.dstv.cx/RTS2HD/index.m3u8 |
+| RTS 2 | General | tv | offline (ENOTFOUND)<br>offline (segment HTTP 404) | https://de1.dstv.cx/RTS2HD/index.m3u8 |
 | RTS Drama | Seriale | tv | offline (ENOTFOUND) | https://de1.dstv.cx/RTSDrama/index.m3u8 |
 | RTS Kolo | General | tv | offline (ENOTFOUND) | https://de1.dstv.cx/RTSKolo/index.m3u8 |
 | RTS Muzika | Muzikë | tv | offline (ENOTFOUND) | https://de1.dstv.cx/RTSMuzika/index.m3u8 |
@@ -263,7 +263,6 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | TV Belle Amie | General | tv | offline (timeout) | http://92.60.238.10:1935/live/belleamie/playlist.m3u8 |
 | TV Duga Plus | Muzikë | tv | offline (timeout) | http://109.92.29.10:1935/tvduga/tvduga/playlist.m3u8 |
 | TV Kanal M | General | tv | offline (timeout) | http://176.67.210.1/hls/kanalm.m3u8 |
-| TV Panon | General | tv | offline (HTTP 404) | https://stream2.nmih.hu:4102/live.m3u8 |
 | TV Pirot | General | tv | offline (ECONNREFUSED) | https://5bc45691ca49f.streamlock.net/tvpirot/uzivo/playlist.m3u8 |
 
 ## Greqi: që nuk punojnë plotësisht
@@ -275,15 +274,16 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | ART TV | General | tv | offline (HTTP 500) | https://rtmp.win:3696/live/arttvgrlive.m3u8 |
 | Astra TV | Lajme | tv | offline (segment HTTP 404) | https://server.gointernet.gr/live/livestream.m3u8 |
 | DELTA TV | General | tv | offline (TypeError) | http://81.171.10.42:554/liveD/DStream.sdp/playlist.m3u8 |
-| Epirus TV1 | General | tv | offline (HTTP 404) | https://rtmp.win:3929/live/epiruslive.m3u8 |
+| Ecclesia TV | General | tv | offline (timeout) | https://liveopen.siliconweb.com/openTvLive/openEcclessia/playlist.m3u8 |
 | ERT Sports 1 | Sport | tv | blocked (HTTP 403) | http://hbbtvapp.ert.gr/stream.php/v/vid_ertsports_mpeg.2ts |
-| ERT Sports 2 | Sport | tv | offline (timeout) | http://hbbtvapp.ert.gr/stream.php/v/vid_ertplay2_mpeg.2ts |
-| ERT3 | Argëtim | tv | offline (HTTP 404) | https://ert-ucdn.broadpeak-aas.com/bpk-tv/ERT3/default/index.m3u8 |
-| Faros TV2 | General | tv | blocked (HTTP 403) | https://s1.cystream.net/live/faros2/playlist.m3u8 |
+| ERT Sports 2 | Sport | tv | blocked (HTTP 403) | http://hbbtvapp.ert.gr/stream.php/v/vid_ertplay2_mpeg.2ts |
+| ERT3 | Argëtim | tv | blocked (HTTP 401) | https://ert-ucdn.broadpeak-aas.com/bpk-tv/ERT3/default/index.m3u8 |
+| Euro TV | Lajme | tv | offline (ENOTFOUND) | https://lbgo.bozztv.com/ssh101/ssh101/eurotvlive/playlist.m3u8 |
 | Lychnos TV | Religious | tv | offline (HTTP 404) | https://thor.mental-media.gr:19360/imp/imp.m3u8 |
 | Mesogeios TV | General | tv | offline (HTTP 500) | https://rtmp.win:3793/live/mesogeiostvlive.m3u8 |
+| Start TV | Lajme | tv | offline (HTTP 404) | https://live.cast-control.eu/StartMedia/StartMedia/playlist.m3u8 |
 | Telekriti | General | tv | offline (HTTP 404) | https://neon.streams.gr:8081/telekriti/index.m3u8 |
-| TRT | Lajme | tv | offline (segment HTTP 404) | https://av.hellasnet.tv/rst/trt/main_stream.m3u8 |
+| TRT | Lajme | tv | offline (timeout) | https://av.hellasnet.tv/rst/trt/main_stream.m3u8 |
 
 ## Turqi: që nuk punojnë plotësisht
 
@@ -291,42 +291,43 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 |---|---|---|---|---|
 | A Haber | Turkish - News | tv | slow<br>offline (timeout) | https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/ahaber/ahaber.m3u8 |
 | A2TV | Turkish - General | tv | slow<br>offline (timeout) | https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/a2tv/a2tv.m3u8 |
-| Al-Zahra TV Turkic | Turkish - Religious | tv | online<br>offline (timeout) | https://live.al-zahratv.com/live/playlist.m3u8 |
+| Al-Zahra TV Turkic | Turkish - Religious | tv | slow<br>offline (timeout) | https://live.al-zahratv.com/live/playlist.m3u8 |
+| ATV | Turkish - General | tv | slow<br>offline (timeout)<br>slow | https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/atv/atv.m3u8 |
 | ATV Alanya | General | tv | online<br>offline (timeout) | https://cdn-alanyatv.yayin.com.tr/alanyatv/alanyatv/playlist.m3u8 |
 | Benguturk TV | Turkish - Undefined | tv | online<br>offline (timeout) | https://tv.ensonhaber.com/benguturk/benguturk.m3u8 |
-| Bloomberg HT | Turkish - Business | tv | online<br>online<br>blocked (HTTP 403)<br>online<br>slow | https://ciner.daioncdn.net/bloomberght/bloomberght.m3u8 |
+| Bir TV | General | tv | offline (HTTP 404) | https://edge.taksimbilisim.com/birtv/bant1/playlist.m3u8 |
+| Bloomberg HT | Turkish - Business | tv | slow<br>online<br>offline (timeout)<br>online<br>online | https://ciner.daioncdn.net/bloomberght/bloomberght.m3u8 |
 | Bursa AS TV | Turkish - News | tv | online<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_astv/astv/playlist.m3u8 |
-| Ciftci TV | Turkish - Culture;Education | tv | online<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_ciftcitv/ciftcitv/playlist.m3u8 |
+| Ciftci TV | Turkish - Culture;Education | tv | slow<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_ciftcitv/ciftcitv/playlist.m3u8 |
 | Disney Jr. | Animacion | tv | offline (timeout) | https://saran-live.ercdn.net/disneyjunior/index.m3u8 |
-| Diyanet TV | Turkish - Religious | tv | online<br>offline (timeout) | https://eustr73.mediatriple.net/videoonlylive/mtikoimxnztxlive/broadcast_5e3bf95a47e07.... |
-| Diyar TV | Turkish - Religious | tv | online<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_diyartv/diyartv/playlist.m3u8 |
+| Diyanet TV | Turkish - Religious | tv | slow<br>offline (timeout) | https://eustr73.mediatriple.net/videoonlylive/mtikoimxnztxlive/broadcast_5e3bf95a47e07.... |
+| Diyar TV | Turkish - Religious | tv | slow<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_diyartv/diyartv/playlist.m3u8 |
 | Dream Turk | Turkish - Music | tv | slow<br>offline (timeout) | https://live.duhnet.tv/S2/HLS_LIVE/dreamturknp/playlist.m3u8 |
 | Ekoturk | Turkish - News | tv | offline (segment HTTP 404)<br>offline (timeout) | https://cdn.ekoturk.net/hls/master.m3u8 |
-| GEM Sport | Sport | tv | blocked (HTTP 403) | https://steep-wildflower-284d.nhhwkiszzzvcuojxdo.workers.dev/?url=https://gg.hls2.xyz/l... |
+| GEM Sport | Sport | tv | offline (timeout) | https://steep-wildflower-284d.nhhwkiszzzvcuojxdo.workers.dev/?url=https://gg.hls2.xyz/l... |
 | Haber Global | Turkish - News | tv | online<br>offline (timeout) | https://tv.ensonhaber.com/haberglobal/haberglobal.m3u8 |
 | HTSpor TV | Turkish - Sports | tv | slow<br>offline (timeout) | https://ciner.daioncdn.net/ht-spor/ht-spor.m3u8?app=web |
 | Hunat TV | Turkish - General | tv | online<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_hunattv/hunattv/playlist.m3u8 |
-| Kanal 26 | Turkish - General | tv | online<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_kanal26/kanal26/playlist.m3u8 |
+| Kanal 26 | Turkish - General | tv | slow<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_kanal26/kanal26/playlist.m3u8 |
 | Kanal 3 | Turkish - General | tv | slow<br>offline (timeout)<br>offline (HTTP 404)<br>offline (timeout)<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_kanal3/kanal3/playlist.m3u8 |
-| Kanal 32 | Turkish - General | tv | online<br>offline (timeout) | https://edge1.socialsmart.tv/kanal32/bant1/playlist.m3u8 |
-| Kanal 33 | General | tv | offline (HTTP 404) | https://edge1.socialsmart.tv/kanal33/bant1/playlist.m3u8 |
-| Kanal 58 | Turkish - General | tv | slow<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_kanal58/kanal58/playlist.m3u8 |
+| Kanal 32 | Turkish - General | tv | slow<br>offline (timeout) | https://edge1.socialsmart.tv/kanal32/bant1/playlist.m3u8 |
+| Kanal 58 | Turkish - General | tv | online<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_kanal58/kanal58/playlist.m3u8 |
 | Kanal 7 | Turkish - Entertainment | tv | offline (segment HTTP 401)<br>offline (HTTP 421) | https://kanal7-live.daioncdn.net/kanal7/kanal7.m3u8 |
 | Kanal D Drama | Argëtim | tv | slow<br>online<br>offline (timeout)<br>offline (timeout) | https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01602-themahqfrance-vivekanald-samsungspai... |
 | Kanal V | Turkish - General | tv | online<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_kanalv/kanalv/playlist.m3u8 |
 | Kent Türk TV | Turkish - General | tv | online<br>offline (HTTP 404) | https://live.artidijitalmedya.com/artidijital_kentturktv/kentturktv/playlist.m3u8 |
-| KRAL Pop TV | Muzikë | tv | blocked (variant HTTP 403) | https://dogus-live.daioncdn.net/kralpoptv/playlist.m3u8 |
+| KRAL Pop TV | Muzikë | tv | offline (timeout) | https://dogus-live.daioncdn.net/kralpoptv/playlist.m3u8 |
 | Lalegul TV | Turkish - Religious | tv | slow<br>offline (HTTP 503)<br>offline (HTTP 503) | https://lbl.netmedya.net/hls/lalegultv.m3u8 |
-| Luys TV | Turkish - Culture | tv | online<br>offline (timeout) | https://b01c02nl.mediatriple.net/videoonlylive/mtpayqrfkgirxelive/broadcast_5e91c5ac968... |
+| Luys TV | Turkish - Culture | tv | slow<br>offline (timeout) | https://b01c02nl.mediatriple.net/videoonlylive/mtpayqrfkgirxelive/broadcast_5e91c5ac968... |
 | Mercan TV | Turkish - Undefined | tv | online<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_mercantv/mercantv/playlist.m3u8 |
 | National Geographic | Dokumentarë | tv | blocked (HTTP 401)<br>offline (ENOTFOUND) | https://saran-live.ercdn.net/natgeohd/index.m3u8 |
 | National Geographic Wild | Dokumentarë | tv | blocked (HTTP 401)<br>offline (ENOTFOUND) | https://saran-live.ercdn.net/natgeowild/index.m3u8 |
 | Natural TV | Culture | tv | online<br>offline (ETIMEDOUT) | https://edge1.socialsmart.tv/naturaltv/bant1/playlist.m3u8 |
-| NOW TV | Turkish - Entertainment | tv | offline (timeout)<br>offline (ECONNREFUSED) | https://uycyyuuzyh.turknet.ercdn.net/nphindgytw/nowtv/nowtv.m3u8 |
-| Number 1 TV | Turkish - Music | tv | online<br>offline (ECONNRESET) | https://b01c02nl.mediatriple.net/videoonlylive/mtkgeuihrlfwlive/broadcast_5c9e17cd59e8b... |
-| Öncü TV | Turkish - General | tv | offline (HTTP 404) | https://edge1.socialsmart.tv/oncurtv/bant1/playlist.m3u8 |
-| Power Turk | Turkish - Undefined | tv | online<br>offline (ECONNRESET) | https://livetv.powerapp.com.tr/powerturkTV/powerturkhd.smil/playlist.m3u8 |
+| NOW TV | Turkish - Entertainment | tv | slow<br>offline (ECONNREFUSED) | https://uycyyuuzyh.turknet.ercdn.net/nphindgytw/nowtv/nowtv.m3u8 |
+| Number 1 TV | Turkish - Music | tv | slow<br>offline (ECONNRESET) | https://b01c02nl.mediatriple.net/videoonlylive/mtkgeuihrlfwlive/broadcast_5c9e17cd59e8b... |
+| Power Turk | Turkish - Undefined | tv | slow<br>offline (ECONNRESET) | https://livetv.powerapp.com.tr/powerturkTV/powerturkhd.smil/playlist.m3u8 |
 | PowerTurk TV | General | tv | offline (HTTP 421)<br>online | https://powerturk.blutv.com/blutv_powerturk/powerturk_sd.smil/playlist.m3u8 |
+| Satranç TV | Turkish - Undefined | tv | offline (HTTP 404) | http://139.162.182.79/live/test/index.m3u8 |
 | Sun RTV | Turkish - Undefined | tv | online<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_sunrtv/sunrtv/playlist.m3u8 |
 | TGRT Haber | Turkish - News | tv | slow<br>offline (variant HTTP 404) | https://canli.tgrthaber.com/tgrt.m3u8 |
 | TJK TV 2 | Sport | tv | blocked (HTTP 401) | https://tjktv-live.tjk.org/tjktv2/tjktv2.m3u8 |
@@ -335,16 +336,16 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | TRT Belgesel | Turkish - Documentary | tv | blocked (HTTP 403)<br>offline (timeout)<br>offline (timeout) | https://tv-trtbelgesel.medya.trt.com.tr/master.m3u8 |
 | TRT Çocuk | Türk Çocuk | tv | offline (ERR_SSL_SSLV3_ALERT_HANDSHAKE_FAILURE)<br>blocked (HTTP 403)<br>offline (timeout) | https://tv-trtcocuk.live.trt.com.tr/master.m3u8 |
 | TRT Genc | General | tv | blocked (HTTP 403) | https://tv-trtgenc.medya.trt.com.tr/master.m3u8 |
-| TRT Haber | Turkish - News | tv | slow<br>offline (timeout) | https://tv-trthaber.medya.trt.com.tr/master.m3u8 |
-| TRT Kurdi | Undefined | tv | slow<br>offline (timeout) | https://tv-trtkurdi.medya.trt.com.tr/master.m3u8 |
-| TRT Muzik | Turkish - Music | tv | slow<br>offline (timeout)<br>slow | https://tv-trtmuzik.medya.trt.com.tr/master.m3u8 |
+| TRT Haber | Turkish - News | tv | online<br>offline (timeout) | https://tv-trthaber.medya.trt.com.tr/master.m3u8 |
+| TRT Kurdi | Undefined | tv | online<br>offline (timeout) | https://tv-trtkurdi.medya.trt.com.tr/master.m3u8 |
+| TRT Muzik | Turkish - Music | tv | online<br>offline (timeout)<br>online | https://tv-trtmuzik.medya.trt.com.tr/master.m3u8 |
 | TRT Spor Yildiz | Sport | tv | blocked (segment HTTP 403) | https://trt.daioncdn.net/trtspor-yildiz/master.m3u8?app=web&platform=trtspor |
-| TRT Turk | Turkish - Undefined | tv | slow<br>offline (timeout) | https://tv-trtturk.medya.trt.com.tr/master.m3u8 |
+| TRT Turk | Turkish - Undefined | tv | online<br>offline (timeout) | https://tv-trtturk.medya.trt.com.tr/master.m3u8 |
 | TRT World | News | tv | online<br>slow<br>slow<br>offline (HTTP 404) | https://tv-trtworld.medya.trt.com.tr/master.m3u8 |
 | TV 41 | General | tv | online<br>offline (timeout)<br>offline (timeout) | https://live.artidijitalmedya.com/artidijital_tv41/tv41/playlist.m3u8 |
 | TV 8 | Turkish - Undefined | tv | offline (segment HTTP 401)<br>blocked (HTTP 403) | https://tv8.daioncdn.net/tv8/tv8.m3u8?app=7ddc255a-ef47-4e81-ab14-c0e5f2949788&ce=3 |
 | Ulke TV | General | tv | offline (timeout) | http://217.174.229.138:8000/play/a0el |
-| Vav TV | Turkish - Undefined | tv | online<br>offline (timeout) | https://playlist.fasttvcdn.com/pl/rfrk9821hdy9dayo8wfyha/kltr-sanat-tv/playlist.m3u8 |
+| Vav TV | Turkish - Undefined | tv | slow<br>offline (timeout) | https://playlist.fasttvcdn.com/pl/rfrk9821hdy9dayo8wfyha/kltr-sanat-tv/playlist.m3u8 |
 | Eurosport 1 Turkiye | General | tv | offline (ENOTFOUND) | https://andro.mangeinde4.lat/checklist/androstreamlivees1.m3u8 |
 | Eurosport 2 Turkiye | General | tv | offline (ENOTFOUND) | https://andro.mangeinde4.lat/checklist/androstreamlivees2.m3u8 |
 
@@ -355,19 +356,41 @@ Rrjeti i testimit ndikon në rezultat (gjeo-bllokime, DNS).
 | Radio Blue Sky | Kosovë | radio | offline (timeout) | https://stream.radiobluesky.com:8000/bluesky.mp3 |
 | Radio Gjakova | Kosovë | radio | offline (timeout) | https://stream.radiogjakova.com:8000/gjakova.mp3 |
 | Radio Rinia | Kosovë | radio | offline (timeout) | https://stream.radiorinia.com:8000/rinia.mp3 |
-| Nest Radio | Shqipëri | radio | offline (timeout) | https://radio.nestnews.al/listen/nest-radio/radio.mp3 |
+| Radio Zëri i Shtimes | Kosovë | radio | blocked (HTTP 401) | http://radio.1dhe1.com:8090/stream |
+| Urban FM 103.5 | Kosovë | radio | offline (HTTP 404) | https://radio.itprishtina.com/urbanfm.ogg |
 | Radio Tirana 1 | Publike | radio | offline (timeout)<br>online | http://91.187.121.202:8000/RadioTirana1 |
 | Radio Tirana 2 | Publike | radio | offline (timeout)<br>online | http://91.187.121.202:8000/RadioTirana2 |
-| Top Gold Radio | Shqipëri | radio | blocked (HTTP 403) | https://live.topgold.al/topgold |
+| Top Gold Radio | Shqipëri | radio | offline (timeout) | https://live.topgold.al/topgold |
+| Antenna 5 | Maqedoni e Veriut | radio | offline (timeout) | https://fms.off.net.mk:8000/antenna5.stream |
 | Life Radio | Maqedoni e Veriut | radio | offline (timeout) | https://worldradio.online/proxy/?q=http://liferadio.ddns.net:8000/stream&plugin_id=1339... |
-| ABC NewsRadio Australia | Lajme | radio | blocked (HTTP 403) | https://live-radio01.mediahubaustralia.com/2NWRW/mp3/ |
-| ABC Radio Australia | Ndërkombëtare | radio | blocked (HTTP 403) | https://live-radio01.mediahubaustralia.com/2LRW/mp3/ |
+| Pink Radio | Serbi | radio | offline (ENOTFOUND) | http://edge1.pink.rs:1935/radiopinkfta/pink61.smil/playlist.m3u8 |
+| Radio Tvornica | Kroaci | radio | offline (timeout) | https://c8.hostingcentar.com/streams/radiotvornica?type=http&nocache=50001 |
+| Rock Radio Belgrade (Рок Радио Београд | Serbi | radio | offline (ENOTFOUND) | https://edge9.pink.rs/rockstream |
+| Star Radio (Plus) Skopje, Macedonia | Maqedoni e Veriut | radio | offline (timeout) | https://radiostar.pro/stream/starplus.php |
+| Star Radio (World Hits) Skopje, Macedonia | Maqedoni e Veriut | radio | offline (timeout) | https://radiostar.pro/stream/worldretro.php |
+| Antenne Bayern | Gjermani | radio | offline (timeout) | https://stream.antenne.de/antenne/stream/mp3 |
+| bigFM HipHop | Gjermani Hiphop/Rap | radio | offline (timeout) | https://streams.bigfm.de/bigfm-hiphop-128-mp3 |
+| Deutschlandfunk | Gjermani | radio | offline (timeout) | https://st01.sslstream.dlf.de/dlf/01/128/mp3/stream.mp3 |
+| Deutschlandfunk Kultur | Gjermani | radio | offline (timeout) | https://st02.sslstream.dlf.de/dlf/02/128/mp3/stream.mp3 |
+| Deutschlandfunk Nova | Gjermani | radio | offline (timeout) | https://st03.sslstream.dlf.de/dlf/03/128/mp3/stream.mp3 |
+| Jam FM Hiphop | Gjermani Hiphop/Rap | radio | offline (timeout) | https://stream.jam.fm/jamfm-hiphop/mp3-128/stream.jam.fm/ |
+| Radio ffn | Gjermani | radio | offline (timeout) | https://stream.ffn.de/ffn/mp3-128/stream.ffn.de/ |
+| Radio RTL | Gjermani | radio | offline (timeout) | https://stream.rtlradio.de/rtl-radio/mp3-128/stream.rtlradio.de/ |
+| ABC NewsRadio Australia | Lajme | radio | offline (timeout) | https://live-radio01.mediahubaustralia.com/2NWRW/mp3/ |
+| ABC Radio Australia | Ndërkombëtare | radio | offline (timeout) | https://live-radio01.mediahubaustralia.com/2LRW/mp3/ |
+| bigFM HipHop (Germany) | Hiphop/Rap | radio | offline (timeout) | http://streams.bigfm.de/bigfm-hiphop-128-mp3 |
 | Club FM | Muzikë | radio | offline (timeout) | http://5.39.71.159:8100/ |
+| CNN Radio | Lajme | radio | offline (timeout) | http://tunein.streamguys1.com/cnn |
 | DW News | Lajme | radio | offline (HTTP 400) | http://dwstream4-lh.akamaihd.net/i/dwstream4_live@123456/master.m3u8 |
+| France Info | Francë | radio | offline (timeout) | http://direct.franceinfo.fr/live/franceinfo-midfi.mp3 |
+| France Inter | Francë | radio | offline (timeout) | https://direct.franceinter.fr/live/franceinter-midfi.mp3 |
 | Hot 108 Jamz (HipHop) | HipHop | radio | offline (timeout) | http://hot108jamz.com:8000/;stream.mp3 |
 | NHK World Radio Japan | Japoni | radio | offline (HTTP 400) | https://nhkworldradio-lh.akamaihd.net/i/worldradio_1@123397/master.m3u8 |
+| NRJ France | Dance | radio | offline (timeout) | http://cdn.nrjaudio.fm/audio1/fr/30001/mp3_128.mp3 |
 | Polskie Radio Jedynka | Poloni | radio | offline (HPE_INVALID_CONSTANT) | http://stream3.polskieradio.pl:8900/;stream.mp3 |
 | Quran Radio Egypt | Islamic | radio | offline (timeout) | http://live.mp3quran.net:8000/arabic |
+| Quran Radio Saudi Arabia | Islamic | radio | offline (timeout) | https://stream.radiojar.com/8s5u5tpdtwzuv |
+| Radio 538 Netherlands | Holandë | radio | offline (timeout) | http://playerservices.streamtheworld.com/api/livestream-redirect/RADIO538.mp3 |
 | Radio Rap Italia | Hiphop/Rap | radio | offline (timeout) | http://onair7.xdevel.com:10052/stream.mp3 |
 | Radio Tirana 3 | Publike | radio | offline (timeout) | http://91.187.121.202:8000/RadioTirana3 |
 | Saudi Arabia Radio 1 | Arabia Saudite | radio | offline (HTTP 404) | https://stream.radiojar.com/saudiarabic1 |
